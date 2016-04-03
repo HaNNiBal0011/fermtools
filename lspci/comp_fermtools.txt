@@ -1,0 +1,165 @@
+Nvidia GPU
+
+Name: NVIDIA GeForce 7600 GS
+Index: 0
+Driver Version: 301.42
+Driver Branch: r301_07-67
+
+DeviceID: 0x39210DE
+SubSystemID: 0x81F61043
+RevisionID: 0xA1
+ExtDeviceID: 0x392
+
+Thermal Settings
+
+ Sensor[0].Controller: GPU_INTERNAL
+ Sensor[0].DefaultMinTemp: 0
+ Sensor[0].DefaultMaxTemp: 127
+ Sensor[0].CurrentTemp: 47
+ Sensor[0].Target: GPU
+
+Clocks
+
+ Clock[0]: 401142
+ Clock[1]: 1
+ Clock[2]: 401142
+ Clock[3]: 9
+ Clock[4]: 401142
+ Clock[5]: 9
+ Clock[6]: 401142
+ Clock[7]: 9
+ Clock[8]: 270000
+ Clock[9]: 11
+ Clock[10]: 277777
+ Clock[11]: 9
+ Clock[12]: 416666
+ Clock[13]: 9
+ Clock[16]: 108000
+ Clock[17]: 1
+ Clock[18]: 145800
+ Clock[19]: 1
+ Clock[20]: 100000
+ Clock[21]: 1
+ Clock[22]: 277777
+ Clock[23]: 1
+ Clock[64]: 401142
+ Clock[65]: 32
+ Clock[71]: 401142
+ Clock[72]: 32
+ Clock[78]: 401142
+ Clock[79]: 32
+ Clock[85]: 401142
+ Clock[86]: 32
+ Clock[92]: 270000
+ Clock[93]: 32
+ Clock[99]: 277777
+ Clock[100]: 32
+ Clock[106]: 416666
+ Clock[107]: 32
+ Clock[120]: 108000
+ Clock[121]: 32
+ Clock[127]: 145800
+ Clock[128]: 32
+ Clock[134]: 100000
+ Clock[135]: 32
+ Clock[141]: 277777
+ Clock[142]: 32
+
+Tachometer
+
+ Status: NOT_SUPPORTED
+
+P-States
+
+ Percentage[0]: 0
+ Percentage[1]: 0
+ Percentage[2]: 0
+ Percentage[3]: 0
+
+Usages
+
+ Usage[1]: 1
+ Usage[3]: 30
+ Usage[4]: 10
+ Usage[5]: 1
+ Usage[7]: 34
+ Usage[8]: 16
+ Usage[9]: 1
+ Usage[13]: 1
+
+Cooler Settings
+
+ Cooler[0].Type: 1
+ Cooler[0].Controller: 1
+ Cooler[0].DefaultMin: 30
+ Cooler[0].DefaultMax: 100
+ Cooler[0].CurrentMin: 30
+ Cooler[0].CurrentMax: 100
+ Cooler[0].CurrentLevel: 100
+ Cooler[0].DefaultPolicy: 2
+ Cooler[0].CurrentPolicy: 2
+ Cooler[0].Target: 7
+ Cooler[0].ControlType: 1
+ Cooler[0].Active: 0
+
+Memory Info
+
+ Value[0]: 524288
+ Value[1]: 524288
+ Value[2]: 0
+ Value[3]: 0
+ Value[4]: 497527
+
+
+AMD Display Library
+
+Status: OK
+
+Number of adapters: 4
+
+AdapterIndex: 0
+isActive: 1
+AdapterName: ATI Radeon HD 4650
+UDID: PCI_VEN_1002&DEV_9498&SUBSYS_24511682&REV_00_4&16A387FF&0&0008A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x89F31538
+
+AdapterIndex: 1
+isActive: 1
+AdapterName: ATI Radeon HD 4650
+UDID: PCI_VEN_1002&DEV_9498&SUBSYS_24511682&REV_00_4&16A387FF&0&0008&02A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x89F31538
+
+AdapterIndex: 2
+isActive: 1
+AdapterName: NVIDIA GeForce 7600 GS 
+UDID: PCI_VEN_10DE&DEV_0392&SUBSYS_81F61043&REV_A1_4&78EEA88&0&0030A
+Present: 1
+VendorID: 0x10DE
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x0
+
+AdapterIndex: 3
+isActive: 1
+AdapterName: NVIDIA GeForce 7600 GS 
+UDID: PCI_VEN_10DE&DEV_0392&SUBSYS_81F61043&REV_A1_4&78EEA88&0&0030&02A
+Present: 1
+VendorID: 0x10DE
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x0
+
+
+

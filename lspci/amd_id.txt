@@ -1,0 +1,173 @@
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&22F847AA&0&0060
+
+AMD Radeon R9 290 Series 
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&14E8F4CB&0&0010
+
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&15001D53&0&0008
+
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&12B449C0&0&0009
+
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&63638AD&0&0008
+
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&30701AFE&0&0010
+
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&145BD4C5&0&0058
+
+AMD Radeon R9 200 Series
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&5AC7D5A&0&0010
+
+AMD Radeon R9 200 Series 
+PCI\VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00\4&3834D97&0&0008
+
+
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008A
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030A
+
+
+AMD Display Library
+
+Status: OK
+
+Number of adapters: 12
+
+AdapterIndex: 0
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x163C7C0
+
+AdapterIndex: 1
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008&02A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x163C7C0
+
+AdapterIndex: 2
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008&03A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x163C7C0
+
+AdapterIndex: 3
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008&04A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x163C7C0
+
+AdapterIndex: 4
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008&05A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x163C7C0
+
+AdapterIndex: 5
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&1BC1D098&0&0008&06A
+Present: 1
+VendorID: 0x1002
+BusNumber: 1
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0x163C7C0
+
+AdapterIndex: 6
+isActive: 1
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030A
+Present: 1
+VendorID: 0x1002
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0xF669C0
+
+AdapterIndex: 7
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030&02A
+Present: 1
+VendorID: 0x1002
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0xF669C0
+
+AdapterIndex: 8
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030&03A
+Present: 1
+VendorID: 0x1002
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0xF669C0
+
+AdapterIndex: 9
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030&04A
+Present: 1
+VendorID: 0x1002
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0xF669C0
+
+AdapterIndex: 10
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030&05A
+Present: 1
+VendorID: 0x1002
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0xF669C0
+
+AdapterIndex: 11
+isActive: 0
+AdapterName: AMD Radeon R9 200 Series
+UDID: PCI_VEN_1002&DEV_67B1&SUBSYS_0B001002&REV_00_4&270A1EF&0&0030&06A
+Present: 1
+VendorID: 0x1002
+BusNumber: 2
+DeviceNumber: 0
+FunctionNumber: 0
+AdapterID: 0xF669C0
+
+
