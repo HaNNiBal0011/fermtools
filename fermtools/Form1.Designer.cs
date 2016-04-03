@@ -50,6 +50,14 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.checkCoreClock = new System.Windows.Forms.CheckBox();
+            this.checkMemClock = new System.Windows.Forms.CheckBox();
+            this.checkGPULoad = new System.Windows.Forms.CheckBox();
+            this.checkMemCtrLoad = new System.Windows.Forms.CheckBox();
+            this.checkGPUTemp = new System.Windows.Forms.CheckBox();
+            this.checkFanSpeed = new System.Windows.Forms.CheckBox();
+            this.checkFanRPM = new System.Windows.Forms.CheckBox();
+            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -69,17 +77,18 @@
             // 
             this.MenuContext.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.MenuContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.resetToolStripMenuItem,
             this.showToolStripMenuItem,
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 52);
+            this.MenuContext.Size = new System.Drawing.Size(90, 82);
             // 
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -87,7 +96,7 @@
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -99,7 +108,7 @@
             this.toolStripProgressBar1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 264);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(488, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(508, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
@@ -125,11 +134,18 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(488, 264);
+            this.tabControl1.Size = new System.Drawing.Size(508, 264);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkFanRPM);
+            this.tabPage1.Controls.Add(this.checkFanSpeed);
+            this.tabPage1.Controls.Add(this.checkGPUTemp);
+            this.tabPage1.Controls.Add(this.checkMemCtrLoad);
+            this.tabPage1.Controls.Add(this.checkGPULoad);
+            this.tabPage1.Controls.Add(this.checkMemClock);
+            this.tabPage1.Controls.Add(this.checkCoreClock);
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.label5);
@@ -140,7 +156,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(480, 235);
+            this.tabPage1.Size = new System.Drawing.Size(500, 235);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "GPU Info";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -213,7 +229,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(480, 235);
+            this.tabPage2.Size = new System.Drawing.Size(480, 232);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graphics";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -234,9 +250,79 @@
             this.timer2.Interval = 10000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // checkCoreClock
+            // 
+            this.checkCoreClock.AutoSize = true;
+            this.checkCoreClock.Location = new System.Drawing.Point(479, 16);
+            this.checkCoreClock.Name = "checkCoreClock";
+            this.checkCoreClock.Size = new System.Drawing.Size(18, 17);
+            this.checkCoreClock.TabIndex = 14;
+            this.checkCoreClock.UseVisualStyleBackColor = true;
+            // 
+            // checkMemClock
+            // 
+            this.checkMemClock.AutoSize = true;
+            this.checkMemClock.Location = new System.Drawing.Point(479, 46);
+            this.checkMemClock.Name = "checkMemClock";
+            this.checkMemClock.Size = new System.Drawing.Size(18, 17);
+            this.checkMemClock.TabIndex = 15;
+            this.checkMemClock.UseVisualStyleBackColor = true;
+            // 
+            // checkGPULoad
+            // 
+            this.checkGPULoad.AutoSize = true;
+            this.checkGPULoad.Location = new System.Drawing.Point(479, 76);
+            this.checkGPULoad.Name = "checkGPULoad";
+            this.checkGPULoad.Size = new System.Drawing.Size(18, 17);
+            this.checkGPULoad.TabIndex = 16;
+            this.checkGPULoad.UseVisualStyleBackColor = true;
+            // 
+            // checkMemCtrLoad
+            // 
+            this.checkMemCtrLoad.AutoSize = true;
+            this.checkMemCtrLoad.Location = new System.Drawing.Point(479, 106);
+            this.checkMemCtrLoad.Name = "checkMemCtrLoad";
+            this.checkMemCtrLoad.Size = new System.Drawing.Size(18, 17);
+            this.checkMemCtrLoad.TabIndex = 17;
+            this.checkMemCtrLoad.UseVisualStyleBackColor = true;
+            // 
+            // checkGPUTemp
+            // 
+            this.checkGPUTemp.AutoSize = true;
+            this.checkGPUTemp.Location = new System.Drawing.Point(479, 136);
+            this.checkGPUTemp.Name = "checkGPUTemp";
+            this.checkGPUTemp.Size = new System.Drawing.Size(18, 17);
+            this.checkGPUTemp.TabIndex = 18;
+            this.checkGPUTemp.UseVisualStyleBackColor = true;
+            // 
+            // checkFanSpeed
+            // 
+            this.checkFanSpeed.AutoSize = true;
+            this.checkFanSpeed.Location = new System.Drawing.Point(479, 166);
+            this.checkFanSpeed.Name = "checkFanSpeed";
+            this.checkFanSpeed.Size = new System.Drawing.Size(18, 17);
+            this.checkFanSpeed.TabIndex = 19;
+            this.checkFanSpeed.UseVisualStyleBackColor = true;
+            // 
+            // checkFanRPM
+            // 
+            this.checkFanRPM.AutoSize = true;
+            this.checkFanRPM.Location = new System.Drawing.Point(479, 196);
+            this.checkFanRPM.Name = "checkFanRPM";
+            this.checkFanRPM.Size = new System.Drawing.Size(18, 17);
+            this.checkFanRPM.TabIndex = 20;
+            this.checkFanRPM.UseVisualStyleBackColor = true;
+            // 
+            // resetToolStripMenuItem
+            // 
+            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.resetToolStripMenuItem.Text = "Reset";
+            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
+            // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(488, 286);
+            this.ClientSize = new System.Drawing.Size(508, 286);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -279,6 +365,14 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox checkCoreClock;
+        private System.Windows.Forms.CheckBox checkFanRPM;
+        private System.Windows.Forms.CheckBox checkFanSpeed;
+        private System.Windows.Forms.CheckBox checkGPUTemp;
+        private System.Windows.Forms.CheckBox checkMemCtrLoad;
+        private System.Windows.Forms.CheckBox checkGPULoad;
+        private System.Windows.Forms.CheckBox checkMemClock;
+        private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
     }
 }
 

@@ -12,6 +12,7 @@
 using System;
 using System.Globalization;
 using System.Text;
+using System.Collections.Generic;
 
 namespace fermtools
 {
@@ -28,6 +29,57 @@ namespace fermtools
         public string Subsys;
         public uint Slot;
     }
+
+    internal struct NviGPUInfoNum
+    {
+        public uint CoreClock;
+        public uint MemoryClock;
+        public uint GPULoad;
+        public uint MemCtrlLoad;
+        public uint GPUTemp;
+        public uint FanLoad;
+        public uint FanRPM;
+    }
+
+    internal class NviGPUStat
+    {
+        public double CoreClock;
+        public double SCoreClock;
+        public List<uint> LCoreClock;
+        public double MemoryClock;
+        public double SMemoryClock;
+        public List<uint> LMemoryClock;
+        public double GPULoad;
+        public double SGPULoad;
+        public List<uint> LGPULoad;
+        public double MemCtrlLoad;
+        public double SMemCtrlLoad;
+        public List<uint> LMemCtrlLoad;
+        public double GPUTemp;
+        public double SGPUTemp;
+        public List<uint> LGPUTemp;
+        public double FanLoad;
+        public double SFanLoad;
+        public List<uint> LFanLoad;
+        public double FanRPM;
+        public double SFanRPM;
+        public List<uint> LFanRPM;
+        public uint TickCount;
+
+        public NviGPUStat()
+        {
+            CoreClock = 0; SCoreClock = 0; LCoreClock = new List<uint>();
+            MemoryClock = 0; SMemoryClock = 0; LMemoryClock = new List<uint>();
+            GPULoad = 0; SGPULoad = 0; LGPULoad = new List<uint>();
+            MemCtrlLoad = 0; SMemCtrlLoad = 0; LMemCtrlLoad = new List<uint>();
+            GPUTemp = 0; SGPUTemp = 0; LGPUTemp = new List<uint>();
+            FanLoad = 0; SFanLoad = 0; LFanLoad = new List<uint>();
+            FanRPM = 0; SFanRPM = 0; LFanRPM = new List<uint>();
+            TickCount = 0;
+            
+        }
+    }
+
   internal class NvidiaGPU 
   {
 
@@ -35,6 +87,10 @@ namespace fermtools
     private readonly NvPhysicalGpuHandle handle;
     private readonly NvDisplayHandle displayHandle;
     public NviGPUInfo gpuinfo;
+    public NviGPUStat gpustat;
+    public NviGPUInfoNum gpucurr;
+    public int statcount;
+
 
     public NvidiaGPU(int adapterIndex, NvPhysicalGpuHandle handl, NvDisplayHandle displayHandle)
     {
@@ -42,6 +98,8 @@ namespace fermtools
       this.handle = handl;
       this.displayHandle = displayHandle;
 
+      gpustat = new NviGPUStat();
+      gpucurr = new NviGPUInfoNum();
       gpuinfo = new NviGPUInfo();
       gpuinfo.GPUName = GetName();
 
@@ -64,6 +122,8 @@ namespace fermtools
             if (gpuinfo.Subsys.Length < 8) gpuinfo.Subsys = "0" + gpuinfo.Subsys;
         }
       }
+      //Переменная задает время сбора статистики, при цикле 1 сек статистика будет формироваться за последние 5 минут.
+      statcount = 60;
       Update();
     }
 
@@ -111,67 +171,149 @@ namespace fermtools
       return null;
     }
 
-    public void Update() 
+    private void UpdateCurr()
     {
-      gpuinfo.CoreClock = "-"; gpuinfo.MemoryClock = "-"; gpuinfo.GPULoad = "-"; gpuinfo.MemCtrlLoad = "-";
-      gpuinfo.GPUTemp = "-"; gpuinfo.FanLoad = "-"; gpuinfo.FanRPM = "-";
-
-      NvGPUThermalSettings settings = GetThermalSettings();
-      for (int i=0; i<settings.Count; i++)
-      {
-          if (settings.Sensor[i].CurrentTemp > 0) gpuinfo.GPUTemp = settings.Sensor[i].CurrentTemp.ToString();
-      }
-
-      uint[] values = GetClocks();
-      if (values != null) 
-      {
-          gpuinfo.CoreClock = (values[0] / 1000).ToString();
-          gpuinfo.MemoryClock = (values[8] / 1000).ToString();
-        if (values[30] != 0) 
+        NvGPUThermalSettings settings = GetThermalSettings();
+        for (int i = 0; i < settings.Count; i++)
         {
-            //GPU Clock values[30]/2 GPU Memory Clock values[8]/2
-            gpuinfo.CoreClock = (values[30] / 2000).ToString();
-            gpuinfo.MemoryClock = (values[8] / 2000).ToString();
+            if (settings.Sensor[i].CurrentTemp > 0) gpucurr.GPUTemp = settings.Sensor[i].CurrentTemp;
+            else gpucurr.GPUTemp = 0;
         }
-      }
 
-      NvPStates states = new NvPStates();
-      states.Version = NVAPI.GPU_PSTATES_VER;
-      states.PStates = new NvPState[NVAPI.MAX_PSTATES_PER_GPU];
-      if (NVAPI.NvAPI_GPU_GetPStates != null && NVAPI.NvAPI_GPU_GetPStates(handle, ref states) == NvStatus.OK) 
-      {
-          if (states.PStates[0].Present) 
-          {
-              //states.PStates[0] GPU Load states.PStates[1] Memory controller load
-              gpuinfo.GPULoad = states.PStates[0].Percentage.ToString();
-              gpuinfo.MemCtrlLoad = states.PStates[1].Percentage.ToString();
-          }
-      } 
-      else 
-      {
-        NvUsages usages = new NvUsages();
-        usages.Version = NVAPI.GPU_USAGES_VER;
-        usages.Usage = new uint[NVAPI.MAX_USAGES_PER_GPU];
-        if (NVAPI.NvAPI_GPU_GetUsages != null && NVAPI.NvAPI_GPU_GetUsages(handle, ref usages) == NvStatus.OK) 
+        uint[] values = GetClocks();
+        if (values != null)
         {
+            gpucurr.CoreClock = (values[0] / 1000);
+            gpucurr.MemoryClock = (values[8] / 1000);
+            if (values[30] != 0)
+            {
+                //GPU Clock values[30]/2 GPU Memory Clock values[8]/2
+                gpucurr.CoreClock = (values[30] / 2000);
+                gpucurr.MemoryClock = (values[8] / 2000);
+            }
         }
-      }
+        else
+        {
+            gpucurr.CoreClock = 0; 
+            gpucurr.MemoryClock = 0;
+        }
 
-      NvGPUCoolerSettings coolerSettings = GetCoolerSettings();
-      if (coolerSettings.Count > 0) 
-      {
-          gpuinfo.FanLoad = coolerSettings.Cooler[0].CurrentLevel.ToString();
-      }
+        NvPStates states = new NvPStates();
+        states.Version = NVAPI.GPU_PSTATES_VER;
+        states.PStates = new NvPState[NVAPI.MAX_PSTATES_PER_GPU];
+        if (NVAPI.NvAPI_GPU_GetPStates != null && NVAPI.NvAPI_GPU_GetPStates(handle, ref states) == NvStatus.OK)
+        {
+            if (states.PStates[0].Present)
+            {
+                //states.PStates[0] GPU Load states.PStates[1] Memory controller load
+                gpucurr.GPULoad = (uint)states.PStates[0].Percentage;
+                gpucurr.MemCtrlLoad = (uint)states.PStates[1].Percentage;
+            }
+            else
+            {
+                gpucurr.GPULoad = 0; 
+                gpucurr.MemCtrlLoad = 0;
+            }
+        }
+        else
+        {
+            NvUsages usages = new NvUsages();
+            usages.Version = NVAPI.GPU_USAGES_VER;
+            usages.Usage = new uint[NVAPI.MAX_USAGES_PER_GPU];
+            if (NVAPI.NvAPI_GPU_GetUsages != null && NVAPI.NvAPI_GPU_GetUsages(handle, ref usages) == NvStatus.OK)
+            {
+            }
+        }
 
-      NvMemoryInfo memoryInfo = new NvMemoryInfo();
-      memoryInfo.Version = NVAPI.GPU_MEMORY_INFO_VER;
-      memoryInfo.Values = new uint[NVAPI.MAX_MEMORY_VALUES_PER_GPU];
-      if (NVAPI.NvAPI_GPU_GetMemoryInfo != null &&  NVAPI.NvAPI_GPU_GetMemoryInfo(displayHandle, ref memoryInfo) == NvStatus.OK) 
-      {
-        uint totalMemory = memoryInfo.Values[0];
-        uint freeMemory = memoryInfo.Values[4];
-        float usedMemory = Math.Max(totalMemory - freeMemory, 0);
-      }
+        NvGPUCoolerSettings coolerSettings = GetCoolerSettings();
+        if (coolerSettings.Count > 0)
+        {
+            gpucurr.FanLoad = (uint)coolerSettings.Cooler[0].CurrentLevel;
+        }
+        else
+        {
+            gpucurr.FanLoad = 0; 
+        }
+
+        gpucurr.FanRPM = 0;
+
+        NvMemoryInfo memoryInfo = new NvMemoryInfo();
+        memoryInfo.Version = NVAPI.GPU_MEMORY_INFO_VER;
+        memoryInfo.Values = new uint[NVAPI.MAX_MEMORY_VALUES_PER_GPU];
+        if (NVAPI.NvAPI_GPU_GetMemoryInfo != null && NVAPI.NvAPI_GPU_GetMemoryInfo(displayHandle, ref memoryInfo) == NvStatus.OK)
+        {
+            uint totalMemory = memoryInfo.Values[0];
+            uint freeMemory = memoryInfo.Values[4];
+            float usedMemory = Math.Max(totalMemory - freeMemory, 0);
+        }
+
+    }
+
+    private void UpdateStat()
+    {
+        //Усредняем значения за время statcount (начало нужно чтобы были корректные данные если времени прошло меньше, чем statcount)
+        gpustat.LCoreClock.Add(gpucurr.CoreClock);
+        gpustat.LMemoryClock.Add(gpucurr.MemoryClock);
+        gpustat.LGPULoad.Add(gpucurr.GPULoad);
+        gpustat.LMemCtrlLoad.Add(gpucurr.MemCtrlLoad);
+        gpustat.LGPUTemp.Add(gpucurr.GPUTemp);
+        gpustat.LFanLoad.Add(gpucurr.FanLoad);
+        gpustat.LFanRPM.Add(gpucurr.FanRPM);
+        if (gpustat.LCoreClock.Count != statcount)
+        {
+            gpustat.SCoreClock += gpucurr.CoreClock;
+            gpustat.SMemoryClock += gpucurr.MemoryClock;
+            gpustat.SGPULoad += gpucurr.GPULoad;
+            gpustat.SMemCtrlLoad += gpucurr.MemCtrlLoad;
+            gpustat.SGPUTemp += gpucurr.GPUTemp;
+            gpustat.SFanLoad += gpucurr.FanLoad;
+            gpustat.SFanRPM += gpucurr.FanRPM;
+            gpustat.TickCount++;
+        }
+        else
+        {
+            gpustat.SCoreClock += (gpucurr.CoreClock - (double)gpustat.LCoreClock[0]);
+            gpustat.LCoreClock.RemoveAt(0);
+            gpustat.SMemoryClock += (gpucurr.MemoryClock - (double)gpustat.LMemoryClock[0]);
+            gpustat.LMemoryClock.RemoveAt(0);
+            gpustat.SGPULoad += (gpucurr.GPULoad - (double)gpustat.LGPULoad[0]);
+            gpustat.LGPULoad.RemoveAt(0);
+            gpustat.SMemCtrlLoad += (gpucurr.MemCtrlLoad - (double)gpustat.LMemCtrlLoad[0]);
+            gpustat.LMemCtrlLoad.RemoveAt(0);
+            gpustat.SGPUTemp += (gpucurr.GPUTemp - (double)gpustat.LGPUTemp[0]);
+            gpustat.LGPUTemp.RemoveAt(0);
+            gpustat.SFanLoad += (gpucurr.FanLoad - (double)gpustat.LFanLoad[0]);
+            gpustat.LFanLoad.RemoveAt(0);
+            gpustat.SFanRPM += (gpucurr.FanRPM - (double)gpustat.LFanRPM[0]);
+            gpustat.LFanRPM.RemoveAt(0);
+        }
+        gpustat.CoreClock = gpustat.SCoreClock / (double)gpustat.TickCount;
+        gpustat.MemoryClock = gpustat.SMemoryClock / (double)gpustat.TickCount;
+        gpustat.GPULoad = gpustat.SGPULoad / (double)gpustat.TickCount;
+        gpustat.MemCtrlLoad = gpustat.SMemCtrlLoad / (double)gpustat.TickCount;
+        gpustat.GPUTemp = gpustat.SGPUTemp / (double)gpustat.TickCount;
+        gpustat.FanLoad = gpustat.SFanLoad / (double)gpustat.TickCount;
+        gpustat.FanRPM = gpustat.SFanRPM / (double)gpustat.TickCount;
+    }
+
+    public void Update()
+    {
+        UpdateCurr();
+        UpdateStat();
+        if (gpucurr.CoreClock > 0) gpuinfo.CoreClock = gpucurr.CoreClock.ToString();
+        else gpuinfo.CoreClock = "-";
+        if (gpucurr.MemoryClock > 0) gpuinfo.MemoryClock = gpucurr.MemoryClock.ToString();
+        else gpuinfo.MemoryClock = "-";
+        if (gpucurr.GPULoad > 0) gpuinfo.GPULoad = gpucurr.GPULoad.ToString();
+        else gpuinfo.GPULoad = "-";
+        if (gpucurr.MemCtrlLoad > 0) gpuinfo.MemCtrlLoad = gpucurr.MemCtrlLoad.ToString();
+        else gpuinfo.MemCtrlLoad = "-";
+        if (gpucurr.GPUTemp > 0) gpuinfo.GPUTemp = gpucurr.GPUTemp.ToString();
+        else gpuinfo.GPUTemp = "-";
+        if (gpucurr.FanLoad > 0) gpuinfo.FanLoad = gpucurr.FanLoad.ToString();
+        else gpuinfo.FanLoad = "-";
+        if (gpucurr.FanRPM > 0) gpuinfo.FanRPM = gpucurr.FanRPM.ToString();
+        else gpuinfo.FanRPM = "-";
     }
 
     public string GetReport() 

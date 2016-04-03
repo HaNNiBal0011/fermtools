@@ -64,7 +64,7 @@ namespace fermtools
             //Добавляем на форму текст боксы для вывода параметров видеокарт NVIDIA
             int nviCardCount = nvigr.hardware.Count;
             int atiCardCount = atigr.hardware.Count;
-            int txtBoxWith = (this.tabPage1.Width - 180) / (nviCardCount + atiCardCount);
+            int txtBoxWith = (this.tabPage1.Width - 200) / (nviCardCount + atiCardCount);
             for (int i = 0; i < nviCardCount; i++)
             {
                 for (int j = 0; j < NumPar; j++)
@@ -193,20 +193,6 @@ namespace fermtools
             if (this.Visible) this.Hide();
             else this.Show();
         }
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            //Разрешаем завершение программы
-            fExitCancel = false;
-            //Прерываем поток pipe
-            signal.Set();
-            //Останавливаем WDT, если он есть
-            if (wdt.isWDT) if (wdt.SetWDT(0)) WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
-            Application.Exit();
-        }
-        private void ShowtoolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            this.Show();
-        }
         private bool CmdString(string[] str)
         {
             Int64 t = 0;
@@ -234,13 +220,16 @@ namespace fermtools
             {
                 nvigr.hardware[i].Update();
                 int m = NumPar * i;
-                this.par[m].Text = nvigr.hardware[i].gpuinfo.CoreClock;
-                this.par[m + 1].Text = nvigr.hardware[i].gpuinfo.MemoryClock;
-                this.par[m + 2].Text = nvigr.hardware[i].gpuinfo.GPULoad;
-                this.par[m + 3].Text = nvigr.hardware[i].gpuinfo.MemCtrlLoad;
-                this.par[m + 4].Text = nvigr.hardware[i].gpuinfo.GPUTemp;
-                this.par[m + 5].Text = nvigr.hardware[i].gpuinfo.FanLoad;
-                this.par[m + 6].Text = nvigr.hardware[i].gpuinfo.FanRPM;
+                this.par[m].Text = nvigr.hardware[i].gpuinfo.CoreClock;         // +" / " + ((uint)nvigr.hardware[i].gpustat.CoreClock).ToString();
+                if (this.checkCoreClock.Checked)
+                    if (nvigr.hardware[i].gpustat.LCoreClock.Max() > 2 * nvigr.hardware[i].gpustat.CoreClock) 
+                        resetToolStripMenuItem_Click(sender, e);
+                this.par[m + 1].Text = nvigr.hardware[i].gpuinfo.MemoryClock;   // +" / " + ((uint)nvigr.hardware[i].gpustat.MemoryClock).ToString();
+                this.par[m + 2].Text = nvigr.hardware[i].gpuinfo.GPULoad;       // +" / " + ((uint)nvigr.hardware[i].gpustat.GPULoad).ToString();
+                this.par[m + 3].Text = nvigr.hardware[i].gpuinfo.MemCtrlLoad;   // +" / " + ((uint)nvigr.hardware[i].gpustat.MemCtrlLoad).ToString();
+                this.par[m + 4].Text = nvigr.hardware[i].gpuinfo.GPUTemp;       // +" / " + ((uint)nvigr.hardware[i].gpustat.GPUTemp).ToString();
+                this.par[m + 5].Text = nvigr.hardware[i].gpuinfo.FanLoad;       // +" / " + ((uint)nvigr.hardware[i].gpustat.FanLoad).ToString();
+                this.par[m + 6].Text = nvigr.hardware[i].gpuinfo.FanRPM;        // +" / " + ((uint)nvigr.hardware[i].gpustat.FanRPM).ToString();
             }
             for (int i = 0; i < atigr.hardware.Count; i++)
             {
@@ -288,6 +277,44 @@ namespace fermtools
             try { eventLog1.WriteEntry(msg, type); }
             catch { return false; }
             return true;
+        }
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //Разрешаем завершение программы
+            fExitCancel = false;
+            //Прерываем поток pipe
+            signal.Set();
+            //Останавливаем WDT, если он есть
+            if (wdt.isWDT) if (wdt.SetWDT(0)) WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+            Application.Exit();
+        }
+        private void ShowtoolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (wdt.isWDT)
+            {
+                timer2.Stop();
+                wdt.SetWDT(1);
+            }
+            else
+            {
+                ManagementBaseObject mboReboot = null;
+                ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem"); mcWin32.Get();
+                // You can't shutdown without security privileges
+                mcWin32.Scope.Options.EnablePrivileges = true;
+                ManagementBaseObject mboRebootParams = mcWin32.GetMethodParameters("Win32Shutdown");
+                // Flags: - 0 (0x0) Log Off - 4 (0x4) Forced Log Off (0 4) - 1 (0x1) Shutdown - 5 (0x5) Forced Shutdown (1 4) - 2 (0x2) Reboot 
+                // - 6 (0x6) Forced Reboot (2 4) - 8 (0x8) Power Off - 12 (0xC) Forced Power Off (8 4)
+                mboRebootParams["Flags"] = "6";
+                mboRebootParams["Reserved"] = "0";
+                foreach (ManagementObject manObj in mcWin32.GetInstances())
+                {
+                    mboReboot = manObj.InvokeMethod("Win32Shutdown", mboRebootParams, null);
+                }
+            }
         }
     }
 }
