@@ -157,7 +157,7 @@ namespace fermtools
           {
           }
           gpucurr.GPULoad = adlp.ActivityPercent;
-          //gpuinfo.MemCtrlLoad = adlp.CurrentPerformanceLevel.ToString();
+          gpucurr.MemCtrlLoad = 0;
       }
       else gpucurr.GPULoad = 0;
     }

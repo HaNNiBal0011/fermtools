@@ -27,7 +27,7 @@ namespace fermtools
         public string FanLoad;
         public string FanRPM;
         public string Subsys;
-        public uint Slot;
+        public int Slot;
     }
 
     internal struct NviGPUInfoNum
@@ -109,7 +109,7 @@ namespace fermtools
         NvStatus status = NVAPI.NvAPI_GPU_GetBusId(handle, out busId);
         if (status == NvStatus.OK)
         {
-            gpuinfo.Slot = busId;
+            gpuinfo.Slot = (int) busId;
         }
       }
       if (NVAPI.NvAPI_GPU_GetPCIIdentifiers != null) 
