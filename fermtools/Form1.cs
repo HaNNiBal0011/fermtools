@@ -34,8 +34,9 @@ namespace fermtools
         int CardCount;              //Количество найденных видеокарт
 
         private List<GPUParam> gpupar = new List<GPUParam>();               //Параметры GPU
-        private List<System.Windows.Forms.TextBox> par = new List<System.Windows.Forms.TextBox>();    //Коллекция текст боксов для отображения параметров видеокарт
-        private List<System.Windows.Forms.CheckBox> check = new List<System.Windows.Forms.CheckBox>();    //Коллекция чек боксов для отметки отслеживания параметров
+        private List<System.Windows.Forms.TextBox> par = new List<System.Windows.Forms.TextBox>();          //Коллекция текст боксов для отображения параметров видеокарт
+        private List<System.Windows.Forms.CheckBox> check = new List<System.Windows.Forms.CheckBox>();      //Коллекция чек боксов для отметки отслеживания параметров
+        private List<System.Windows.Forms.Label> label = new List<System.Windows.Forms.Label>();            //Коллекция меток для вывода названий параметров
 
         public Form1(string[] args)
         {
@@ -101,6 +102,13 @@ namespace fermtools
             this.check.Add(this.checkGPUTemp);
             this.check.Add(this.checkFanLoad);
             this.check.Add(this.checkFanRPM);
+            //Помещаем метки (названия параметров) в коллекцию для возможности доступа по индексу
+            this.label.Add(this.label1);
+            this.label.Add(this.label2);
+            this.label.Add(this.label3);
+            this.label.Add(this.label4);
+            this.label.Add(this.label5);
+            this.label.Add(this.label6);
         }
         private void InitWDT(string[] args)
         {
@@ -206,6 +214,9 @@ namespace fermtools
                 for (int j = 0; j != NumPar; j++)
                     this.par[j].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
             }
+            //Мониторим, если что то не так, перезагружаем комп
+            if (Monitoring())
+                resetToolStripMenuItem_Click(sender,e);
         }
         private bool Monitoring()
         {
@@ -224,8 +235,9 @@ namespace fermtools
                         if (gpupar[j].GPUParams[i].ParCollect.Average() < gpupar[j].GPUParams[i].ParCollect.Max()/gpupar[j].GPUParams[i].Rate)
                         {
                             //Если уменьшилось сообщаем в репорт и устанавливаем флаг
-                            report.AppendLine(gpupar[j].GPUName + ", subsys:" + gpupar[j].Subsys + ", slot:" + gpupar[j].Slot.ToString());
-                            report.AppendLine(check[i].Text + " average:" + gpupar[j].GPUParams[i].ParCollect.Average().ToString());
+                            report.AppendLine(gpupar[j].GPUName + ", subsys: " + gpupar[j].Subsys + ", slot: " + gpupar[j].Slot.ToString());
+                            report.AppendLine(label[i].Text + " - average: " + ((int)gpupar[j].GPUParams[i].ParCollect.Average()).ToString() + ", maximum: " +
+                                gpupar[j].GPUParams[i].ParCollect.Max().ToString());
                             report.AppendLine();
                             res = true;
                         }
