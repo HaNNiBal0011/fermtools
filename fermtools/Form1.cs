@@ -32,8 +32,9 @@ namespace fermtools
         ToolTip pbTT;               //Инфа для отображения состояния WDT
         uint TickCount;             //Счетчик для отслеживания параметров
         uint TickCountMax = 60;     //Максимальное время отслеживания параметров
+        int CardCount;              //Количество найденных видеокарт
 
-        private List<GPUParam> gpupar = new List<GPUParam>();            //Параметры GPU
+        private List<GPUParam> gpupar = new List<GPUParam>();               //Параметры GPU
         private List<System.Windows.Forms.TextBox> par = new List<System.Windows.Forms.TextBox>();    //Коллекция текст боксов для отображения параметров видеокарт
         private List<System.Windows.Forms.CheckBox> check = new List<System.Windows.Forms.CheckBox>();    //Коллекция чек боксов для отметки отслеживания параметров
 
@@ -43,8 +44,9 @@ namespace fermtools
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
             TickCount = 0; //Сброс счетчика 
-            nvigr = new NvidiaGroup(); //Группа видеокарт NVIDIA
+            nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
             atigr = new ATIGroup(); //Группа видеокарт ATI
+            CardCount = gpupar.Count; //Сколько всего видеокарт
             WriteEventLog(GetReportVideoCard(), EventLogEntryType.Information);
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
             pipeServerTh = new Thread(pipeServerThread); //Поток для работы именованного канала
@@ -59,8 +61,8 @@ namespace fermtools
         {
             StringBuilder report = new StringBuilder();
 
-            for (int i=0; i<nvigr.hardware.Count;i++) report.AppendLine(nvigr.hardware[i].GetReport());
-            if (atigr.hardware.Count > 0) report.AppendLine(atigr.GetReport());
+            report.AppendLine(nvigr.GetReport());
+            report.AppendLine(atigr.GetReport());
 
             return report.ToString();
         }
@@ -68,17 +70,11 @@ namespace fermtools
         {
             //Вычисление размеров и положения текст боксов на вкладке будет работать, если ренее не было задано
             //свойство формы AutoScaleMode, нужно чтобы в свойствах формы было AutoScaleMode = Inherit
-            //Добавляем на форму текст боксы для вывода параметров видеокарт NVIDIA
+            //Добавляем на форму текст боксы для вывода параметров видеокарт
             ToolTip tt = new ToolTip();
-            int nviCardCount = nvigr.hardware.Count;
-            int atiCardCount = atigr.hardware.Count;
-            int txtBoxWith = (this.tabPage1.Width - 200) / (nviCardCount + atiCardCount);
-            for (int i = 0; i < nviCardCount; i++)
+            int txtBoxWith = (this.tabPage1.Width - 200) / CardCount;
+            for (int i = 0; i < CardCount; i++)
             {
-                gpupar.Insert(i, new GPUParam(NumPar));
-                gpupar[i].GPUName = nvigr.hardware[i].gpuinfo.GPUName;
-                gpupar[i].Subsys = nvigr.hardware[i].gpuinfo.Subsys;
-                gpupar[i].Slot = nvigr.hardware[i].gpuinfo.Slot;
                 for (int j = 0; j < NumPar; j++)
                 {
                     int m = i * NumPar + j;
@@ -90,28 +86,7 @@ namespace fermtools
                     this.par[m].TextAlign = HorizontalAlignment.Right;
                     this.par[m].BackColor = System.Drawing.SystemColors.Window;
                     if (j==0)
-                        tt.SetToolTip(this.par[m], nvigr.hardware[i].gpuinfo.GPUName + "\nSubsys " + nvigr.hardware[i].gpuinfo.Subsys + "\nSlot " + nvigr.hardware[i].gpuinfo.Slot.ToString());
-                }
-            }
-            //Добавляем на форму текст боксы для вывода параметров видеокарт ATI
-            for (int i = 0; i < atiCardCount; i++)
-            {
-                gpupar.Insert(i + nviCardCount, new GPUParam(NumPar));
-                gpupar[i + nviCardCount].GPUName = atigr.hardware[i].gpuinfo.GPUName;
-                gpupar[i + nviCardCount].Subsys = atigr.hardware[i].gpuinfo.Subsys;
-                gpupar[i + nviCardCount].Slot = atigr.hardware[i].gpuinfo.Slot;
-                for (int j = 0; j < NumPar; j++)
-                {
-                    int m = (i + nviCardCount) * NumPar + j;
-                    this.par.Insert(m, new System.Windows.Forms.TextBox());
-                    this.tabPage1.Controls.Add(this.par[m]);
-                    this.par[m].Size = new System.Drawing.Size(txtBoxWith - 6, 22);
-                    this.par[m].Location = new System.Drawing.Point(180 + txtBoxWith * (i + nviCardCount), 10 + 30 * j); //X = 234 (180 + 48 + 6) Y = 40 (10 + 22 + 8)
-                    this.par[m].ReadOnly = true;
-                    this.par[m].TextAlign = HorizontalAlignment.Right;
-                    this.par[m].BackColor = System.Drawing.SystemColors.Window;
-                    if (j == 0)
-                        tt.SetToolTip(this.par[m], atigr.hardware[i].gpuinfo.GPUName + "\nSubsys " + atigr.hardware[i].gpuinfo.Subsys + "\nSlot " + atigr.hardware[i].gpuinfo.Slot.ToString());
+                        tt.SetToolTip(this.par[m], gpupar[i].GPUName + "\nSubsys " + gpupar[i].Subsys + "\nSlot " + gpupar[i].Slot.ToString());
                 }
             }
             //Применяем масштабирование формы, чтобы вновь добавленные элементы оказались в том же масштабе
@@ -167,32 +142,16 @@ namespace fermtools
                         StreamWriter sw = new StreamWriter(pipeServer);
                         sw.AutoFlush = true;
                         sw.WriteLine(NumPar.ToString());
-                        if (nvigr.hardware.Count > 0)
+                        if (CardCount > 0)
                         {
-                            sw.WriteLine(nvigr.hardware.Count.ToString());
-                            for (int i = 0; i < nvigr.hardware.Count; i++)
+                            sw.WriteLine(CardCount.ToString());
+                            for (int i = 0; i != CardCount; i++)
                             {
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.GPUName);
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.CoreClock);
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.MemoryClock);
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.GPUTemp);
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.GPULoad);
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.FanLoad);
-                                sw.WriteLine(nvigr.hardware[i].gpuinfo.FanRPM);
-                            }
-                        }
-                        if (atigr.hardware.Count > 0)
-                        {
-                            sw.WriteLine(atigr.hardware.Count.ToString());
-                            for (int i = 0; i < atigr.hardware.Count; i++)
-                            {
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.GPUName);
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.CoreClock);
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.MemoryClock);
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.GPUTemp);
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.GPULoad);
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.FanLoad);
-                                sw.WriteLine(atigr.hardware[i].gpuinfo.FanRPM);
+                                sw.WriteLine(gpupar[i].GPUName);
+                                sw.WriteLine(gpupar[i].Subsys);
+                                sw.WriteLine(gpupar[i].Slot.ToString());
+                                for (int j = 0; j != NumPar; j++)
+                                    sw.WriteLine(gpupar[i].GPUParams[j].ParCurrent.ToString());
                             }
                         }
                         //Ждем окончания чтения и отключаем клиента
@@ -240,131 +199,17 @@ namespace fermtools
         private void timer1_Tick(object sender, EventArgs e)
         {
             //Цикл тика 1 секунда, нстраивается в графическом конструкторе свойств
-            for (int i = 0; i < nvigr.hardware.Count; i++)
+            for (int i = 0; i != CardCount; i++)
             {
-                nvigr.hardware[i].Update();
-                int m = NumPar * i;
-                this.par[m].Text = nvigr.hardware[i].gpuinfo.CoreClock;
-                this.par[m + 1].Text = nvigr.hardware[i].gpuinfo.MemoryClock;
-                this.par[m + 2].Text = nvigr.hardware[i].gpuinfo.GPULoad;
-                this.par[m + 3].Text = nvigr.hardware[i].gpuinfo.MemCtrlLoad;
-                this.par[m + 4].Text = nvigr.hardware[i].gpuinfo.GPUTemp;
-                this.par[m + 5].Text = nvigr.hardware[i].gpuinfo.FanLoad;
-                this.par[m + 6].Text = nvigr.hardware[i].gpuinfo.FanRPM;
-                
-            }
-            for (int i = 0; i < atigr.hardware.Count; i++)
-            {
-                atigr.hardware[i].Update();
-                int m = NumPar * (i + nvigr.hardware.Count);
-                this.par[m].Text = atigr.hardware[i].gpuinfo.CoreClock;
-                this.par[m + 1].Text = atigr.hardware[i].gpuinfo.MemoryClock;
-                this.par[m + 2].Text = atigr.hardware[i].gpuinfo.GPULoad;
-                this.par[m + 3].Text = atigr.hardware[i].gpuinfo.MemCtrlLoad;
-                this.par[m + 4].Text = atigr.hardware[i].gpuinfo.GPUTemp;
-                this.par[m + 5].Text = atigr.hardware[i].gpuinfo.FanLoad;
-                this.par[m + 6].Text = atigr.hardware[i].gpuinfo.FanRPM;
+                gpupar[i].Update();
+                for (int j = 0; j != NumPar; j++)
+                    this.par[j].Text = gpupar[i].GPUParams[j].ParCurrent.ToString();
             }
         }
         private int Monitoring()
         {
             int res = 0;
-            if (this.checkCoreClock.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LCoreClock.Max() > 2 * nvigr.hardware[i].gpustat.CoreClock)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LCoreClock.Max() > 2 * atigr.hardware[i].gpustat.CoreClock)
-                    {
-                        res = 1;
-                    }
-            }
-            if (this.checkMemoryClock.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LMemoryClock.Max() > 2 * nvigr.hardware[i].gpustat.MemoryClock)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LMemoryClock.Max() > 2 * atigr.hardware[i].gpustat.MemoryClock)
-                    {
-                        res = 1;
-                    }
-            }
-            if (this.checkGPULoad.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LGPULoad.Max() > 2 * nvigr.hardware[i].gpustat.GPULoad)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LGPULoad.Max() > 2 * atigr.hardware[i].gpustat.GPULoad)
-                    {
-                        res = 1;
-                    }
-            }
-            if (this.checkMemCtrlLoad.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LMemCtrlLoad.Max() > 2 * nvigr.hardware[i].gpustat.MemCtrlLoad)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LMemCtrlLoad.Max() > 2 * atigr.hardware[i].gpustat.MemCtrlLoad)
-                    {
-                        res = 1;
-                    }
-            }
-            if (this.checkGPUTemp.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LGPUTemp.Max() > 1.4 * nvigr.hardware[i].gpustat.GPUTemp)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LGPUTemp.Max() > 1.4 * atigr.hardware[i].gpustat.GPUTemp)
-                    {
-                        res = 1;
-                    }
-            }
-            if (this.checkFanLoad.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LFanLoad.Max() > 1.4 * nvigr.hardware[i].gpustat.FanLoad)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LFanLoad.Max() > 1.4 * atigr.hardware[i].gpustat.FanLoad)
-                    {
-                        res = 1;
-                    }
-            }
-            if (this.checkFanRPM.Checked)
-            {
-                for (int i = 0; i < nvigr.hardware.Count; i++)
-                    if (nvigr.hardware[i].gpustat.LFanRPM.Max() > 1.4 * nvigr.hardware[i].gpustat.FanRPM)
-                    {
-                        res = 1;
-                    }
-                for (int i = 0; i < atigr.hardware.Count; i++)
-                    if (atigr.hardware[i].gpustat.LFanRPM.Max() > 1.4 * atigr.hardware[i].gpustat.FanRPM)
-                    {
-                        res = 1;
-                    }
-            }
             return res;
-        }
-        private void statNvidia2Log(int i)
-        {
-            StringBuilder r = new StringBuilder();
         }
         private void timer2_Tick(object sender, EventArgs e)
         {

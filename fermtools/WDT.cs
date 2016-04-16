@@ -42,7 +42,7 @@ namespace fermtools
                 WDTnumPort = GetWDTChip();
                 if (WDTnumPort >= REGISTER_PORTS.Length)
                 {
-                    report.AppendLine("Chip W83627XXX not found. Only software reset.");
+                    report.AppendLine("WDT chip not found. Only software reset.");
                     isWDT = false;
                 }
                 else
