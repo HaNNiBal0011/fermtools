@@ -21,6 +21,7 @@ namespace fermtools
     public partial class Form1 : Form
     {
         const int NumPar = 7;       //Число параметров GPU выводимых в окошки
+        const int TickCountMax=60;  //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
         NvidiaGroup nvigr;          //Группа Nvidia видеокарт
         ATIGroup atigr;             //Группа AMD видеокарт
         bool fExitCancel;           //Флаг используется для сворачивания окна формы в трей при нажатии на крестик и для завершения программы при нажатии Exit в контектстном меню 
@@ -30,8 +31,6 @@ namespace fermtools
         ManualResetEvent signal;    //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
         WDT wdt;                    //WatchDog Timer
         ToolTip pbTT;               //Инфа для отображения состояния WDT
-        uint TickCount;             //Счетчик для отслеживания параметров
-        uint TickCountMax = 60;     //Максимальное время отслеживания параметров
         int CardCount;              //Количество найденных видеокарт
 
         private List<GPUParam> gpupar = new List<GPUParam>();               //Параметры GPU
@@ -43,7 +42,6 @@ namespace fermtools
             InitializeComponent();
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
-            TickCount = 0; //Сброс счетчика 
             nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
             atigr = new ATIGroup(); //Группа видеокарт ATI
             CardCount = gpupar.Count; //Сколько всего видеокарт
@@ -88,11 +86,14 @@ namespace fermtools
                     if (j==0)
                         tt.SetToolTip(this.par[m], gpupar[i].GPUName + "\nSubsys " + gpupar[i].Subsys + "\nSlot " + gpupar[i].Slot.ToString());
                 }
+                //Коэффициенты для срабатывания порога отслеживания
+                gpupar[i].GPUParams[0].Rate = gpupar[i].GPUParams[1].Rate = gpupar[i].GPUParams[2].Rate = gpupar[i].GPUParams[3].Rate = 2;
+                gpupar[i].GPUParams[4].Rate = gpupar[i].GPUParams[5].Rate = gpupar[i].GPUParams[6].Rate = 1.5;
             }
             //Применяем масштабирование формы, чтобы вновь добавленные элементы оказались в том же масштабе
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            //Помещаем чекбоксы в коллекцию
+            //Помещаем чекбоксы в коллекцию для возможности доступа по индексу
             this.check.Add(this.checkCoreClock);
             this.check.Add(this.checkMemoryClock);
             this.check.Add(this.checkGPULoad);
@@ -151,7 +152,7 @@ namespace fermtools
                                 sw.WriteLine(gpupar[i].Subsys);
                                 sw.WriteLine(gpupar[i].Slot.ToString());
                                 for (int j = 0; j != NumPar; j++)
-                                    sw.WriteLine(gpupar[i].GPUParams[j].ParCurrent.ToString());
+                                    sw.WriteLine(gpupar[i].GPUParams[j].ParCollect.Last().ToString());
                             }
                         }
                         //Ждем окончания чтения и отключаем клиента
@@ -201,14 +202,39 @@ namespace fermtools
             //Цикл тика 1 секунда, нстраивается в графическом конструкторе свойств
             for (int i = 0; i != CardCount; i++)
             {
-                gpupar[i].Update();
+                gpupar[i].Update(TickCountMax);
                 for (int j = 0; j != NumPar; j++)
-                    this.par[j].Text = gpupar[i].GPUParams[j].ParCurrent.ToString();
+                    this.par[j].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
             }
         }
-        private int Monitoring()
+        private bool Monitoring()
         {
-            int res = 0;
+            bool res = false;
+            StringBuilder report = new StringBuilder();
+            //Бежим по параметрам
+            for (int i = 0; i != NumPar;i++)
+            {
+                //Проверяем установленный флаг слежения
+                if (check[i].Checked)
+                {
+                    //Бежим по картам
+                    for (int j=0; j!=CardCount; j++)
+                    {
+                        //Проверяем уменьшилось ли среднее значение ниже MAX/RATE
+                        if (gpupar[j].GPUParams[i].ParCollect.Average() < gpupar[j].GPUParams[i].ParCollect.Max()/gpupar[j].GPUParams[i].Rate)
+                        {
+                            //Если уменьшилось сообщаем в репорт и устанавливаем флаг
+                            report.AppendLine(gpupar[j].GPUName + ", subsys:" + gpupar[j].Subsys + ", slot:" + gpupar[j].Slot.ToString());
+                            report.AppendLine(check[i].Text + " average:" + gpupar[j].GPUParams[i].ParCollect.Average().ToString());
+                            report.AppendLine();
+                            res = true;
+                        }
+                    }
+                }
+            }
+            //Если что то где то упало, сообщаем в EVENLOG
+            if (res) 
+                WriteEventLog(report.ToString(), EventLogEntryType.Error);
             return res;
         }
         private void timer2_Tick(object sender, EventArgs e)
