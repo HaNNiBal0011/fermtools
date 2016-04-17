@@ -65,8 +65,20 @@ namespace fermtools
                 report.AppendLine(adapterInfo[i].FunctionNumber.ToString(CultureInfo.InvariantCulture));
                 report.Append("AdapterID: 0x");
                 report.AppendLine(adapterID.ToString("X", CultureInfo.InvariantCulture));
-                if (!string.IsNullOrEmpty(adapterInfo[i].UDID) && adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID) 
-                      gpupar.Add(new GPUParam(adapterInfo[i], numpar));
+                if (!string.IsNullOrEmpty(adapterInfo[i].UDID) && adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID)
+                {
+                    bool found = false;
+                    foreach (GPUParam gpu in gpupar)
+                    {
+                        if (gpu.adapterInfo.BusNumber == adapterInfo[i].BusNumber && gpu.adapterInfo.DeviceNumber == adapterInfo[i].DeviceNumber)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                        gpupar.Add(new GPUParam(adapterInfo[i], numpar));
+                }
                 report.AppendLine();
               }
           }

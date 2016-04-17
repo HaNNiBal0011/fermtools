@@ -28,11 +28,11 @@ namespace fermtools
         private readonly NvPhysicalGpuHandle handle;
         private readonly NvDisplayHandle displayHandle;
         //Specific parametr for AMD GPU
-        ADLAdapterInfo adapterInfo;
-        ADLTemperature adlt;
-        ADLFanSpeedInfo afsi;
-        ADLFanSpeedValue adlf;
-        ADLPMActivity adlp;
+        public ADLAdapterInfo adapterInfo;
+        private ADLTemperature adlt;
+        private ADLFanSpeedInfo afsi;
+        private ADLFanSpeedValue adlf;
+        private ADLPMActivity adlp;
         //Init Nvidia GPU param
         public GPUParam(NvPhysicalGpuHandle hdl, NvDisplayHandle displ, int num)
         {
