@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
-    <Compile Include="ATIGPU.cs" />
     <Compile Include="ATIGroup.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

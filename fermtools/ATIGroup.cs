@@ -15,30 +15,26 @@ using System.Text;
 
 namespace fermtools
 {
-  internal class ATIGroup {
-
-    public readonly List<ATIGPU> hardware = new List<ATIGPU>();
+  internal class ATIGroup 
+  {
     public readonly StringBuilder report = new StringBuilder();
-
-    public ATIGroup() {
-      try {
+    public ATIGroup(ref List<GPUParam> gpupar, int numpar)
+    {
+      try 
+      {
         int status = ADL.ADL_Main_Control_Create(1);
-
         report.AppendLine("AMD Display Library");
         report.AppendLine();
         report.Append("Status: ");
         report.AppendLine(status == ADL.ADL_OK ? "OK" : status.ToString(CultureInfo.InvariantCulture));
         report.AppendLine();
-
         if (status == ADL.ADL_OK) 
         {
           int numberOfAdapters = 0;
           ADL.ADL_Adapter_NumberOfAdapters_Get(ref numberOfAdapters);
-          
           report.Append("Number of adapters: "); 
           report.AppendLine(numberOfAdapters.ToString(CultureInfo.InvariantCulture));
           report.AppendLine();
-
           if (numberOfAdapters > 0) 
           {
               ADLAdapterInfo[] adapterInfo = new ADLAdapterInfo[numberOfAdapters];
@@ -49,7 +45,6 @@ namespace fermtools
                 ADL.ADL_Adapter_Active_Get(adapterInfo[i].AdapterIndex,out isActive);
                 int adapterID;
                 ADL.ADL_Adapter_ID_Get(adapterInfo[i].AdapterIndex,out adapterID);
-
                 report.Append("AdapterIndex: "); 
                 report.AppendLine(i.ToString(CultureInfo.InvariantCulture));
                 report.Append("isActive: "); 
@@ -70,39 +65,28 @@ namespace fermtools
                 report.AppendLine(adapterInfo[i].FunctionNumber.ToString(CultureInfo.InvariantCulture));
                 report.Append("AdapterID: 0x");
                 report.AppendLine(adapterID.ToString("X", CultureInfo.InvariantCulture));
-
                 if (!string.IsNullOrEmpty(adapterInfo[i].UDID) && adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID) 
-                {
-                  bool found = false;
-                  foreach (ATIGPU gpu in hardware)
-                    if (gpu.BusNumber == adapterInfo[i].BusNumber && gpu.DeviceNumber == adapterInfo[i].DeviceNumber) 
-                    {
-                      found = true;
-                      break;
-                    }
-                  if (!found) hardware.Add(new ATIGPU(adapterInfo[i]));
-                }
+                      gpupar.Add(new GPUParam(adapterInfo[i], numpar));
                 report.AppendLine();
               }
           }
         }
-      } catch (DllNotFoundException) { } 
-        catch (EntryPointNotFoundException e) {
+      } 
+      catch (DllNotFoundException) 
+      { 
+
+      }
+      catch (EntryPointNotFoundException e) 
+      {
           report.AppendLine();
           report.AppendLine(e.ToString());
           report.AppendLine();        
-        }
+      }
     }
 
-    public string GetReport() {
+    public string GetReport() 
+    {
       return report.ToString();
-    }
-
-    public void Close() {
-      try {
-        foreach (ATIGPU gpu in hardware)
-        ADL.ADL_Main_Control_Destroy();
-      } catch (Exception) { }
     }
   }
 }

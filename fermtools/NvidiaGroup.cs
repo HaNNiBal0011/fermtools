@@ -19,18 +19,16 @@ namespace fermtools
     public readonly StringBuilder report = new StringBuilder();
     public NvidiaGroup(ref List<GPUParam> gpupar, int numpar)
     {
-      if (!NVAPI.IsAvailable) return;
-
+      if (!NVAPI.IsAvailable) 
+          return;
       report.AppendLine("NVAPI");
       report.AppendLine();
-
       string version;
       if (NVAPI.NvAPI_GetInterfaceVersionString(out version) == NvStatus.OK) 
       {
         report.Append("Version: ");
         report.AppendLine(version);
       }
-
       NvPhysicalGpuHandle[] handles = new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];
       int count;
       if (NVAPI.NvAPI_EnumPhysicalGPUs == null) 
@@ -49,7 +47,6 @@ namespace fermtools
           return;
         }
       }
-
       IDictionary<NvPhysicalGpuHandle, NvDisplayHandle> displayHandles = new Dictionary<NvPhysicalGpuHandle, NvDisplayHandle>();
       if (NVAPI.NvAPI_EnumNvidiaDisplayHandle != null && NVAPI.NvAPI_GetPhysicalGPUsFromDisplay != null) 
       {
@@ -60,17 +57,17 @@ namespace fermtools
           NvDisplayHandle displayHandle = new NvDisplayHandle();
           status = NVAPI.NvAPI_EnumNvidiaDisplayHandle(i, ref displayHandle);
           i++;
-
           if (status == NvStatus.OK) 
           {
             NvPhysicalGpuHandle[] handlesFromDisplay = new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];
             uint countFromDisplay;
             if (NVAPI.NvAPI_GetPhysicalGPUsFromDisplay(displayHandle, handlesFromDisplay, out countFromDisplay) == NvStatus.OK) 
             {
-              for (int j = 0; j < countFromDisplay; j++) 
-              {
-                if (!displayHandles.ContainsKey(handlesFromDisplay[j])) displayHandles.Add(handlesFromDisplay[j], displayHandle);
-              }
+                for (int j = 0; j < countFromDisplay; j++)
+                {
+                    if (!displayHandles.ContainsKey(handlesFromDisplay[j]))
+                        displayHandles.Add(handlesFromDisplay[j], displayHandle);
+                }
             }
           }
         }
@@ -89,7 +86,7 @@ namespace fermtools
       report.AppendLine();
     }
 
-    private string GetReportCard(int adapterIndex, NvPhysicalGpuHandle handle, NvDisplayHandle displayHandle)
+      private string GetReportCard(int adapterIndex, NvPhysicalGpuHandle handle, NvDisplayHandle displayHandle)
     {
         StringBuilder r = new StringBuilder();
         r.AppendLine("Nvidia GPU");
@@ -117,7 +114,6 @@ namespace fermtools
             }
         }
         r.AppendLine();
-
         if (NVAPI.NvAPI_GPU_GetPCIIdentifiers != null)
         {
             uint deviceId, subSystemId, revisionId, extDeviceId;
@@ -135,16 +131,13 @@ namespace fermtools
                 r.AppendLine();
             }
         }
-
         if (NVAPI.NvAPI_GPU_GetThermalSettings != null)
         {
             NvGPUThermalSettings settings = new NvGPUThermalSettings();
             settings.Version = NVAPI.GPU_THERMAL_SETTINGS_VER;
             settings.Count = NVAPI.MAX_THERMAL_SENSORS_PER_GPU;
             settings.Sensor = new NvSensor[NVAPI.MAX_THERMAL_SENSORS_PER_GPU];
-
             NvStatus status = NVAPI.NvAPI_GPU_GetThermalSettings(handle, (int)NvThermalTarget.ALL, ref settings);
-
             r.AppendLine("Thermal Settings");
             r.AppendLine();
             if (status == NvStatus.OK)
@@ -165,14 +158,12 @@ namespace fermtools
             }
             r.AppendLine();
         }
-
         if (NVAPI.NvAPI_GPU_GetAllClocks != null)
         {
             NvClocks allClocks = new NvClocks();
             allClocks.Version = NVAPI.GPU_CLOCKS_VER;
             allClocks.Clock = new uint[NVAPI.MAX_CLOCKS_PER_GPU];
             NvStatus status = NVAPI.NvAPI_GPU_GetAllClocks(handle, ref allClocks);
-
             r.AppendLine("Clocks");
             r.AppendLine();
             if (status == NvStatus.OK)
@@ -206,14 +197,12 @@ namespace fermtools
             }
             r.AppendLine();
         }
-
         if (NVAPI.NvAPI_GPU_GetPStates != null)
         {
             NvPStates states = new NvPStates();
             states.Version = NVAPI.GPU_PSTATES_VER;
             states.PStates = new NvPState[NVAPI.MAX_PSTATES_PER_GPU];
             NvStatus status = NVAPI.NvAPI_GPU_GetPStates(handle, ref states);
-
             r.AppendLine("P-States");
             r.AppendLine();
             if (status == NvStatus.OK)
@@ -228,14 +217,12 @@ namespace fermtools
             }
             r.AppendLine();
         }
-
         if (NVAPI.NvAPI_GPU_GetUsages != null)
         {
             NvUsages usages = new NvUsages();
             usages.Version = NVAPI.GPU_USAGES_VER;
             usages.Usage = new uint[NVAPI.MAX_USAGES_PER_GPU];
             NvStatus status = NVAPI.NvAPI_GPU_GetUsages(handle, ref usages);
-
             r.AppendLine("Usages");
             r.AppendLine();
             if (status == NvStatus.OK)
@@ -250,14 +237,12 @@ namespace fermtools
             }
             r.AppendLine();
         }
-
         if (NVAPI.NvAPI_GPU_GetCoolerSettings != null)
         {
             NvGPUCoolerSettings settings = new NvGPUCoolerSettings();
             settings.Version = NVAPI.GPU_COOLER_SETTINGS_VER;
             settings.Cooler = new NvCooler[NVAPI.MAX_COOLER_PER_GPU];
             NvStatus status = NVAPI.NvAPI_GPU_GetCoolerSettings(handle, 0, ref settings);
-
             r.AppendLine("Cooler Settings");
             r.AppendLine();
             if (status == NvStatus.OK)
@@ -285,14 +270,12 @@ namespace fermtools
             }
             r.AppendLine();
         }
-
         if (NVAPI.NvAPI_GPU_GetMemoryInfo != null)
         {
             NvMemoryInfo memoryInfo = new NvMemoryInfo();
             memoryInfo.Version = NVAPI.GPU_MEMORY_INFO_VER;
             memoryInfo.Values = new uint[NVAPI.MAX_MEMORY_VALUES_PER_GPU];
             NvStatus status = NVAPI.NvAPI_GPU_GetMemoryInfo(displayHandle, ref memoryInfo);
-
             r.AppendLine("Memory Info");
             r.AppendLine();
             if (status == NvStatus.OK)
@@ -307,7 +290,6 @@ namespace fermtools
             }
             r.AppendLine();
         }
-
         return r.ToString();
     }
      public string GetReport() 

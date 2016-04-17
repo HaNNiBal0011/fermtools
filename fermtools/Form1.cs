@@ -33,7 +33,7 @@ namespace fermtools
         ToolTip pbTT;               //Инфа для отображения состояния WDT
         int CardCount;              //Количество найденных видеокарт
 
-        private List<GPUParam> gpupar = new List<GPUParam>();               //Параметры GPU
+        private List<GPUParam> gpupar = new List<GPUParam>();               //Коллекция Параметров GPU
         private List<System.Windows.Forms.TextBox> par = new List<System.Windows.Forms.TextBox>();          //Коллекция текст боксов для отображения параметров видеокарт
         private List<System.Windows.Forms.CheckBox> check = new List<System.Windows.Forms.CheckBox>();      //Коллекция чек боксов для отметки отслеживания параметров
         private List<System.Windows.Forms.Label> label = new List<System.Windows.Forms.Label>();            //Коллекция меток для вывода названий параметров
@@ -44,7 +44,7 @@ namespace fermtools
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
             nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
-            atigr = new ATIGroup(); //Группа видеокарт ATI
+            atigr = new ATIGroup(ref gpupar, NumPar); //Группа видеокарт ATI
             CardCount = gpupar.Count; //Сколько всего видеокарт
             WriteEventLog(GetReportVideoCard(), EventLogEntryType.Information);
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
