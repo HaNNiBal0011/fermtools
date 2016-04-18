@@ -55,6 +55,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btSaveMon = new System.Windows.Forms.Button();
+            this.cbEnableSSL = new System.Windows.Forms.CheckBox();
+            this.btSendTest = new System.Windows.Forms.Button();
+            this.tbPassword = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tbSubject = new System.Windows.Forms.TextBox();
+            this.tbMailTo = new System.Windows.Forms.TextBox();
+            this.tbMailFrom = new System.Windows.Forms.TextBox();
+            this.tbSmtpServer = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
@@ -62,6 +75,7 @@
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -296,6 +310,19 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btSaveMon);
+            this.tabPage2.Controls.Add(this.cbEnableSSL);
+            this.tabPage2.Controls.Add(this.btSendTest);
+            this.tabPage2.Controls.Add(this.tbPassword);
+            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.tbSubject);
+            this.tabPage2.Controls.Add(this.tbMailTo);
+            this.tabPage2.Controls.Add(this.tbMailFrom);
+            this.tabPage2.Controls.Add(this.tbSmtpServer);
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.label10);
+            this.tabPage2.Controls.Add(this.label9);
+            this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -303,6 +330,119 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Setup";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btSaveMon
+            // 
+            this.btSaveMon.Location = new System.Drawing.Point(222, 150);
+            this.btSaveMon.Name = "btSaveMon";
+            this.btSaveMon.Size = new System.Drawing.Size(89, 29);
+            this.btSaveMon.TabIndex = 12;
+            this.btSaveMon.Text = "Save";
+            this.btSaveMon.UseVisualStyleBackColor = true;
+            this.btSaveMon.Click += new System.EventHandler(this.SaveSetting);
+            // 
+            // cbEnableSSL
+            // 
+            this.cbEnableSSL.Location = new System.Drawing.Point(6, 150);
+            this.cbEnableSSL.Name = "cbEnableSSL";
+            this.cbEnableSSL.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.cbEnableSSL.Size = new System.Drawing.Size(117, 21);
+            this.cbEnableSSL.TabIndex = 11;
+            this.cbEnableSSL.Text = "Enable SSL";
+            this.cbEnableSSL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbEnableSSL.UseVisualStyleBackColor = true;
+            // 
+            // btSendTest
+            // 
+            this.btSendTest.Location = new System.Drawing.Point(129, 150);
+            this.btSendTest.Name = "btSendTest";
+            this.btSendTest.Size = new System.Drawing.Size(89, 29);
+            this.btSendTest.TabIndex = 10;
+            this.btSendTest.Text = "SendTest";
+            this.btSendTest.UseVisualStyleBackColor = true;
+            this.btSendTest.Click += new System.EventHandler(this.Send_TestMail);
+            // 
+            // tbPassword
+            // 
+            this.tbPassword.Location = new System.Drawing.Point(106, 122);
+            this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '*';
+            this.tbPassword.Size = new System.Drawing.Size(205, 22);
+            this.tbPassword.TabIndex = 9;
+            this.tbPassword.UseSystemPasswordChar = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(8, 125);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(73, 17);
+            this.label12.TabIndex = 8;
+            this.label12.Text = "Password:";
+            // 
+            // tbSubject
+            // 
+            this.tbSubject.Location = new System.Drawing.Point(106, 94);
+            this.tbSubject.Name = "tbSubject";
+            this.tbSubject.Size = new System.Drawing.Size(205, 22);
+            this.tbSubject.TabIndex = 7;
+            // 
+            // tbMailTo
+            // 
+            this.tbMailTo.Location = new System.Drawing.Point(106, 66);
+            this.tbMailTo.Name = "tbMailTo";
+            this.tbMailTo.Size = new System.Drawing.Size(205, 22);
+            this.tbMailTo.TabIndex = 6;
+            // 
+            // tbMailFrom
+            // 
+            this.tbMailFrom.Location = new System.Drawing.Point(106, 38);
+            this.tbMailFrom.Name = "tbMailFrom";
+            this.tbMailFrom.Size = new System.Drawing.Size(205, 22);
+            this.tbMailFrom.TabIndex = 5;
+            // 
+            // tbSmtpServer
+            // 
+            this.tbSmtpServer.Location = new System.Drawing.Point(106, 11);
+            this.tbSmtpServer.Name = "tbSmtpServer";
+            this.tbSmtpServer.Size = new System.Drawing.Size(205, 22);
+            this.tbSmtpServer.TabIndex = 4;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(8, 97);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(59, 17);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "Subject:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(8, 69);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(58, 17);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Mail To:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(8, 41);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(73, 17);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Mail From:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 14);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(92, 17);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "SMTP Server";
             // 
             // timer1
             // 
@@ -339,6 +479,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -373,6 +515,19 @@
         private System.Windows.Forms.CheckBox checkGPULoad;
         private System.Windows.Forms.CheckBox checkMemoryClock;
         private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
+        private System.Windows.Forms.Button btSendTest;
+        private System.Windows.Forms.TextBox tbPassword;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox tbSubject;
+        private System.Windows.Forms.TextBox tbMailTo;
+        private System.Windows.Forms.TextBox tbMailFrom;
+        private System.Windows.Forms.TextBox tbSmtpServer;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox cbEnableSSL;
+        private System.Windows.Forms.Button btSaveMon;
     }
 }
 

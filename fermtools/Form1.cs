@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.Threading;
+using System.Drawing;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using System.Management;
+using System.Net;
+using System.Net.Mail;
 using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Management;
+using System.Security.Cryptography;
+using System.Security.Permissions;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace fermtools
 {
@@ -26,6 +30,7 @@ namespace fermtools
         ATIGroup atigr;             //Группа AMD видеокарт
         bool fExitCancel;           //Флаг используется для сворачивания окна формы в трей при нажатии на крестик и для завершения программы при нажатии Exit в контектстном меню 
         bool fReset;                //Устанавливается, если уже запущен процесс перезагрузки компьютера
+        bool fMessage;              //Устанавливается, если выведена сообщение перезагрузки
         byte WDtimer;               //Интервал в минутах для записи в WatchDog Timer
         Thread pipeServerTh;        //Поток для работы именованного канала
         ManualResetEvent signal;    //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
@@ -41,8 +46,10 @@ namespace fermtools
         public Form1(string[] args)
         {
             InitializeComponent();
+            RestoreSetting();
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
+            fMessage = false; //Сообщение не выведено
             nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
             atigr = new ATIGroup(ref gpupar, NumPar); //Группа видеокарт ATI
             CardCount = gpupar.Count; //Сколько всего видеокарт
@@ -207,18 +214,42 @@ namespace fermtools
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
+            string repmon = "";
             //Цикл тика 1 секунда, нстраивается в графическом конструкторе свойств
             for (int i = 0; i != CardCount; i++)
             {
                 gpupar[i].Update(TickCountMax);
                 for (int j = 0; j != NumPar; j++)
-                    this.par[j].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
+                    this.par[j+i*NumPar].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
             }
-            //Мониторим, если что то не так, перезагружаем комп
-            if (Monitoring())
-                resetToolStripMenuItem_Click(sender,e);
+            //Мониторим, если не инициирована перезагрузка, если что то не так, перезагружаем комп
+            if (!fReset && !fMessage)
+            {
+                if (Monitoring(ref repmon))
+                {
+                    fMessage = true;
+                    Thread msgsh = new Thread(MessageShowTh);
+                    msgsh.Start(repmon);
+                }
+            }
         }
-        private bool Monitoring()
+        private void MessageShowTh(object rep)
+        {
+            DialogResult dlg = AutoClosingMessageBox.Show("The monitoring system has identified the wrong setting:\n" + rep + "the computer prepares to reset\n" +
+                "If a reset is not required, disable the monitoring", "Fermtool reset", 20000);
+            //Если нажали ОК (или само нажалось) то запускаем процесс перезагрузки, иначе нажали Отмена и ждем 10 сек для реакции на сработку.
+            if (dlg == System.Windows.Forms.DialogResult.OK)
+            {
+                object sender = null; EventArgs e = null;
+                resetToolStripMenuItem_Click(sender, e);
+            }
+            else
+            {
+                Thread.Sleep(10000);
+                fMessage = false;
+            }
+        }
+        private bool Monitoring(ref string rep)
         {
             bool res = false;
             StringBuilder report = new StringBuilder();
@@ -244,9 +275,13 @@ namespace fermtools
                     }
                 }
             }
-            //Если что то где то упало, сообщаем в EVENLOG
-            if (res) 
-                WriteEventLog(report.ToString(), EventLogEntryType.Error);
+            //Если что то где то упало, сообщаем в EVENLOG и шлем e-mail
+            if (res)
+            {
+                rep = report.ToString();
+                WriteEventLog(rep, EventLogEntryType.Error);
+                sendMail(rep);
+            }
             return res;
         }
         private void timer2_Tick(object sender, EventArgs e)
@@ -306,6 +341,8 @@ namespace fermtools
             {
                 timer2.Stop();
                 wdt.SetWDT(1);
+                toolStripProgressBar1.Value = 0;
+                pbTT.SetToolTip(this.statusStrip1, "WDT reset computer after 1 min.");
             }
             else
             {
@@ -323,6 +360,147 @@ namespace fermtools
                     mboReboot = manObj.InvokeMethod("Win32Shutdown", mboRebootParams, null);
                 }
             }
+        }
+        private bool sendMail(string msg)
+        {
+            try
+            {
+                MailAddress from = new MailAddress(this.tbMailFrom.Text);
+                MailAddress to = new MailAddress(this.tbMailTo.Text);
+                MailMessage message = new MailMessage(from, to);
+                message.Subject = this.tbSubject.Text;
+                message.Body = msg;
+                //В поле должно быть указано Server, port
+                string[] elements = this.tbSmtpServer.Text.Split(',');
+                string server = elements[0];
+                //Если попытка преобразовать строку в число не удалась, считаем порт по умолчаию 25
+                int port;
+                if (elements.Length > 1)
+                {
+                    if (!int.TryParse(elements[1], out port))
+                        port = 25;
+                }
+                else
+                    port = 25;
+                SmtpClient client = new SmtpClient(server, port);
+                client.Credentials = new NetworkCredential(this.tbMailFrom.Text, this.tbPassword.Text);
+                client.EnableSsl = this.cbEnableSSL.Checked;
+                client.Send(message);
+            }
+            catch (Exception ex)
+            {
+                WriteEventLog(String.Format("Exception caught in sendMail(): {0}", ex.ToString()), EventLogEntryType.Error);
+                return false;
+            }
+            return true;
+        }
+
+        private void Send_TestMail(object sender, EventArgs e)
+        {
+            sendMail("Test");
+        }
+
+        private void SaveSetting(object sender, EventArgs e)
+        {
+            //Send mail setting
+            if (!String.IsNullOrEmpty(this.tbPassword.Text))
+                Properties.Settings.Default.Password = Encrypt(this.tbPassword.Text, "pass");
+            else
+                Properties.Settings.Default.Password = "";
+            Properties.Settings.Default.SMTPServer = this.tbSmtpServer.Text;
+            Properties.Settings.Default.MailFrom = this.tbMailFrom.Text;
+            Properties.Settings.Default.MailTo = this.tbMailTo.Text;
+            Properties.Settings.Default.Subject = this.tbSubject.Text;
+            Properties.Settings.Default.EnableSSL = this.cbEnableSSL.Checked;
+            //Monitoring setting
+            Properties.Settings.Default.mGPUClock = this.checkCoreClock.Checked;
+            Properties.Settings.Default.mMemClock = this.checkMemoryClock.Checked;
+            Properties.Settings.Default.mGPULoad = this.checkGPULoad.Checked;
+            Properties.Settings.Default.mMemLoad = this.checkMemCtrlLoad.Checked;
+            Properties.Settings.Default.mGPUTemp = this.checkGPUTemp.Checked;
+            Properties.Settings.Default.mFanLoad = this.checkFanLoad.Checked;
+            Properties.Settings.Default.mFanRPM = this.checkFanRPM.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void RestoreSetting()
+        {
+            //Send mail setting
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.Password))
+                this.tbPassword.Text = Decrypt(Properties.Settings.Default.Password, "pass");
+            else
+                this.tbPassword.Text = "";
+            this.tbSmtpServer.Text = Properties.Settings.Default.SMTPServer;
+            this.tbMailFrom.Text = Properties.Settings.Default.MailFrom;
+            this.tbMailTo.Text = Properties.Settings.Default.MailTo;
+            this.tbSubject.Text = Properties.Settings.Default.Subject;
+            this.cbEnableSSL.Checked = Properties.Settings.Default.EnableSSL;
+            //Monitoring setting
+            this.checkCoreClock.Checked = Properties.Settings.Default.mGPUClock;
+            this.checkMemoryClock.Checked = Properties.Settings.Default.mMemClock;
+            this.checkGPULoad.Checked = Properties.Settings.Default.mGPULoad;
+            this.checkMemCtrlLoad.Checked = Properties.Settings.Default.mMemLoad;
+            this.checkGPUTemp.Checked = Properties.Settings.Default.mGPUTemp;
+            this.checkFanLoad.Checked = Properties.Settings.Default.mFanLoad;
+            this.checkFanRPM.Checked = Properties.Settings.Default.mFanRPM;
+        }
+        public static string Encrypt(string data, string password)
+        {
+            if(String.IsNullOrEmpty(data))
+                return null;
+            if(String.IsNullOrEmpty(password))
+                return null;
+            // setup the encryption algorithm
+            Rfc2898DeriveBytes keyGenerator = new Rfc2898DeriveBytes(password, 8);
+            Rijndael aes = Rijndael.Create();
+            aes.IV = keyGenerator.GetBytes(aes.BlockSize / 8);
+            aes.Key = keyGenerator.GetBytes(aes.KeySize / 8);
+            // encrypt the data
+            byte[] rawData = Encoding.Unicode.GetBytes(data);
+            using(MemoryStream memoryStream = new MemoryStream())
+            try
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    memoryStream.Write(keyGenerator.Salt, 0, keyGenerator.Salt.Length);
+                    cryptoStream.Write(rawData, 0, rawData.Length);
+                    cryptoStream.Close();
+                    byte[] encrypted = memoryStream.ToArray();
+                    return Encoding.Unicode.GetString(encrypted);
+                }
+            }
+            catch { return null; }
+        }
+        public static string Decrypt(string data, string password)
+        {
+            if(String.IsNullOrEmpty(data))
+                return null;
+            if(String.IsNullOrEmpty(password))
+                return null;
+            byte[] rawData = Encoding.Unicode.GetBytes(data);
+            if(rawData.Length < 8)
+                throw new ArgumentException("Invalid input data");
+            // setup the decryption algorithm
+            byte[] salt = new byte[8];
+            for(int i = 0; i < salt.Length; i++)
+                salt[i] = rawData[i];
+            Rfc2898DeriveBytes keyGenerator = new Rfc2898DeriveBytes(password, salt);
+            Rijndael aes = Rijndael.Create();
+            aes.IV = keyGenerator.GetBytes(aes.BlockSize / 8);
+            aes.Key = keyGenerator.GetBytes(aes.KeySize / 8);
+            // decrypt the data
+            using(MemoryStream memoryStream = new MemoryStream())
+            try
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cryptoStream.Write(rawData, 8, rawData.Length - 8);
+                    cryptoStream.Close();
+                    byte[] decrypted = memoryStream.ToArray();
+                    return Encoding.Unicode.GetString(decrypted);
+                }
+            }
+            catch { return null; }
         }
     }
 }
