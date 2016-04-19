@@ -385,6 +385,8 @@ namespace fermtools
                 SmtpClient client = new SmtpClient(server, port);
                 client.Credentials = new NetworkCredential(this.tbMailFrom.Text, this.tbPassword.Text);
                 client.EnableSsl = this.cbEnableSSL.Checked;
+                //Фиксит ошибку при установке флага SSL: System.Security.Authentication.AuthenticationException: Удаленный сертификат недействителен согласно результатам проверки подлинности.
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 client.Send(message);
             }
             catch (Exception ex)
@@ -397,7 +399,10 @@ namespace fermtools
 
         private void Send_TestMail(object sender, EventArgs e)
         {
-            sendMail("Test");
+            if (sendMail("Test"))
+                MessageBox.Show("Sending a test mail message successfully", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            else
+                MessageBox.Show("An error occurred while sending mail message\nFor details, see the eventlog", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
 
         private void SaveSetting(object sender, EventArgs e)
@@ -421,6 +426,7 @@ namespace fermtools
             Properties.Settings.Default.mFanLoad = this.checkFanLoad.Checked;
             Properties.Settings.Default.mFanRPM = this.checkFanRPM.Checked;
             Properties.Settings.Default.Save();
+            MessageBox.Show("Settings save successfully", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
 
         private void RestoreSetting()
