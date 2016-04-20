@@ -1,4 +1,6 @@
-﻿namespace fermtools
+﻿// Copyright © 2016 Dimasin. All rights reserved.
+
+namespace fermtools
 {
     partial class Form1
     {
@@ -96,12 +98,12 @@
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 82);
+            this.MenuContext.Size = new System.Drawing.Size(90, 76);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -109,7 +111,7 @@
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -117,7 +119,7 @@
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright © 2016 Dimasin. All rights reserved.
+
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
