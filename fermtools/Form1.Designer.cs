@@ -334,13 +334,13 @@ namespace fermtools
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(500, 235);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Setup";
+            this.tabPage2.Text = "E-mail setting";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // cbOnSendStart
             // 
             this.cbOnSendStart.AutoSize = true;
-            this.cbOnSendStart.Location = new System.Drawing.Point(11, 34);
+            this.cbOnSendStart.Location = new System.Drawing.Point(11, 30);
             this.cbOnSendStart.Name = "cbOnSendStart";
             this.cbOnSendStart.Size = new System.Drawing.Size(174, 21);
             this.cbOnSendStart.TabIndex = 14;
@@ -350,16 +350,16 @@ namespace fermtools
             // cbOnEmail
             // 
             this.cbOnEmail.AutoSize = true;
-            this.cbOnEmail.Location = new System.Drawing.Point(11, 7);
+            this.cbOnEmail.Location = new System.Drawing.Point(11, 6);
             this.cbOnEmail.Name = "cbOnEmail";
-            this.cbOnEmail.Size = new System.Drawing.Size(183, 21);
+            this.cbOnEmail.Size = new System.Drawing.Size(188, 21);
             this.cbOnEmail.TabIndex = 13;
-            this.cbOnEmail.Text = "Enable e-mail nitification";
+            this.cbOnEmail.Text = "Enable e-mail notification";
             this.cbOnEmail.UseVisualStyleBackColor = true;
             // 
             // btSaveMon
             // 
-            this.btSaveMon.Location = new System.Drawing.Point(222, 198);
+            this.btSaveMon.Location = new System.Drawing.Point(222, 194);
             this.btSaveMon.Name = "btSaveMon";
             this.btSaveMon.Size = new System.Drawing.Size(89, 29);
             this.btSaveMon.TabIndex = 12;
@@ -369,7 +369,7 @@ namespace fermtools
             // 
             // cbEnableSSL
             // 
-            this.cbEnableSSL.Location = new System.Drawing.Point(6, 198);
+            this.cbEnableSSL.Location = new System.Drawing.Point(6, 194);
             this.cbEnableSSL.Name = "cbEnableSSL";
             this.cbEnableSSL.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbEnableSSL.Size = new System.Drawing.Size(117, 21);
@@ -380,7 +380,7 @@ namespace fermtools
             // 
             // btSendTest
             // 
-            this.btSendTest.Location = new System.Drawing.Point(129, 198);
+            this.btSendTest.Location = new System.Drawing.Point(129, 194);
             this.btSendTest.Name = "btSendTest";
             this.btSendTest.Size = new System.Drawing.Size(89, 29);
             this.btSendTest.TabIndex = 10;
@@ -390,7 +390,7 @@ namespace fermtools
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(106, 170);
+            this.tbPassword.Location = new System.Drawing.Point(106, 166);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(205, 22);
@@ -400,7 +400,7 @@ namespace fermtools
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(8, 173);
+            this.label12.Location = new System.Drawing.Point(8, 169);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(73, 17);
             this.label12.TabIndex = 8;
@@ -408,28 +408,28 @@ namespace fermtools
             // 
             // tbSubject
             // 
-            this.tbSubject.Location = new System.Drawing.Point(106, 142);
+            this.tbSubject.Location = new System.Drawing.Point(106, 138);
             this.tbSubject.Name = "tbSubject";
             this.tbSubject.Size = new System.Drawing.Size(205, 22);
             this.tbSubject.TabIndex = 7;
             // 
             // tbMailTo
             // 
-            this.tbMailTo.Location = new System.Drawing.Point(106, 114);
+            this.tbMailTo.Location = new System.Drawing.Point(106, 110);
             this.tbMailTo.Name = "tbMailTo";
             this.tbMailTo.Size = new System.Drawing.Size(205, 22);
             this.tbMailTo.TabIndex = 6;
             // 
             // tbMailFrom
             // 
-            this.tbMailFrom.Location = new System.Drawing.Point(106, 86);
+            this.tbMailFrom.Location = new System.Drawing.Point(106, 82);
             this.tbMailFrom.Name = "tbMailFrom";
             this.tbMailFrom.Size = new System.Drawing.Size(205, 22);
             this.tbMailFrom.TabIndex = 5;
             // 
             // tbSmtpServer
             // 
-            this.tbSmtpServer.Location = new System.Drawing.Point(106, 59);
+            this.tbSmtpServer.Location = new System.Drawing.Point(106, 55);
             this.tbSmtpServer.Name = "tbSmtpServer";
             this.tbSmtpServer.Size = new System.Drawing.Size(205, 22);
             this.tbSmtpServer.TabIndex = 4;
@@ -437,7 +437,7 @@ namespace fermtools
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 145);
+            this.label11.Location = new System.Drawing.Point(8, 141);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 17);
             this.label11.TabIndex = 3;
@@ -446,7 +446,7 @@ namespace fermtools
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(8, 117);
+            this.label10.Location = new System.Drawing.Point(8, 113);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 17);
             this.label10.TabIndex = 2;
@@ -455,7 +455,7 @@ namespace fermtools
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(8, 89);
+            this.label9.Location = new System.Drawing.Point(8, 85);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(73, 17);
             this.label9.TabIndex = 1;
@@ -464,7 +464,7 @@ namespace fermtools
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 62);
+            this.label8.Location = new System.Drawing.Point(8, 58);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(92, 17);
             this.label8.TabIndex = 0;

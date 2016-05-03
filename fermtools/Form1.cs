@@ -67,7 +67,7 @@ namespace fermtools
             pipeServerTh.Start();
             if (this.cbOnEmail.Checked && this.cbOnSendStart.Checked && Properties.Settings.Default.isReset) 
                 sendMail("Computer restart after freze"); //Если был хардресет отправляем мыло
-            Properties.Settings.Default.isReset = true; Properties.Settings.Default.Save(); //Сохраняем состояние ресета
+            Properties.Settings.Default.isReset = true; Properties.Settings.Default.Save(); //Устанавливаем и сохраняем состояние ресета
         }
         private string GetReportVideoCard()
         {
