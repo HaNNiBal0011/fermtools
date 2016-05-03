@@ -57,6 +57,8 @@ namespace fermtools
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cbOnSendStart = new System.Windows.Forms.CheckBox();
+            this.cbOnEmail = new System.Windows.Forms.CheckBox();
             this.btSaveMon = new System.Windows.Forms.Button();
             this.cbEnableSSL = new System.Windows.Forms.CheckBox();
             this.btSendTest = new System.Windows.Forms.Button();
@@ -73,8 +75,6 @@ namespace fermtools
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.cbOnEmail = new System.Windows.Forms.CheckBox();
-            this.cbOnSendStart = new System.Windows.Forms.CheckBox();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -100,12 +100,12 @@ namespace fermtools
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 76);
+            this.MenuContext.Size = new System.Drawing.Size(90, 82);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -113,7 +113,7 @@ namespace fermtools
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -121,7 +121,7 @@ namespace fermtools
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -337,6 +337,26 @@ namespace fermtools
             this.tabPage2.Text = "Setup";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // cbOnSendStart
+            // 
+            this.cbOnSendStart.AutoSize = true;
+            this.cbOnSendStart.Location = new System.Drawing.Point(11, 34);
+            this.cbOnSendStart.Name = "cbOnSendStart";
+            this.cbOnSendStart.Size = new System.Drawing.Size(174, 21);
+            this.cbOnSendStart.TabIndex = 14;
+            this.cbOnSendStart.Text = "Send e-mail after reset";
+            this.cbOnSendStart.UseVisualStyleBackColor = true;
+            // 
+            // cbOnEmail
+            // 
+            this.cbOnEmail.AutoSize = true;
+            this.cbOnEmail.Location = new System.Drawing.Point(11, 7);
+            this.cbOnEmail.Name = "cbOnEmail";
+            this.cbOnEmail.Size = new System.Drawing.Size(183, 21);
+            this.cbOnEmail.TabIndex = 13;
+            this.cbOnEmail.Text = "Enable e-mail nitification";
+            this.cbOnEmail.UseVisualStyleBackColor = true;
+            // 
             // btSaveMon
             // 
             this.btSaveMon.Location = new System.Drawing.Point(222, 198);
@@ -465,26 +485,6 @@ namespace fermtools
             // 
             this.timer2.Interval = 10000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
-            // cbOnEmail
-            // 
-            this.cbOnEmail.AutoSize = true;
-            this.cbOnEmail.Location = new System.Drawing.Point(11, 7);
-            this.cbOnEmail.Name = "cbOnEmail";
-            this.cbOnEmail.Size = new System.Drawing.Size(183, 21);
-            this.cbOnEmail.TabIndex = 13;
-            this.cbOnEmail.Text = "Enable e-mail nitification";
-            this.cbOnEmail.UseVisualStyleBackColor = true;
-            // 
-            // cbOnSendStart
-            // 
-            this.cbOnSendStart.AutoSize = true;
-            this.cbOnSendStart.Location = new System.Drawing.Point(11, 34);
-            this.cbOnSendStart.Name = "cbOnSendStart";
-            this.cbOnSendStart.Size = new System.Drawing.Size(174, 21);
-            this.cbOnSendStart.TabIndex = 14;
-            this.cbOnSendStart.Text = "Send e-mail after reset";
-            this.cbOnSendStart.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
