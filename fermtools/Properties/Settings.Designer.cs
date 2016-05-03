@@ -178,5 +178,41 @@ namespace fermtools.Properties {
                 this["mFanRPM"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cbOnSendStart {
+            get {
+                return ((bool)(this["cbOnSendStart"]));
+            }
+            set {
+                this["cbOnSendStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cbOnEmail {
+            get {
+                return ((bool)(this["cbOnEmail"]));
+            }
+            set {
+                this["cbOnEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool isReset {
+            get {
+                return ((bool)(this["isReset"]));
+            }
+            set {
+                this["isReset"] = value;
+            }
+        }
     }
 }

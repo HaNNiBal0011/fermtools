@@ -26,19 +26,20 @@ namespace fermtools
 {
     public partial class Form1 : Form
     {
-        const int NumPar = 7;       //Число параметров GPU выводимых в окошки
-        const int TickCountMax=60;  //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
-        NvidiaGroup nvigr;          //Группа Nvidia видеокарт
-        ATIGroup atigr;             //Группа AMD видеокарт
-        bool fExitCancel;           //Флаг используется для сворачивания окна формы в трей при нажатии на крестик и для завершения программы при нажатии Exit в контектстном меню 
-        bool fReset;                //Устанавливается, если уже запущен процесс перезагрузки компьютера
-        bool fMessage;              //Устанавливается, если выведена сообщение перезагрузки
-        byte WDtimer;               //Интервал в минутах для записи в WatchDog Timer
-        Thread pipeServerTh;        //Поток для работы именованного канала
-        ManualResetEvent signal;    //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
-        WDT wdt;                    //WatchDog Timer
-        ToolTip pbTT;               //Инфа для отображения состояния WDT
-        int CardCount;              //Количество найденных видеокарт
+        const int NumPar = 7;                   //Число параметров GPU выводимых в окошки
+        const int TickCountMax=60;              //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
+        NvidiaGroup nvigr;                      //Группа Nvidia видеокарт
+        ATIGroup atigr;                         //Группа AMD видеокарт
+        bool fExitCancel;                       //Флаг используется для сворачивания окна формы в трей при нажатии на крестик и для завершения программы при нажатии Exit в контектстном меню 
+        bool fReset;                            //Устанавливается, если уже запущен процесс перезагрузки компьютера
+        bool fMessage;                          //Устанавливается, если выведена сообщение перезагрузки
+        byte WDtimer;                           //Интервал в минутах для записи в WatchDog Timer
+        Thread pipeServerTh;                    //Поток для работы именованного канала
+        ManualResetEvent signal;                //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
+        WDT wdt;                                //WatchDog Timer
+        ToolTip pbTT;                           //Инфа для отображения состояния WDT
+        int CardCount;                          //Количество найденных видеокарт
+        const string rand = "xBW8skR2lmmMs";    //Случайная строка для эмуляции пароля
 
         private List<GPUParam> gpupar = new List<GPUParam>();               //Коллекция Параметров GPU
         private List<System.Windows.Forms.TextBox> par = new List<System.Windows.Forms.TextBox>();          //Коллекция текст боксов для отображения параметров видеокарт
@@ -64,6 +65,9 @@ namespace fermtools
             WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
             timer1.Start(); //Стартуем таймеры и потоки
             pipeServerTh.Start();
+            if (this.cbOnEmail.Checked && this.cbOnSendStart.Checked && Properties.Settings.Default.isReset) 
+                sendMail("Computer restart after freze"); //Если был хардресет отправляем мыло
+            Properties.Settings.Default.isReset = true; Properties.Settings.Default.Save(); //Сохраняем состояние ресета
         }
         private string GetReportVideoCard()
         {
@@ -282,7 +286,7 @@ namespace fermtools
             {
                 rep = report.ToString();
                 WriteEventLog(rep, EventLogEntryType.Error);
-                sendMail(rep);
+                if (this.cbOnEmail.Checked) sendMail(rep);
             }
             return res;
         }
@@ -328,6 +332,8 @@ namespace fermtools
             signal.Set();
             //Останавливаем WDT, если он есть
             if (wdt.isWDT) if (wdt.SetWDT(0)) WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+            //Сбрасываем состояние ресета
+            Properties.Settings.Default.isReset = false; Properties.Settings.Default.Save();
             Application.Exit();
         }
         private void ShowtoolStripMenuItem1_Click(object sender, EventArgs e)
@@ -385,7 +391,15 @@ namespace fermtools
                 else
                     port = 25;
                 SmtpClient client = new SmtpClient(server, port);
-                client.Credentials = new NetworkCredential(this.tbMailFrom.Text, this.tbPassword.Text);
+                //Если в поле пароль по умолчанию, то берем его из настроек, если нет (поменяли) то берем из поля формы
+                if (this.tbPassword.Text == rand)
+                {
+                    //Если в настройках не пусто и не пароль по умолчанию, то авторизуемся, иначе нет смысла авторизоваться
+                    if (!String.IsNullOrEmpty(Decrypt(Properties.Settings.Default.Password)) && Decrypt(Properties.Settings.Default.Password) != rand)
+                        client.Credentials = new NetworkCredential(this.tbMailFrom.Text, Decrypt(Properties.Settings.Default.Password));
+                }
+                else
+                    client.Credentials = new NetworkCredential(this.tbMailFrom.Text, this.tbPassword.Text);
                 client.EnableSsl = this.cbEnableSSL.Checked;
                 //Фиксит ошибку при установке флага SSL: System.Security.Authentication.AuthenticationException: Удаленный сертификат недействителен согласно результатам проверки подлинности.
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -404,21 +418,24 @@ namespace fermtools
             if (sendMail("Test"))
                 MessageBox.Show("Sending a test mail message successfully", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             else
-                MessageBox.Show("An error occurred while sending mail message\nFor details, see the eventlog", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("An error occurred while sending mail message\nFor details, see the eventlog", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
 
         private void SaveSetting(object sender, EventArgs e)
         {
             //Send mail setting
-            if (!String.IsNullOrEmpty(this.tbPassword.Text))
-                Properties.Settings.Default.Password = Encrypt(this.tbPassword.Text, "pass");
-            else
-                Properties.Settings.Default.Password = "";
+            if ((!String.IsNullOrEmpty(this.tbPassword.Text)) && (this.tbPassword.Text != rand))
+            {
+                Properties.Settings.Default.Password = Encrypt(this.tbPassword.Text);
+                this.tbPassword.Text = rand;
+            }
             Properties.Settings.Default.SMTPServer = this.tbSmtpServer.Text;
             Properties.Settings.Default.MailFrom = this.tbMailFrom.Text;
             Properties.Settings.Default.MailTo = this.tbMailTo.Text;
             Properties.Settings.Default.Subject = this.tbSubject.Text;
             Properties.Settings.Default.EnableSSL = this.cbEnableSSL.Checked;
+            Properties.Settings.Default.cbOnEmail = this.cbOnEmail.Checked;
+            Properties.Settings.Default.cbOnSendStart = this.cbOnSendStart.Checked;
             //Monitoring setting
             Properties.Settings.Default.mGPUClock = this.checkCoreClock.Checked;
             Properties.Settings.Default.mMemClock = this.checkMemoryClock.Checked;
@@ -434,15 +451,15 @@ namespace fermtools
         private void RestoreSetting()
         {
             //Send mail setting
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.Password))
-                this.tbPassword.Text = Decrypt(Properties.Settings.Default.Password, "pass");
-            else
-                this.tbPassword.Text = "";
+            if (!String.IsNullOrEmpty(Decrypt(Properties.Settings.Default.Password)))
+                this.tbPassword.Text = rand;
             this.tbSmtpServer.Text = Properties.Settings.Default.SMTPServer;
             this.tbMailFrom.Text = Properties.Settings.Default.MailFrom;
             this.tbMailTo.Text = Properties.Settings.Default.MailTo;
             this.tbSubject.Text = Properties.Settings.Default.Subject;
             this.cbEnableSSL.Checked = Properties.Settings.Default.EnableSSL;
+            this.cbOnEmail.Checked = Properties.Settings.Default.cbOnEmail;
+            this.cbOnSendStart.Checked = Properties.Settings.Default.cbOnSendStart;
             //Monitoring setting
             this.checkCoreClock.Checked = Properties.Settings.Default.mGPUClock;
             this.checkMemoryClock.Checked = Properties.Settings.Default.mMemClock;
@@ -452,14 +469,12 @@ namespace fermtools
             this.checkFanLoad.Checked = Properties.Settings.Default.mFanLoad;
             this.checkFanRPM.Checked = Properties.Settings.Default.mFanRPM;
         }
-        public static string Encrypt(string data, string password)
+        public static string Encrypt(string data)
         {
             if(String.IsNullOrEmpty(data))
                 return null;
-            if(String.IsNullOrEmpty(password))
-                return null;
             // setup the encryption algorithm
-            Rfc2898DeriveBytes keyGenerator = new Rfc2898DeriveBytes(password, 8);
+            Rfc2898DeriveBytes keyGenerator = new Rfc2898DeriveBytes(rand, 8);
             Rijndael aes = Rijndael.Create();
             aes.IV = keyGenerator.GetBytes(aes.BlockSize / 8);
             aes.Key = keyGenerator.GetBytes(aes.KeySize / 8);
@@ -474,25 +489,30 @@ namespace fermtools
                     cryptoStream.Write(rawData, 0, rawData.Length);
                     cryptoStream.Close();
                     byte[] encrypted = memoryStream.ToArray();
-                    return Encoding.Unicode.GetString(encrypted);
+                    char [] outArr = new char[encrypted.Length * 2];
+                    int chlen = Convert.ToBase64CharArray(encrypted, 0, encrypted.Length, outArr, 0);
+                    return new string(outArr, 0, chlen);
                 }
             }
             catch { return null; }
         }
-        public static string Decrypt(string data, string password)
+        public static string Decrypt(string data)
         {
             if(String.IsNullOrEmpty(data))
                 return null;
-            if(String.IsNullOrEmpty(password))
-                return null;
-            byte[] rawData = Encoding.Unicode.GetBytes(data);
+            byte[] rawData = new byte[data.Length];
+            try
+            {
+                rawData = Convert.FromBase64CharArray(data.ToCharArray(), 0, data.Length);
+            }
+            catch { return null; }
             if(rawData.Length < 8)
                 throw new ArgumentException("Invalid input data");
             // setup the decryption algorithm
             byte[] salt = new byte[8];
             for(int i = 0; i < salt.Length; i++)
                 salt[i] = rawData[i];
-            Rfc2898DeriveBytes keyGenerator = new Rfc2898DeriveBytes(password, salt);
+            Rfc2898DeriveBytes keyGenerator = new Rfc2898DeriveBytes(rand, salt);
             Rijndael aes = Rijndael.Create();
             aes.IV = keyGenerator.GetBytes(aes.BlockSize / 8);
             aes.Key = keyGenerator.GetBytes(aes.KeySize / 8);
@@ -508,7 +528,8 @@ namespace fermtools
                     return Encoding.Unicode.GetString(decrypted);
                 }
             }
-            catch { return null; }
+            catch 
+            { return null; }
         }
     }
 }
