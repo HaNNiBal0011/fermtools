@@ -72,14 +72,29 @@ namespace fermtools
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btBotSave = new System.Windows.Forms.Button();
+            this.btBotTest = new System.Windows.Forms.Button();
+            this.cbResponceCmd = new System.Windows.Forms.CheckBox();
+            this.cbTelegramOn = new System.Windows.Forms.CheckBox();
+            this.textFermaName = new System.Windows.Forms.TextBox();
+            this.textBotSendTo = new System.Windows.Forms.TextBox();
+            this.textBotName = new System.Windows.Forms.TextBox();
+            this.textBotToken = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -155,6 +170,7 @@ namespace fermtools
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -340,7 +356,7 @@ namespace fermtools
             // cbOnSendStart
             // 
             this.cbOnSendStart.AutoSize = true;
-            this.cbOnSendStart.Location = new System.Drawing.Point(11, 30);
+            this.cbOnSendStart.Location = new System.Drawing.Point(17, 30);
             this.cbOnSendStart.Name = "cbOnSendStart";
             this.cbOnSendStart.Size = new System.Drawing.Size(174, 21);
             this.cbOnSendStart.TabIndex = 14;
@@ -350,7 +366,7 @@ namespace fermtools
             // cbOnEmail
             // 
             this.cbOnEmail.AutoSize = true;
-            this.cbOnEmail.Location = new System.Drawing.Point(11, 6);
+            this.cbOnEmail.Location = new System.Drawing.Point(17, 6);
             this.cbOnEmail.Name = "cbOnEmail";
             this.cbOnEmail.Size = new System.Drawing.Size(188, 21);
             this.cbOnEmail.TabIndex = 13;
@@ -359,7 +375,7 @@ namespace fermtools
             // 
             // btSaveMon
             // 
-            this.btSaveMon.Location = new System.Drawing.Point(222, 194);
+            this.btSaveMon.Location = new System.Drawing.Point(228, 194);
             this.btSaveMon.Name = "btSaveMon";
             this.btSaveMon.Size = new System.Drawing.Size(89, 29);
             this.btSaveMon.TabIndex = 12;
@@ -369,7 +385,7 @@ namespace fermtools
             // 
             // cbEnableSSL
             // 
-            this.cbEnableSSL.Location = new System.Drawing.Point(6, 194);
+            this.cbEnableSSL.Location = new System.Drawing.Point(12, 194);
             this.cbEnableSSL.Name = "cbEnableSSL";
             this.cbEnableSSL.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbEnableSSL.Size = new System.Drawing.Size(117, 21);
@@ -380,17 +396,17 @@ namespace fermtools
             // 
             // btSendTest
             // 
-            this.btSendTest.Location = new System.Drawing.Point(129, 194);
+            this.btSendTest.Location = new System.Drawing.Point(135, 194);
             this.btSendTest.Name = "btSendTest";
             this.btSendTest.Size = new System.Drawing.Size(89, 29);
             this.btSendTest.TabIndex = 10;
-            this.btSendTest.Text = "SendTest";
+            this.btSendTest.Text = "Send Test";
             this.btSendTest.UseVisualStyleBackColor = true;
             this.btSendTest.Click += new System.EventHandler(this.Send_TestMail);
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(106, 166);
+            this.tbPassword.Location = new System.Drawing.Point(112, 166);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(205, 22);
@@ -400,7 +416,7 @@ namespace fermtools
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(8, 169);
+            this.label12.Location = new System.Drawing.Point(14, 169);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(73, 17);
             this.label12.TabIndex = 8;
@@ -408,28 +424,28 @@ namespace fermtools
             // 
             // tbSubject
             // 
-            this.tbSubject.Location = new System.Drawing.Point(106, 138);
+            this.tbSubject.Location = new System.Drawing.Point(112, 138);
             this.tbSubject.Name = "tbSubject";
             this.tbSubject.Size = new System.Drawing.Size(205, 22);
             this.tbSubject.TabIndex = 7;
             // 
             // tbMailTo
             // 
-            this.tbMailTo.Location = new System.Drawing.Point(106, 110);
+            this.tbMailTo.Location = new System.Drawing.Point(112, 110);
             this.tbMailTo.Name = "tbMailTo";
             this.tbMailTo.Size = new System.Drawing.Size(205, 22);
             this.tbMailTo.TabIndex = 6;
             // 
             // tbMailFrom
             // 
-            this.tbMailFrom.Location = new System.Drawing.Point(106, 82);
+            this.tbMailFrom.Location = new System.Drawing.Point(112, 82);
             this.tbMailFrom.Name = "tbMailFrom";
             this.tbMailFrom.Size = new System.Drawing.Size(205, 22);
             this.tbMailFrom.TabIndex = 5;
             // 
             // tbSmtpServer
             // 
-            this.tbSmtpServer.Location = new System.Drawing.Point(106, 55);
+            this.tbSmtpServer.Location = new System.Drawing.Point(112, 55);
             this.tbSmtpServer.Name = "tbSmtpServer";
             this.tbSmtpServer.Size = new System.Drawing.Size(205, 22);
             this.tbSmtpServer.TabIndex = 4;
@@ -437,7 +453,7 @@ namespace fermtools
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 141);
+            this.label11.Location = new System.Drawing.Point(14, 141);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 17);
             this.label11.TabIndex = 3;
@@ -446,7 +462,7 @@ namespace fermtools
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(8, 113);
+            this.label10.Location = new System.Drawing.Point(14, 113);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 17);
             this.label10.TabIndex = 2;
@@ -455,7 +471,7 @@ namespace fermtools
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(8, 85);
+            this.label9.Location = new System.Drawing.Point(14, 85);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(73, 17);
             this.label9.TabIndex = 1;
@@ -464,11 +480,137 @@ namespace fermtools
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 58);
+            this.label8.Location = new System.Drawing.Point(14, 58);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(92, 17);
             this.label8.TabIndex = 0;
             this.label8.Text = "SMTP Server";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.btBotSave);
+            this.tabPage3.Controls.Add(this.btBotTest);
+            this.tabPage3.Controls.Add(this.cbResponceCmd);
+            this.tabPage3.Controls.Add(this.cbTelegramOn);
+            this.tabPage3.Controls.Add(this.textFermaName);
+            this.tabPage3.Controls.Add(this.textBotSendTo);
+            this.tabPage3.Controls.Add(this.textBotName);
+            this.tabPage3.Controls.Add(this.textBotToken);
+            this.tabPage3.Controls.Add(this.label13);
+            this.tabPage3.Controls.Add(this.label14);
+            this.tabPage3.Controls.Add(this.label15);
+            this.tabPage3.Controls.Add(this.label16);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(500, 235);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Telegram setting";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // btBotSave
+            // 
+            this.btBotSave.Location = new System.Drawing.Point(228, 194);
+            this.btBotSave.Name = "btBotSave";
+            this.btBotSave.Size = new System.Drawing.Size(89, 29);
+            this.btBotSave.TabIndex = 26;
+            this.btBotSave.Text = "Save";
+            this.btBotSave.UseVisualStyleBackColor = true;
+            this.btBotSave.Click += new System.EventHandler(this.SaveSetting);
+            // 
+            // btBotTest
+            // 
+            this.btBotTest.Location = new System.Drawing.Point(135, 194);
+            this.btBotTest.Name = "btBotTest";
+            this.btBotTest.Size = new System.Drawing.Size(89, 29);
+            this.btBotTest.TabIndex = 25;
+            this.btBotTest.Text = "Test Bot";
+            this.btBotTest.UseVisualStyleBackColor = true;
+            this.btBotTest.Click += new System.EventHandler(this.Send_TestBot);
+            // 
+            // cbResponceCmd
+            // 
+            this.cbResponceCmd.AutoSize = true;
+            this.cbResponceCmd.Location = new System.Drawing.Point(17, 30);
+            this.cbResponceCmd.Name = "cbResponceCmd";
+            this.cbResponceCmd.Size = new System.Drawing.Size(214, 21);
+            this.cbResponceCmd.TabIndex = 24;
+            this.cbResponceCmd.Text = "Send response to commands";
+            this.cbResponceCmd.UseVisualStyleBackColor = true;
+            // 
+            // cbTelegramOn
+            // 
+            this.cbTelegramOn.AutoSize = true;
+            this.cbTelegramOn.Location = new System.Drawing.Point(17, 6);
+            this.cbTelegramOn.Name = "cbTelegramOn";
+            this.cbTelegramOn.Size = new System.Drawing.Size(220, 21);
+            this.cbTelegramOn.TabIndex = 23;
+            this.cbTelegramOn.Text = "Enable messenger notification";
+            this.cbTelegramOn.UseVisualStyleBackColor = true;
+            // 
+            // textFermaName
+            // 
+            this.textFermaName.Location = new System.Drawing.Point(112, 138);
+            this.textFermaName.Name = "textFermaName";
+            this.textFermaName.Size = new System.Drawing.Size(380, 22);
+            this.textFermaName.TabIndex = 22;
+            // 
+            // textBotSendTo
+            // 
+            this.textBotSendTo.Location = new System.Drawing.Point(112, 110);
+            this.textBotSendTo.Name = "textBotSendTo";
+            this.textBotSendTo.Size = new System.Drawing.Size(380, 22);
+            this.textBotSendTo.TabIndex = 21;
+            // 
+            // textBotName
+            // 
+            this.textBotName.Location = new System.Drawing.Point(112, 82);
+            this.textBotName.Name = "textBotName";
+            this.textBotName.Size = new System.Drawing.Size(380, 22);
+            this.textBotName.TabIndex = 20;
+            // 
+            // textBotToken
+            // 
+            this.textBotToken.Location = new System.Drawing.Point(112, 55);
+            this.textBotToken.Name = "textBotToken";
+            this.textBotToken.Size = new System.Drawing.Size(380, 22);
+            this.textBotToken.TabIndex = 19;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(14, 141);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(85, 17);
+            this.label13.TabIndex = 18;
+            this.label13.Text = "Name Ferm:";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(14, 113);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(66, 17);
+            this.label14.TabIndex = 17;
+            this.label14.Text = "Send To:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(14, 85);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(74, 17);
+            this.label15.TabIndex = 16;
+            this.label15.Text = "Name Bot:";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(14, 58);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(77, 17);
+            this.label16.TabIndex = 15;
+            this.label16.Text = "Token Bot:";
             // 
             // timer1
             // 
@@ -485,6 +627,11 @@ namespace fermtools
             // 
             this.timer2.Interval = 10000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
+            // timer3
+            // 
+            this.timer3.Interval = 5000;
+            this.timer3.Tick += new System.EventHandler(this.timer3Tick);
             // 
             // Form1
             // 
@@ -507,6 +654,8 @@ namespace fermtools
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -556,6 +705,20 @@ namespace fermtools
         private System.Windows.Forms.Button btSaveMon;
         private System.Windows.Forms.CheckBox cbOnSendStart;
         private System.Windows.Forms.CheckBox cbOnEmail;
+        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.CheckBox cbResponceCmd;
+        private System.Windows.Forms.CheckBox cbTelegramOn;
+        private System.Windows.Forms.TextBox textFermaName;
+        private System.Windows.Forms.TextBox textBotSendTo;
+        private System.Windows.Forms.TextBox textBotName;
+        private System.Windows.Forms.TextBox textBotToken;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button btBotSave;
+        private System.Windows.Forms.Button btBotTest;
     }
 }
 

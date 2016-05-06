@@ -14,14 +14,16 @@ namespace fermtools
 {
     class TelegramBot
     {
-        private readonly string token;
+        public string token;
         public string lastUpd;
         public string chatID;
-        public TelegramBot(string tk, string id = "")
+        public bool bInit;
+        public TelegramBot(string tk = "", string id = "")
         {
             token = tk;
             lastUpd = "";
             chatID = id;
+            bInit = false;
         }
         public List<Update> GetUpdates(string offset = "", string limit = "", string timeout = "")
         {
@@ -70,8 +72,8 @@ namespace fermtools
         {
             string url = "https://api.telegram.org/bot" + token + "/" + method + ToQueryString(args);
             var client = new HttpClient();
-            var response = await client.GetAsync(url);
-            var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return responseContent;
         }
 

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -11,11 +12,13 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Management;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -40,7 +43,10 @@ namespace fermtools
         ToolTip pbTT;                           //Инфа для отображения состояния WDT
         int CardCount;                          //Количество найденных видеокарт
         const string rand = "xBW8skR2lmmMs";    //Случайная строка для эмуляции пароля
+        Random rndTimer = new Random();         //Случайное число для таймера бота от 3 до 8 секунд с интервалом 0.1 сек
+        TelegramBot bot = new TelegramBot();    //Бот Telegram
 
+        private List<Update> botUpdate = new List<Update>();                //Сообщения боту
         private List<GPUParam> gpupar = new List<GPUParam>();               //Коллекция Параметров GPU
         private List<System.Windows.Forms.TextBox> par = new List<System.Windows.Forms.TextBox>();          //Коллекция текст боксов для отображения параметров видеокарт
         private List<System.Windows.Forms.CheckBox> check = new List<System.Windows.Forms.CheckBox>();      //Коллекция чек боксов для отметки отслеживания параметров
@@ -65,7 +71,10 @@ namespace fermtools
             WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
             timer1.Start(); //Стартуем таймеры и потоки
             pipeServerTh.Start();
-            if (this.cbOnEmail.Checked && this.cbOnSendStart.Checked && Properties.Settings.Default.isReset) 
+            if (this.cbTelegramOn.Checked) //Инициализируем бота, если установлен соответствующий флаг
+                if (botInit()) //Если бот инициализирован, отправляем сообщение
+                    bot.SendMessage(bot.chatID, this.textFermaName.Text + " restart after freze");
+            if (this.cbOnEmail.Checked && this.cbOnSendStart.Checked && Properties.Settings.Default.isReset)
                 sendMail("Computer restart after freze"); //Если был хардресет отправляем мыло
             Properties.Settings.Default.isReset = true; Properties.Settings.Default.Save(); //Устанавливаем и сохраняем состояние ресета
         }
@@ -286,7 +295,10 @@ namespace fermtools
             {
                 rep = report.ToString();
                 WriteEventLog(rep, EventLogEntryType.Error);
-                if (this.cbOnEmail.Checked) sendMail(rep);
+                if (this.cbOnEmail.Checked) 
+                    sendMail(rep);
+                if (bot.bInit)
+                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + rep);
             }
             return res;
         }
@@ -331,7 +343,16 @@ namespace fermtools
             //Прерываем поток pipe
             signal.Set();
             //Останавливаем WDT, если он есть
-            if (wdt.isWDT) if (wdt.SetWDT(0)) WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+            if (wdt.isWDT) 
+                if (wdt.SetWDT(0)) 
+                    WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+            //Останавливаем таймеры
+            if (this.timer1.Enabled) 
+                this.timer1.Stop();
+            if (this.timer2.Enabled)
+                this.timer2.Stop();
+            if (this.timer3.Enabled)
+                this.timer3.Stop();
             //Сбрасываем состояние ресета
             Properties.Settings.Default.isReset = false; Properties.Settings.Default.Save();
             Application.Exit();
@@ -412,7 +433,6 @@ namespace fermtools
             }
             return true;
         }
-
         private void Send_TestMail(object sender, EventArgs e)
         {
             if (sendMail("Test"))
@@ -420,7 +440,6 @@ namespace fermtools
             else
                 MessageBox.Show("An error occurred while sending mail message\nFor details, see the eventlog", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
-
         private void SaveSetting(object sender, EventArgs e)
         {
             //Send mail setting
@@ -444,10 +463,16 @@ namespace fermtools
             Properties.Settings.Default.mGPUTemp = this.checkGPUTemp.Checked;
             Properties.Settings.Default.mFanLoad = this.checkFanLoad.Checked;
             Properties.Settings.Default.mFanRPM = this.checkFanRPM.Checked;
+            //Bot setting
+            Properties.Settings.Default.textBotToken = this.textBotToken.Text;
+            Properties.Settings.Default.textBotName = this.textBotName.Text;
+            Properties.Settings.Default.textBotSendTo = this.textBotSendTo.Text;
+            Properties.Settings.Default.textFermaName = this.textFermaName.Text;
+            Properties.Settings.Default.cbTelegramOn = this.cbTelegramOn.Checked;
+            Properties.Settings.Default.cbResponceCmd = this.cbResponceCmd.Checked;
             Properties.Settings.Default.Save();
             MessageBox.Show("Settings save successfully", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
-
         private void RestoreSetting()
         {
             //Send mail setting
@@ -468,6 +493,13 @@ namespace fermtools
             this.checkGPUTemp.Checked = Properties.Settings.Default.mGPUTemp;
             this.checkFanLoad.Checked = Properties.Settings.Default.mFanLoad;
             this.checkFanRPM.Checked = Properties.Settings.Default.mFanRPM;
+            //Bot setting
+            this.textBotToken.Text = Properties.Settings.Default.textBotToken;
+            this.textBotName.Text = Properties.Settings.Default.textBotName;
+            this.textBotSendTo.Text = Properties.Settings.Default.textBotSendTo;
+            this.textFermaName.Text = Properties.Settings.Default.textFermaName;
+            this.cbTelegramOn.Checked = Properties.Settings.Default.cbTelegramOn;
+            this.cbResponceCmd.Checked = Properties.Settings.Default.cbResponceCmd;
         }
         public static string Encrypt(string data)
         {
@@ -530,6 +562,113 @@ namespace fermtools
             }
             catch 
             { return null; }
+        }
+        private bool botInit()
+        {
+            if ((!String.IsNullOrEmpty(this.textBotToken.Text)) && (!String.IsNullOrEmpty(this.textBotName.Text)))
+            {
+                //Инициализируем основные элементы бота
+                bot.token = this.textBotToken.Text;
+                if (!String.IsNullOrEmpty(Properties.Settings.Default.botChatID))
+                    bot.chatID = Properties.Settings.Default.botChatID;
+                //Получаем имя бота, если соответствует ожидаемому, считаем, что все работает и запускаем цикл сообщений бота, если нет, пишем в лог
+                User us = bot.GetMe();
+                if ((us != null) && (us.Username == this.textBotName.Text))
+                {
+                    this.timer3.Interval = rndTimer.Next(30, 80) * 100; //Случаный интервал
+                    bot.bInit = true;
+                    this.timer3.Start();
+                    return true;
+                }
+                else
+                    WriteEventLog("You Telegram bot " + this.textBotName.Text + " not init and not work.\nCheck the bot settings.", EventLogEntryType.Error);
+            }
+            return false;
+        }
+        private string getParam(int par)
+        {
+            StringBuilder report = new StringBuilder();
+            for (int i = 0; i != CardCount; i++)
+                report.AppendLine("Slot " + gpupar[i].Slot.ToString() + ": " + gpupar[i].GPUParams[par].ParCollect.Last().ToString());
+            return report.ToString();
+        }
+        private void timer3Tick(object sender, EventArgs e)
+        {
+            //Обработка сообщений для бота
+            botMessageCycle();
+            this.timer3.Interval = rndTimer.Next(30, 80) * 100; //Случаный интервал
+        }
+        private void Send_TestBot(object sender, EventArgs e)
+        {
+            if (botInit())
+                MessageBox.Show("Telegram Bot started successfully\nPlease send command to Bot", "Test Telegram Bot", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            else
+                MessageBox.Show("An error occurred while starting Bot\nFor details, see the eventlog", "Test Telegram Bot", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+        }
+        private void botMessageCycle()
+        {
+            botUpdate = bot.GetUpdates(bot.lastUpd);
+            if (botUpdate != null)
+            {
+                foreach (var upd in botUpdate.Skip(1))
+                {
+                    //Берем сообщения только конкретного пользователя
+                    if (upd.Message.Chat.Username == this.textBotSendTo.Text)
+                    {
+                        //Сохраняем чатИД
+                        bot.chatID = upd.Message.Chat.Id.ToString();
+                        //Обрабатываем Цикл команд, если установлен соотвествующий флаг, если флаг сброшен, то единственная польза цикла получить чат ИД для уведомлений.
+                        if (this.cbResponceCmd.Checked)
+                        {
+                            switch (upd.Message.Text)
+                            {
+                                case "/fgpu":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label1.Text + "\n" + getParam(0), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/fmem":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label2.Text + "\n" + getParam(1), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/lgpu":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label3.Text + "\n" + getParam(2), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/lmem":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label4.Text + "\n" + getParam(3), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/tgpu":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label5.Text + "\n" + getParam(4), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/fanr":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label6.Text + "\n" + getParam(5), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/fanp":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/all":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ":\n" +
+                                        this.label1.Text + "\n" + getParam(0) + "\n" +
+                                        this.label2.Text + "\n" + getParam(1) + "\n" +
+                                        this.label3.Text + "\n" + getParam(2) + "\n" +
+                                        this.label4.Text + "\n" + getParam(3) + "\n" +
+                                        this.label5.Text + "\n" + getParam(4) + "\n" +
+                                        this.label6.Text + "\n" + getParam(5) + "\n" +
+                                        this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
+                                    break;
+                            }
+                        }
+                        //Сохраняем ИД сообщения для очистки очереди
+                        bot.lastUpd = (upd.UpdateId).ToString();
+                    }
+                    //Сохраняем последний чатИД, чтобы бот мог ответить
+                    if (!String.IsNullOrEmpty(bot.chatID))
+                    {
+                        Properties.Settings.Default.botChatID = bot.chatID;
+                        Properties.Settings.Default.Save();
+                    }
+                }
+                //Защита от спама: если запросы были не мои, чтобы не копились
+                if (botUpdate.Count > 10)
+                    bot.lastUpd = (botUpdate[botUpdate.Count - 1].UpdateId).ToString();
+            }
         }
     }
 }

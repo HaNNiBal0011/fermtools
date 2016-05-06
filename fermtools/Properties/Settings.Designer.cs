@@ -214,5 +214,89 @@ namespace fermtools.Properties {
                 this["isReset"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string textBotToken {
+            get {
+                return ((string)(this["textBotToken"]));
+            }
+            set {
+                this["textBotToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string textBotName {
+            get {
+                return ((string)(this["textBotName"]));
+            }
+            set {
+                this["textBotName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string textBotSendTo {
+            get {
+                return ((string)(this["textBotSendTo"]));
+            }
+            set {
+                this["textBotSendTo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string textFermaName {
+            get {
+                return ((string)(this["textFermaName"]));
+            }
+            set {
+                this["textFermaName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cbTelegramOn {
+            get {
+                return ((bool)(this["cbTelegramOn"]));
+            }
+            set {
+                this["cbTelegramOn"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cbResponceCmd {
+            get {
+                return ((bool)(this["cbResponceCmd"]));
+            }
+            set {
+                this["cbResponceCmd"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string botChatID {
+            get {
+                return ((string)(this["botChatID"]));
+            }
+            set {
+                this["botChatID"] = value;
+            }
+        }
     }
 }
