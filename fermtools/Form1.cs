@@ -72,7 +72,7 @@ namespace fermtools
             timer1.Start(); //Стартуем таймеры и потоки
             pipeServerTh.Start();
             if (this.cbTelegramOn.Checked) //Инициализируем бота, если установлен соответствующий флаг
-                if (botInit()) //Если бот инициализирован, отправляем сообщение
+                if (botInit() && Properties.Settings.Default.isReset) //Если бот инициализирован и был нештатный рестарт, отправляем сообщение
                     bot.SendMessage(bot.chatID, this.textFermaName.Text + " restart after freze");
             if (this.cbOnEmail.Checked && this.cbOnSendStart.Checked && Properties.Settings.Default.isReset)
                 sendMail("Computer restart after freze"); //Если был хардресет отправляем мыло
