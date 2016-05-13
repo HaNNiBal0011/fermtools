@@ -742,5 +742,26 @@ namespace fermtools
             //Задержка на время timer4 после старта программы
             this.timer4.Stop();
         }
+
+        private void EstimateDuration(object sender, EventArgs e)
+        {
+            //Оценка времени превышения порога наблюдения за параметрами при известном интервале наблюдения, K, Min и Max значенииях
+            // K*((Min*tau) + (Max * (T - tau)))/T = Max => T*Max/K = Min*tau + Max*T - Max*tau => T*Max/K - T*Max = (Min - Max)*tau => tau = T*Max(1 - 1/K)/(Max-Min)
+            int K_est, Min_est, Max_est;
+            bool fK, fMin, fMax;
+            fK = int.TryParse(this.tb_K_est.Text, out K_est);
+            fMin = int.TryParse(this.tb_Min_est.Text, out Min_est);
+            fMax = int.TryParse(this.tb_Max_est.Text, out Max_est);
+            if (fK && fMin && fMax && (Max_est > 0) && (Min_est >= 0) && (K_est > 0) && (Max_est > Min_est))
+            {
+                int tau = (int)(this.nc_Span_integration.Value);
+                tau = tau * Max_est;
+                tau = tau - tau / K_est;
+                tau = tau / (Max_est - Min_est);
+                MessageBox.Show("Approximate time operation the monitoring\nafter fails is " + tau.ToString() + " sec.", "Estimate the duration", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
+            else
+                MessageBox.Show("Approximate time operation the monitoring\nafter fails can not be calculated\nCheck variables values", "Estimate the duration", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
     }
 }

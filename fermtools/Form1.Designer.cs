@@ -57,6 +57,13 @@ namespace fermtools
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.bt_Calc = new System.Windows.Forms.Button();
+            this.tb_Max_est = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.tb_Min_est = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.tb_K_est = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.cb_NoUp = new System.Windows.Forms.CheckBox();
             this.label27 = new System.Windows.Forms.Label();
             this.nc_DelayMon = new System.Windows.Forms.NumericUpDown();
@@ -369,6 +376,13 @@ namespace fermtools
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.bt_Calc);
+            this.tabPage4.Controls.Add(this.tb_Max_est);
+            this.tabPage4.Controls.Add(this.label30);
+            this.tabPage4.Controls.Add(this.tb_Min_est);
+            this.tabPage4.Controls.Add(this.label29);
+            this.tabPage4.Controls.Add(this.tb_K_est);
+            this.tabPage4.Controls.Add(this.label28);
             this.tabPage4.Controls.Add(this.cb_NoUp);
             this.tabPage4.Controls.Add(this.label27);
             this.tabPage4.Controls.Add(this.nc_DelayMon);
@@ -400,11 +414,69 @@ namespace fermtools
             this.tabPage4.Text = "Monitoring setting";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // bt_Calc
+            // 
+            this.bt_Calc.Location = new System.Drawing.Point(321, 194);
+            this.bt_Calc.Name = "bt_Calc";
+            this.bt_Calc.Size = new System.Drawing.Size(89, 29);
+            this.bt_Calc.TabIndex = 43;
+            this.bt_Calc.Text = "Estimate";
+            this.bt_Calc.UseVisualStyleBackColor = true;
+            this.bt_Calc.Click += new System.EventHandler(this.EstimateDuration);
+            // 
+            // tb_Max_est
+            // 
+            this.tb_Max_est.Location = new System.Drawing.Point(401, 163);
+            this.tb_Max_est.Name = "tb_Max_est";
+            this.tb_Max_est.Size = new System.Drawing.Size(70, 22);
+            this.tb_Max_est.TabIndex = 42;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(369, 164);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(37, 17);
+            this.label30.TabIndex = 41;
+            this.label30.Text = "Max:";
+            // 
+            // tb_Min_est
+            // 
+            this.tb_Min_est.Location = new System.Drawing.Point(293, 163);
+            this.tb_Min_est.Name = "tb_Min_est";
+            this.tb_Min_est.Size = new System.Drawing.Size(70, 22);
+            this.tb_Min_est.TabIndex = 40;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(261, 164);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(34, 17);
+            this.label29.TabIndex = 39;
+            this.label29.Text = "Min:";
+            // 
+            // tb_K_est
+            // 
+            this.tb_K_est.Location = new System.Drawing.Point(203, 163);
+            this.tb_K_est.Name = "tb_K_est";
+            this.tb_K_est.Size = new System.Drawing.Size(52, 22);
+            this.tb_K_est.TabIndex = 38;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(184, 164);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(21, 17);
+            this.label28.TabIndex = 37;
+            this.label28.Text = "K:";
+            // 
             // cb_NoUp
             // 
             this.cb_NoUp.Checked = true;
             this.cb_NoUp.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_NoUp.Location = new System.Drawing.Point(196, 135);
+            this.cb_NoUp.Location = new System.Drawing.Point(184, 135);
             this.cb_NoUp.Name = "cb_NoUp";
             this.cb_NoUp.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cb_NoUp.Size = new System.Drawing.Size(251, 21);
@@ -412,10 +484,11 @@ namespace fermtools
             this.cb_NoUp.Text = "No react to up";
             this.cb_NoUp.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cb_NoUp.UseVisualStyleBackColor = true;
+            this.cb_NoUp.Click += new System.EventHandler(this.EstimateDuration);
             // 
             // label27
             // 
-            this.label27.Location = new System.Drawing.Point(196, 101);
+            this.label27.Location = new System.Drawing.Point(184, 101);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(226, 34);
             this.label27.TabIndex = 35;
@@ -423,7 +496,7 @@ namespace fermtools
             // 
             // nc_DelayMon
             // 
-            this.nc_DelayMon.Location = new System.Drawing.Point(428, 104);
+            this.nc_DelayMon.Location = new System.Drawing.Point(416, 104);
             this.nc_DelayMon.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -446,7 +519,7 @@ namespace fermtools
             // 
             // label26
             // 
-            this.label26.Location = new System.Drawing.Point(196, 67);
+            this.label26.Location = new System.Drawing.Point(184, 67);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(226, 34);
             this.label26.TabIndex = 33;
@@ -454,7 +527,7 @@ namespace fermtools
             // 
             // nc_DelayFailoverNext
             // 
-            this.nc_DelayFailoverNext.Location = new System.Drawing.Point(428, 74);
+            this.nc_DelayFailoverNext.Location = new System.Drawing.Point(416, 74);
             this.nc_DelayFailoverNext.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -477,7 +550,7 @@ namespace fermtools
             // 
             // label25
             // 
-            this.label25.Location = new System.Drawing.Point(196, 33);
+            this.label25.Location = new System.Drawing.Point(184, 33);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(226, 34);
             this.label25.TabIndex = 31;
@@ -485,7 +558,7 @@ namespace fermtools
             // 
             // nc_DelayFailover
             // 
-            this.nc_DelayFailover.Location = new System.Drawing.Point(428, 44);
+            this.nc_DelayFailover.Location = new System.Drawing.Point(416, 44);
             this.nc_DelayFailover.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -519,7 +592,7 @@ namespace fermtools
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(196, 16);
+            this.label24.Location = new System.Drawing.Point(184, 16);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(226, 17);
             this.label24.TabIndex = 28;
@@ -527,7 +600,7 @@ namespace fermtools
             // 
             // nc_Span_integration
             // 
-            this.nc_Span_integration.Location = new System.Drawing.Point(428, 14);
+            this.nc_Span_integration.Location = new System.Drawing.Point(416, 14);
             this.nc_Span_integration.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1249,6 +1322,13 @@ namespace fermtools
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.NumericUpDown nc_DelayMon;
         private System.Windows.Forms.CheckBox cb_NoUp;
+        private System.Windows.Forms.Button bt_Calc;
+        private System.Windows.Forms.TextBox tb_Max_est;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox tb_Min_est;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox tb_K_est;
+        private System.Windows.Forms.Label label28;
     }
 }
 
