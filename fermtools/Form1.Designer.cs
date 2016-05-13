@@ -56,10 +56,35 @@ namespace fermtools
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.cb_NoUp = new System.Windows.Forms.CheckBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.nc_DelayMon = new System.Windows.Forms.NumericUpDown();
+            this.label26 = new System.Windows.Forms.Label();
+            this.nc_DelayFailoverNext = new System.Windows.Forms.NumericUpDown();
+            this.label25 = new System.Windows.Forms.Label();
+            this.nc_DelayFailover = new System.Windows.Forms.NumericUpDown();
+            this.btSaveMon = new System.Windows.Forms.Button();
+            this.label24 = new System.Windows.Forms.Label();
+            this.nc_Span_integration = new System.Windows.Forms.NumericUpDown();
+            this.nc_K_fan_speed_r = new System.Windows.Forms.NumericUpDown();
+            this.nc_K_fan_speed_p = new System.Windows.Forms.NumericUpDown();
+            this.nc_K_gpu_temp = new System.Windows.Forms.NumericUpDown();
+            this.nc_K_mem_load = new System.Windows.Forms.NumericUpDown();
+            this.nc_K_gpu_load = new System.Windows.Forms.NumericUpDown();
+            this.nc_K_mem_clock = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.nc_K_gpu_clock = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cbOnSendStart = new System.Windows.Forms.CheckBox();
             this.cbOnEmail = new System.Windows.Forms.CheckBox();
-            this.btSaveMon = new System.Windows.Forms.Button();
+            this.btSaveMail = new System.Windows.Forms.Button();
             this.cbEnableSSL = new System.Windows.Forms.CheckBox();
             this.btSendTest = new System.Windows.Forms.Button();
             this.tbPassword = new System.Windows.Forms.TextBox();
@@ -89,10 +114,23 @@ namespace fermtools
             this.eventLog1 = new System.Diagnostics.EventLog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.timer4 = new System.Windows.Forms.Timer(this.components);
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_DelayMon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailoverNext)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailover)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_Span_integration)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_fan_speed_r)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_fan_speed_p)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_temp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_mem_load)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_load)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_mem_clock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_clock)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
@@ -169,6 +207,7 @@ namespace fermtools
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -328,11 +367,458 @@ namespace fermtools
             this.label1.TabIndex = 7;
             this.label1.Text = "GPU Core Clock, MHz";
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.cb_NoUp);
+            this.tabPage4.Controls.Add(this.label27);
+            this.tabPage4.Controls.Add(this.nc_DelayMon);
+            this.tabPage4.Controls.Add(this.label26);
+            this.tabPage4.Controls.Add(this.nc_DelayFailoverNext);
+            this.tabPage4.Controls.Add(this.label25);
+            this.tabPage4.Controls.Add(this.nc_DelayFailover);
+            this.tabPage4.Controls.Add(this.btSaveMon);
+            this.tabPage4.Controls.Add(this.label24);
+            this.tabPage4.Controls.Add(this.nc_Span_integration);
+            this.tabPage4.Controls.Add(this.nc_K_fan_speed_r);
+            this.tabPage4.Controls.Add(this.nc_K_fan_speed_p);
+            this.tabPage4.Controls.Add(this.nc_K_gpu_temp);
+            this.tabPage4.Controls.Add(this.nc_K_mem_load);
+            this.tabPage4.Controls.Add(this.nc_K_gpu_load);
+            this.tabPage4.Controls.Add(this.nc_K_mem_clock);
+            this.tabPage4.Controls.Add(this.label17);
+            this.tabPage4.Controls.Add(this.label18);
+            this.tabPage4.Controls.Add(this.label19);
+            this.tabPage4.Controls.Add(this.label20);
+            this.tabPage4.Controls.Add(this.label21);
+            this.tabPage4.Controls.Add(this.label22);
+            this.tabPage4.Controls.Add(this.label23);
+            this.tabPage4.Controls.Add(this.nc_K_gpu_clock);
+            this.tabPage4.Location = new System.Drawing.Point(4, 25);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(500, 235);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Monitoring setting";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // cb_NoUp
+            // 
+            this.cb_NoUp.Checked = true;
+            this.cb_NoUp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_NoUp.Location = new System.Drawing.Point(196, 135);
+            this.cb_NoUp.Name = "cb_NoUp";
+            this.cb_NoUp.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.cb_NoUp.Size = new System.Drawing.Size(251, 21);
+            this.cb_NoUp.TabIndex = 36;
+            this.cb_NoUp.Text = "No react to up";
+            this.cb_NoUp.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cb_NoUp.UseVisualStyleBackColor = true;
+            // 
+            // label27
+            // 
+            this.label27.Location = new System.Drawing.Point(196, 101);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(226, 34);
+            this.label27.TabIndex = 35;
+            this.label27.Text = "Delay enable the monitoring after start, sec:";
+            // 
+            // nc_DelayMon
+            // 
+            this.nc_DelayMon.Location = new System.Drawing.Point(428, 104);
+            this.nc_DelayMon.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nc_DelayMon.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_DelayMon.Name = "nc_DelayMon";
+            this.nc_DelayMon.Size = new System.Drawing.Size(55, 22);
+            this.nc_DelayMon.TabIndex = 34;
+            this.nc_DelayMon.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_DelayMon.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // label26
+            // 
+            this.label26.Location = new System.Drawing.Point(196, 67);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(226, 34);
+            this.label26.TabIndex = 33;
+            this.label26.Text = "Timeout display the next message of fault, sec:";
+            // 
+            // nc_DelayFailoverNext
+            // 
+            this.nc_DelayFailoverNext.Location = new System.Drawing.Point(428, 74);
+            this.nc_DelayFailoverNext.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nc_DelayFailoverNext.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_DelayFailoverNext.Name = "nc_DelayFailoverNext";
+            this.nc_DelayFailoverNext.Size = new System.Drawing.Size(55, 22);
+            this.nc_DelayFailoverNext.TabIndex = 32;
+            this.nc_DelayFailoverNext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_DelayFailoverNext.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(196, 33);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(226, 34);
+            this.label25.TabIndex = 31;
+            this.label25.Text = "Timeout display the message of fault, sec:";
+            // 
+            // nc_DelayFailover
+            // 
+            this.nc_DelayFailover.Location = new System.Drawing.Point(428, 44);
+            this.nc_DelayFailover.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nc_DelayFailover.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_DelayFailover.Name = "nc_DelayFailover";
+            this.nc_DelayFailover.Size = new System.Drawing.Size(55, 22);
+            this.nc_DelayFailover.TabIndex = 30;
+            this.nc_DelayFailover.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_DelayFailover.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // btSaveMon
+            // 
+            this.btSaveMon.Location = new System.Drawing.Point(228, 194);
+            this.btSaveMon.Name = "btSaveMon";
+            this.btSaveMon.Size = new System.Drawing.Size(89, 29);
+            this.btSaveMon.TabIndex = 29;
+            this.btSaveMon.Text = "Save";
+            this.btSaveMon.UseVisualStyleBackColor = true;
+            this.btSaveMon.Click += new System.EventHandler(this.SaveMonitoringSetting);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(196, 16);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(226, 17);
+            this.label24.TabIndex = 28;
+            this.label24.Text = "Span calculating the average, sec:";
+            // 
+            // nc_Span_integration
+            // 
+            this.nc_Span_integration.Location = new System.Drawing.Point(428, 14);
+            this.nc_Span_integration.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nc_Span_integration.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_Span_integration.Name = "nc_Span_integration";
+            this.nc_Span_integration.Size = new System.Drawing.Size(55, 22);
+            this.nc_Span_integration.TabIndex = 27;
+            this.nc_Span_integration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_Span_integration.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // nc_K_fan_speed_r
+            // 
+            this.nc_K_fan_speed_r.DecimalPlaces = 1;
+            this.nc_K_fan_speed_r.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_fan_speed_r.Location = new System.Drawing.Point(117, 194);
+            this.nc_K_fan_speed_r.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_fan_speed_r.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_fan_speed_r.Name = "nc_K_fan_speed_r";
+            this.nc_K_fan_speed_r.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_fan_speed_r.TabIndex = 26;
+            this.nc_K_fan_speed_r.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_fan_speed_r.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            65536});
+            // 
+            // nc_K_fan_speed_p
+            // 
+            this.nc_K_fan_speed_p.DecimalPlaces = 1;
+            this.nc_K_fan_speed_p.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_fan_speed_p.Location = new System.Drawing.Point(117, 164);
+            this.nc_K_fan_speed_p.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_fan_speed_p.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_fan_speed_p.Name = "nc_K_fan_speed_p";
+            this.nc_K_fan_speed_p.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_fan_speed_p.TabIndex = 25;
+            this.nc_K_fan_speed_p.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_fan_speed_p.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            65536});
+            // 
+            // nc_K_gpu_temp
+            // 
+            this.nc_K_gpu_temp.DecimalPlaces = 1;
+            this.nc_K_gpu_temp.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_gpu_temp.Location = new System.Drawing.Point(117, 134);
+            this.nc_K_gpu_temp.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_gpu_temp.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_gpu_temp.Name = "nc_K_gpu_temp";
+            this.nc_K_gpu_temp.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_gpu_temp.TabIndex = 24;
+            this.nc_K_gpu_temp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_gpu_temp.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            65536});
+            // 
+            // nc_K_mem_load
+            // 
+            this.nc_K_mem_load.DecimalPlaces = 1;
+            this.nc_K_mem_load.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_mem_load.Location = new System.Drawing.Point(117, 104);
+            this.nc_K_mem_load.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_mem_load.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_mem_load.Name = "nc_K_mem_load";
+            this.nc_K_mem_load.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_mem_load.TabIndex = 23;
+            this.nc_K_mem_load.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_mem_load.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // nc_K_gpu_load
+            // 
+            this.nc_K_gpu_load.DecimalPlaces = 1;
+            this.nc_K_gpu_load.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_gpu_load.Location = new System.Drawing.Point(117, 74);
+            this.nc_K_gpu_load.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_gpu_load.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_gpu_load.Name = "nc_K_gpu_load";
+            this.nc_K_gpu_load.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_gpu_load.TabIndex = 22;
+            this.nc_K_gpu_load.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_gpu_load.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // nc_K_mem_clock
+            // 
+            this.nc_K_mem_clock.DecimalPlaces = 1;
+            this.nc_K_mem_clock.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_mem_clock.Location = new System.Drawing.Point(117, 44);
+            this.nc_K_mem_clock.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_mem_clock.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_mem_clock.Name = "nc_K_mem_clock";
+            this.nc_K_mem_clock.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_mem_clock.TabIndex = 21;
+            this.nc_K_mem_clock.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_mem_clock.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(8, 196);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(105, 17);
+            this.label17.TabIndex = 20;
+            this.label17.Text = "K fan_speed_r:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(8, 166);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(108, 17);
+            this.label18.TabIndex = 19;
+            this.label18.Text = "K fan_speed_p:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(8, 136);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(88, 17);
+            this.label19.TabIndex = 18;
+            this.label19.Text = "K gpu_temp:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(8, 106);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(90, 17);
+            this.label20.TabIndex = 17;
+            this.label20.Text = "K mem_load:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(8, 76);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(84, 17);
+            this.label21.TabIndex = 16;
+            this.label21.Text = "K gpu_load:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(8, 46);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(95, 17);
+            this.label22.TabIndex = 15;
+            this.label22.Text = "K mem_clock:";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(8, 16);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(89, 17);
+            this.label23.TabIndex = 14;
+            this.label23.Text = "K gpu_clock:";
+            // 
+            // nc_K_gpu_clock
+            // 
+            this.nc_K_gpu_clock.DecimalPlaces = 1;
+            this.nc_K_gpu_clock.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nc_K_gpu_clock.Location = new System.Drawing.Point(117, 14);
+            this.nc_K_gpu_clock.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nc_K_gpu_clock.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nc_K_gpu_clock.Name = "nc_K_gpu_clock";
+            this.nc_K_gpu_clock.Size = new System.Drawing.Size(52, 22);
+            this.nc_K_gpu_clock.TabIndex = 0;
+            this.nc_K_gpu_clock.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nc_K_gpu_clock.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.cbOnSendStart);
             this.tabPage2.Controls.Add(this.cbOnEmail);
-            this.tabPage2.Controls.Add(this.btSaveMon);
+            this.tabPage2.Controls.Add(this.btSaveMail);
             this.tabPage2.Controls.Add(this.cbEnableSSL);
             this.tabPage2.Controls.Add(this.btSendTest);
             this.tabPage2.Controls.Add(this.tbPassword);
@@ -373,15 +859,15 @@ namespace fermtools
             this.cbOnEmail.Text = "Enable e-mail notification";
             this.cbOnEmail.UseVisualStyleBackColor = true;
             // 
-            // btSaveMon
+            // btSaveMail
             // 
-            this.btSaveMon.Location = new System.Drawing.Point(228, 194);
-            this.btSaveMon.Name = "btSaveMon";
-            this.btSaveMon.Size = new System.Drawing.Size(89, 29);
-            this.btSaveMon.TabIndex = 12;
-            this.btSaveMon.Text = "Save";
-            this.btSaveMon.UseVisualStyleBackColor = true;
-            this.btSaveMon.Click += new System.EventHandler(this.SaveSetting);
+            this.btSaveMail.Location = new System.Drawing.Point(228, 194);
+            this.btSaveMail.Name = "btSaveMail";
+            this.btSaveMail.Size = new System.Drawing.Size(89, 29);
+            this.btSaveMail.TabIndex = 12;
+            this.btSaveMail.Text = "Save";
+            this.btSaveMail.UseVisualStyleBackColor = true;
+            this.btSaveMail.Click += new System.EventHandler(this.SaveMailSetting);
             // 
             // cbEnableSSL
             // 
@@ -516,7 +1002,7 @@ namespace fermtools
             this.btBotSave.TabIndex = 26;
             this.btBotSave.Text = "Save";
             this.btBotSave.UseVisualStyleBackColor = true;
-            this.btBotSave.Click += new System.EventHandler(this.SaveSetting);
+            this.btBotSave.Click += new System.EventHandler(this.SaveBotSetting);
             // 
             // btBotTest
             // 
@@ -533,9 +1019,9 @@ namespace fermtools
             this.cbResponceCmd.AutoSize = true;
             this.cbResponceCmd.Location = new System.Drawing.Point(17, 30);
             this.cbResponceCmd.Name = "cbResponceCmd";
-            this.cbResponceCmd.Size = new System.Drawing.Size(214, 21);
+            this.cbResponceCmd.Size = new System.Drawing.Size(132, 21);
             this.cbResponceCmd.TabIndex = 24;
-            this.cbResponceCmd.Text = "Send response to commands";
+            this.cbResponceCmd.Text = "Command mode";
             this.cbResponceCmd.UseVisualStyleBackColor = true;
             // 
             // cbTelegramOn
@@ -633,6 +1119,11 @@ namespace fermtools
             this.timer3.Interval = 5000;
             this.timer3.Tick += new System.EventHandler(this.timer3Tick);
             // 
+            // timer4
+            // 
+            this.timer4.Interval = 60000;
+            this.timer4.Tick += new System.EventHandler(this.PauseAfterStart);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(508, 286);
@@ -652,6 +1143,19 @@ namespace fermtools
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_DelayMon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailoverNext)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailover)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_Span_integration)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_fan_speed_r)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_fan_speed_p)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_temp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_mem_load)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_load)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_mem_clock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_clock)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
@@ -702,7 +1206,7 @@ namespace fermtools
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox cbEnableSSL;
-        private System.Windows.Forms.Button btSaveMon;
+        private System.Windows.Forms.Button btSaveMail;
         private System.Windows.Forms.CheckBox cbOnSendStart;
         private System.Windows.Forms.CheckBox cbOnEmail;
         private System.Windows.Forms.Timer timer3;
@@ -719,6 +1223,32 @@ namespace fermtools
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btBotSave;
         private System.Windows.Forms.Button btBotTest;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown nc_K_gpu_clock;
+        private System.Windows.Forms.NumericUpDown nc_K_fan_speed_r;
+        private System.Windows.Forms.NumericUpDown nc_K_fan_speed_p;
+        private System.Windows.Forms.NumericUpDown nc_K_gpu_temp;
+        private System.Windows.Forms.NumericUpDown nc_K_mem_load;
+        private System.Windows.Forms.NumericUpDown nc_K_gpu_load;
+        private System.Windows.Forms.NumericUpDown nc_K_mem_clock;
+        private System.Windows.Forms.Button btSaveMon;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.NumericUpDown nc_Span_integration;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.NumericUpDown nc_DelayFailoverNext;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.NumericUpDown nc_DelayFailover;
+        private System.Windows.Forms.Timer timer4;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.NumericUpDown nc_DelayMon;
+        private System.Windows.Forms.CheckBox cb_NoUp;
     }
 }
 

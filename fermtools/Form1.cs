@@ -30,12 +30,16 @@ namespace fermtools
     public partial class Form1 : Form
     {
         const int NumPar = 7;                   //Число параметров GPU выводимых в окошки
-        const int TickCountMax=60;              //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
+        int TickCountMax = 60;                  //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
+        int MonDelay = 60;                      //Время задержки начала мониторинга при старте, сек
+        int MsgBoxPause = 20000;                //Пауза для отображения сообщения, когда пользователь сможет нажать Отмену перезагрузки (мс)
+        int MsgBoxTimeout = 10000;              //пауза после отмены перезагрузки до отображения нового сообщения об ошибке (мс)
         NvidiaGroup nvigr;                      //Группа Nvidia видеокарт
         ATIGroup atigr;                         //Группа AMD видеокарт
         bool fExitCancel;                       //Флаг используется для сворачивания окна формы в трей при нажатии на крестик и для завершения программы при нажатии Exit в контектстном меню 
         bool fReset;                            //Устанавливается, если уже запущен процесс перезагрузки компьютера
         bool fMessage;                          //Устанавливается, если выведена сообщение перезагрузки
+        bool fNoUp;                             //Не реагировать на повышение параметров при мониторинге
         byte WDtimer;                           //Интервал в минутах для записи в WatchDog Timer
         Thread pipeServerTh;                    //Поток для работы именованного канала
         ManualResetEvent signal;                //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
@@ -62,12 +66,18 @@ namespace fermtools
             nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
             atigr = new ATIGroup(ref gpupar, NumPar); //Группа видеокарт ATI
             CardCount = gpupar.Count; //Сколько всего видеокарт
+            SetMonitoringSetting(); //Восстанавливаем параметры мониторинга из конфига (после инициализации видеокарт)
+            //Устанавливаем длительность задержки монторинга и запускаем таймер задержки мониторинга, если он еще не запущен
+            this.timer4.Interval = MonDelay;
+            if (!this.timer4.Enabled)
+                this.timer4.Start();
             WriteEventLog(GetReportVideoCard(), EventLogEntryType.Information);
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
             pipeServerTh = new Thread(pipeServerThread); //Поток для работы именованного канала
             signal = new ManualResetEvent(false);
             wdt = new WDT(); //Инициализация WatchDog Timer
-            if (wdt.isWDT) InitWDT(args);
+            if (wdt.isWDT) 
+                InitWDT(args);
             WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
             timer1.Start(); //Стартуем таймеры и потоки
             pipeServerTh.Start();
@@ -81,10 +91,8 @@ namespace fermtools
         private string GetReportVideoCard()
         {
             StringBuilder report = new StringBuilder();
-
             report.AppendLine(nvigr.GetReport());
             report.AppendLine(atigr.GetReport());
-
             return report.ToString();
         }
         private void InitVideoCards()
@@ -237,11 +245,12 @@ namespace fermtools
                 for (int j = 0; j != NumPar; j++)
                     this.par[j+i*NumPar].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
             }
-            //Мониторим, если не инициирована перезагрузка, если что то не так, перезагружаем комп
-            if (!fReset && !fMessage)
+            //Мониторим, если не инициирована перезагрузка, не отображается сообщение и не кончилось время задержки на запуск мониторинга
+            if (!fReset && !fMessage && !this.timer4.Enabled)
             {
                 if (Monitoring(ref repmon))
                 {
+                    //Если мониторинг что то нашел, устанавливаем флаг и отображаем сообщение что не так
                     fMessage = true;
                     Thread msgsh = new Thread(MessageShowTh);
                     msgsh.Start(repmon);
@@ -251,8 +260,8 @@ namespace fermtools
         private void MessageShowTh(object rep)
         {
             DialogResult dlg = AutoClosingMessageBox.Show("The monitoring system has identified the wrong setting:\n" + rep + "the computer prepares to reset\n" +
-                "If a reset is not required, disable the monitoring", "Fermtool reset", 20000);
-            //Если нажали ОК (или само нажалось) то запускаем процесс перезагрузки, иначе нажали Отмена и ждем 10 сек для реакции на сработку.
+                "If a reset is not required, disable the monitoring", "Fermtool reset", MsgBoxPause);
+            //Если нажали ОК (или само нажалось) то запускаем процесс перезагрузки, иначе нажали Отмена и ждем MsgBoxTimeout для реакции на сработку.
             if (dlg == System.Windows.Forms.DialogResult.OK)
             {
                 object sender = null; EventArgs e = null;
@@ -260,8 +269,27 @@ namespace fermtools
             }
             else
             {
-                Thread.Sleep(10000);
+                //Если нажата кнопка отмены ждем, чтобы сразу не вылезло следующее предупреждение
+                Thread.Sleep(MsgBoxTimeout);
                 fMessage = false;
+            }
+        }
+        private void SetMonitoringSetting()
+        {
+            TickCountMax = (int)this.nc_Span_integration.Value;
+            MsgBoxPause = (int)(this.nc_DelayFailover.Value) * 1000;
+            MsgBoxTimeout = (int)(this.nc_DelayFailoverNext.Value) * 1000;
+            MonDelay = (int)(this.nc_DelayMon.Value) * 1000;
+            fNoUp = this.cb_NoUp.Checked;
+            for (int j=0; j!=CardCount; j++)
+            {
+                gpupar[j].GPUParams[0].Rate = (double)this.nc_K_gpu_clock.Value;
+                gpupar[j].GPUParams[1].Rate = (double)this.nc_K_mem_clock.Value;
+                gpupar[j].GPUParams[2].Rate = (double)this.nc_K_gpu_load.Value;
+                gpupar[j].GPUParams[3].Rate = (double)this.nc_K_mem_load.Value;
+                gpupar[j].GPUParams[4].Rate = (double)this.nc_K_gpu_temp.Value;
+                gpupar[j].GPUParams[5].Rate = (double)this.nc_K_fan_speed_p.Value;
+                gpupar[j].GPUParams[6].Rate = (double)this.nc_K_fan_speed_r.Value;
             }
         }
         private bool Monitoring(ref string rep)
@@ -277,10 +305,13 @@ namespace fermtools
                     //Бежим по картам
                     for (int j=0; j!=CardCount; j++)
                     {
-                        //Проверяем уменьшилось ли среднее значение ниже MAX/RATE
-                        if (gpupar[j].GPUParams[i].ParCollect.Average() < gpupar[j].GPUParams[i].ParCollect.Max()/gpupar[j].GPUParams[i].Rate)
+                        //Проверяем меньше ли среднее значение * RATE, чем MAX
+                        if (((int)(gpupar[j].GPUParams[i].ParCollect.Average() * gpupar[j].GPUParams[i].Rate)) < gpupar[j].GPUParams[i].ParCollect.Max())
                         {
-                            //Если уменьшилось сообщаем в репорт и устанавливаем флаг
+                            //Проверяем, установлен ли флаг контролирующий повышение параметров, если установлен и текущий параметр больше среднего
+                            //то не реагируем на повышение параметра
+                            if ((fNoUp) && (gpupar[j].GPUParams[i].ParCollect.Last() > ((int)gpupar[j].GPUParams[i].ParCollect.Average())))
+                                return res;
                             report.AppendLine(gpupar[j].GPUName + ", subsys: " + gpupar[j].Subsys + ", slot: " + gpupar[j].Slot.ToString());
                             report.AppendLine(label[i].Text + " - average: " + ((int)gpupar[j].GPUParams[i].ParCollect.Average()).ToString() + ", maximum: " +
                                 gpupar[j].GPUParams[i].ParCollect.Max().ToString());
@@ -290,7 +321,7 @@ namespace fermtools
                     }
                 }
             }
-            //Если что то где то упало, сообщаем в EVENLOG и шлем e-mail
+            //Если что то где то упало, сообщаем в EVENLOG, шлем e-mail и телеграмму
             if (res)
             {
                 rep = report.ToString();
@@ -440,7 +471,7 @@ namespace fermtools
             else
                 MessageBox.Show("An error occurred while sending mail message\nFor details, see the eventlog", "Test mail", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
-        private void SaveSetting(object sender, EventArgs e)
+        private void SaveMailSetting(object sender, EventArgs e)
         {
             //Send mail setting
             if ((!String.IsNullOrEmpty(this.tbPassword.Text)) && (this.tbPassword.Text != rand))
@@ -455,14 +486,11 @@ namespace fermtools
             Properties.Settings.Default.EnableSSL = this.cbEnableSSL.Checked;
             Properties.Settings.Default.cbOnEmail = this.cbOnEmail.Checked;
             Properties.Settings.Default.cbOnSendStart = this.cbOnSendStart.Checked;
-            //Monitoring setting
-            Properties.Settings.Default.mGPUClock = this.checkCoreClock.Checked;
-            Properties.Settings.Default.mMemClock = this.checkMemoryClock.Checked;
-            Properties.Settings.Default.mGPULoad = this.checkGPULoad.Checked;
-            Properties.Settings.Default.mMemLoad = this.checkMemCtrlLoad.Checked;
-            Properties.Settings.Default.mGPUTemp = this.checkGPUTemp.Checked;
-            Properties.Settings.Default.mFanLoad = this.checkFanLoad.Checked;
-            Properties.Settings.Default.mFanRPM = this.checkFanRPM.Checked;
+            Properties.Settings.Default.Save();
+            MessageBox.Show("Mail settings save successfully", "Save mail", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+        private void SaveBotSetting(object sender, EventArgs e)
+        {
             //Bot setting
             Properties.Settings.Default.textBotToken = this.textBotToken.Text;
             Properties.Settings.Default.textBotName = this.textBotName.Text;
@@ -471,7 +499,7 @@ namespace fermtools
             Properties.Settings.Default.cbTelegramOn = this.cbTelegramOn.Checked;
             Properties.Settings.Default.cbResponceCmd = this.cbResponceCmd.Checked;
             Properties.Settings.Default.Save();
-            MessageBox.Show("Settings save successfully", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            MessageBox.Show("Bot settings save successfully", "Save bot", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
         private void RestoreSetting()
         {
@@ -493,6 +521,19 @@ namespace fermtools
             this.checkGPUTemp.Checked = Properties.Settings.Default.mGPUTemp;
             this.checkFanLoad.Checked = Properties.Settings.Default.mFanLoad;
             this.checkFanRPM.Checked = Properties.Settings.Default.mFanRPM;
+            this.nc_K_gpu_clock.Value = Properties.Settings.Default.K_gpu_clock;
+            this.nc_K_mem_clock.Value = Properties.Settings.Default.K_mem_clock;
+            this.nc_K_gpu_load.Value = Properties.Settings.Default.K_gpu_load;
+            this.nc_K_mem_load.Value = Properties.Settings.Default.K_mem_load;
+            this.nc_K_gpu_temp.Value = Properties.Settings.Default.K_gpu_temp;
+            this.nc_K_fan_speed_p.Value = Properties.Settings.Default.K_fan_speed_p;
+            this.nc_K_fan_speed_r.Value = Properties.Settings.Default.K_fan_speed_r;
+            this.nc_Span_integration.Value = Properties.Settings.Default.nc_Span_integration;
+            this.nc_Span_integration.Value = Properties.Settings.Default.nc_Span_integration;
+            this.nc_DelayFailover.Value = Properties.Settings.Default.nc_DelayFailover;
+            this.nc_DelayFailoverNext.Value = Properties.Settings.Default.nc_DelayFailoverNext;
+            this.nc_DelayMon.Value = Properties.Settings.Default.nc_DelayMon;
+            this.cb_NoUp.Checked = Properties.Settings.Default.cb_NoUp;
             //Bot setting
             this.textBotToken.Text = Properties.Settings.Default.textBotToken;
             this.textBotName.Text = Properties.Settings.Default.textBotName;
@@ -596,7 +637,7 @@ namespace fermtools
         {
             //Обработка сообщений для бота
             botMessageCycle();
-            this.timer3.Interval = rndTimer.Next(30, 80) * 100; //Случаный интервал
+            this.timer3.Interval = rndTimer.Next(30, 99) * 100; //Случаный интервал от 3 до 10 секунд
         }
         private void Send_TestBot(object sender, EventArgs e)
         {
@@ -669,6 +710,37 @@ namespace fermtools
                 if (botUpdate.Count > 10)
                     bot.lastUpd = (botUpdate[botUpdate.Count - 1].UpdateId).ToString();
             }
+        }
+        private void SaveMonitoringSetting(object sender, EventArgs e)
+        {
+            //Monitoring setting
+            Properties.Settings.Default.mGPUClock = this.checkCoreClock.Checked;
+            Properties.Settings.Default.mMemClock = this.checkMemoryClock.Checked;
+            Properties.Settings.Default.mGPULoad = this.checkGPULoad.Checked;
+            Properties.Settings.Default.mMemLoad = this.checkMemCtrlLoad.Checked;
+            Properties.Settings.Default.mGPUTemp = this.checkGPUTemp.Checked;
+            Properties.Settings.Default.mFanLoad = this.checkFanLoad.Checked;
+            Properties.Settings.Default.mFanRPM = this.checkFanRPM.Checked;
+            Properties.Settings.Default.K_gpu_clock = this.nc_K_gpu_clock.Value;
+            Properties.Settings.Default.K_mem_clock = this.nc_K_mem_clock.Value;
+            Properties.Settings.Default.K_gpu_load = this.nc_K_gpu_load.Value;
+            Properties.Settings.Default.K_mem_load = this.nc_K_mem_load.Value;
+            Properties.Settings.Default.K_gpu_temp = this.nc_K_gpu_temp.Value;
+            Properties.Settings.Default.K_fan_speed_p = this.nc_K_fan_speed_p.Value;
+            Properties.Settings.Default.K_fan_speed_r = this.nc_K_fan_speed_r.Value;
+            Properties.Settings.Default.nc_Span_integration = this.nc_Span_integration.Value;
+            Properties.Settings.Default.nc_DelayFailover = this.nc_DelayFailover.Value;
+            Properties.Settings.Default.nc_DelayFailoverNext = this.nc_DelayFailoverNext.Value;
+            Properties.Settings.Default.nc_DelayMon = this.nc_DelayMon.Value;
+            Properties.Settings.Default.cb_NoUp = this.cb_NoUp.Checked;
+            Properties.Settings.Default.Save();
+            SetMonitoringSetting(); //Устанавливаем текущие параметры мониторинга из котролов в переменные
+            MessageBox.Show("Monitoring settings save successfully", "Save monitoring", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+        private void PauseAfterStart(object sender, EventArgs e)
+        {
+            //Задержка на время timer4 после старта программы
+            this.timer4.Stop();
         }
     }
 }

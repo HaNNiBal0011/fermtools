@@ -298,5 +298,149 @@ namespace fermtools.Properties {
                 this["botChatID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public decimal K_gpu_clock {
+            get {
+                return ((decimal)(this["K_gpu_clock"]));
+            }
+            set {
+                this["K_gpu_clock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public decimal K_mem_clock {
+            get {
+                return ((decimal)(this["K_mem_clock"]));
+            }
+            set {
+                this["K_mem_clock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public decimal K_gpu_load {
+            get {
+                return ((decimal)(this["K_gpu_load"]));
+            }
+            set {
+                this["K_gpu_load"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public decimal K_mem_load {
+            get {
+                return ((decimal)(this["K_mem_load"]));
+            }
+            set {
+                this["K_mem_load"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public decimal K_gpu_temp {
+            get {
+                return ((decimal)(this["K_gpu_temp"]));
+            }
+            set {
+                this["K_gpu_temp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public decimal K_fan_speed_p {
+            get {
+                return ((decimal)(this["K_fan_speed_p"]));
+            }
+            set {
+                this["K_fan_speed_p"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public decimal K_fan_speed_r {
+            get {
+                return ((decimal)(this["K_fan_speed_r"]));
+            }
+            set {
+                this["K_fan_speed_r"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public decimal nc_Span_integration {
+            get {
+                return ((decimal)(this["nc_Span_integration"]));
+            }
+            set {
+                this["nc_Span_integration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public decimal nc_DelayFailover {
+            get {
+                return ((decimal)(this["nc_DelayFailover"]));
+            }
+            set {
+                this["nc_DelayFailover"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public decimal nc_DelayFailoverNext {
+            get {
+                return ((decimal)(this["nc_DelayFailoverNext"]));
+            }
+            set {
+                this["nc_DelayFailoverNext"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public decimal nc_DelayMon {
+            get {
+                return ((decimal)(this["nc_DelayMon"]));
+            }
+            set {
+                this["nc_DelayMon"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb_NoUp {
+            get {
+                return ((bool)(this["cb_NoUp"]));
+            }
+            set {
+                this["cb_NoUp"] = value;
+            }
+        }
     }
 }
