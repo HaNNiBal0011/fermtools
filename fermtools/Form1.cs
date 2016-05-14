@@ -529,7 +529,6 @@ namespace fermtools
             this.nc_K_fan_speed_p.Value = Properties.Settings.Default.K_fan_speed_p;
             this.nc_K_fan_speed_r.Value = Properties.Settings.Default.K_fan_speed_r;
             this.nc_Span_integration.Value = Properties.Settings.Default.nc_Span_integration;
-            this.nc_Span_integration.Value = Properties.Settings.Default.nc_Span_integration;
             this.nc_DelayFailover.Value = Properties.Settings.Default.nc_DelayFailover;
             this.nc_DelayFailoverNext.Value = Properties.Settings.Default.nc_DelayFailoverNext;
             this.nc_DelayMon.Value = Properties.Settings.Default.nc_DelayMon;
@@ -762,6 +761,29 @@ namespace fermtools
             }
             else
                 MessageBox.Show("Approximate time operation the monitoring\nafter fails can not be calculated\nCheck variables values", "Estimate the duration", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
+        private void ResetDefaultParam(object sender, EventArgs e)
+        {
+            this.checkCoreClock.Checked = false;
+            this.checkMemoryClock.Checked = false;
+            this.checkGPULoad.Checked = false;
+            this.checkMemCtrlLoad.Checked = false;
+            this.checkGPUTemp.Checked = false;
+            this.checkFanLoad.Checked = false;
+            this.checkFanRPM.Checked = false;
+            this.nc_K_gpu_clock.Value = 2.0M;
+            this.nc_K_mem_clock.Value = 2.0M;
+            this.nc_K_gpu_load.Value = 2.0M;
+            this.nc_K_mem_load.Value = 2.0M;
+            this.nc_K_gpu_temp.Value = 1.5M;
+            this.nc_K_fan_speed_p.Value = 1.5M;
+            this.nc_K_fan_speed_r.Value = 1.5M;
+            this.nc_Span_integration.Value = 60M;
+            this.nc_DelayFailover.Value = 20M;
+            this.nc_DelayFailoverNext.Value = 10M;
+            this.nc_DelayMon.Value = 60M;
+            this.cb_NoUp.Checked = true;
         }
     }
 }

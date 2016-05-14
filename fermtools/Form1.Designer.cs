@@ -122,6 +122,7 @@ namespace fermtools
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timer4 = new System.Windows.Forms.Timer(this.components);
+            this.bt_ResetDefault = new System.Windows.Forms.Button();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -376,6 +377,7 @@ namespace fermtools
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.bt_ResetDefault);
             this.tabPage4.Controls.Add(this.bt_Calc);
             this.tabPage4.Controls.Add(this.tb_Max_est);
             this.tabPage4.Controls.Add(this.label30);
@@ -416,7 +418,7 @@ namespace fermtools
             // 
             // bt_Calc
             // 
-            this.bt_Calc.Location = new System.Drawing.Point(321, 194);
+            this.bt_Calc.Location = new System.Drawing.Point(293, 194);
             this.bt_Calc.Name = "bt_Calc";
             this.bt_Calc.Size = new System.Drawing.Size(89, 29);
             this.bt_Calc.TabIndex = 43;
@@ -581,7 +583,7 @@ namespace fermtools
             // 
             // btSaveMon
             // 
-            this.btSaveMon.Location = new System.Drawing.Point(228, 194);
+            this.btSaveMon.Location = new System.Drawing.Point(200, 194);
             this.btSaveMon.Name = "btSaveMon";
             this.btSaveMon.Size = new System.Drawing.Size(89, 29);
             this.btSaveMon.TabIndex = 29;
@@ -1197,6 +1199,16 @@ namespace fermtools
             this.timer4.Interval = 60000;
             this.timer4.Tick += new System.EventHandler(this.PauseAfterStart);
             // 
+            // bt_ResetDefault
+            // 
+            this.bt_ResetDefault.Location = new System.Drawing.Point(386, 194);
+            this.bt_ResetDefault.Name = "bt_ResetDefault";
+            this.bt_ResetDefault.Size = new System.Drawing.Size(89, 29);
+            this.bt_ResetDefault.TabIndex = 44;
+            this.bt_ResetDefault.Text = "Reset def";
+            this.bt_ResetDefault.UseVisualStyleBackColor = true;
+            this.bt_ResetDefault.Click += new System.EventHandler(this.ResetDefaultParam);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(508, 286);
@@ -1329,6 +1341,7 @@ namespace fermtools
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.TextBox tb_K_est;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Button bt_ResetDefault;
     }
 }
 
