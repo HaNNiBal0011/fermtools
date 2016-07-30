@@ -57,6 +57,7 @@ namespace fermtools
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.bt_ResetDefault = new System.Windows.Forms.Button();
             this.bt_Calc = new System.Windows.Forms.Button();
             this.tb_Max_est = new System.Windows.Forms.TextBox();
             this.label30 = new System.Windows.Forms.Label();
@@ -122,7 +123,6 @@ namespace fermtools
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timer4 = new System.Windows.Forms.Timer(this.components);
-            this.bt_ResetDefault = new System.Windows.Forms.Button();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -161,12 +161,12 @@ namespace fermtools
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 82);
+            this.MenuContext.Size = new System.Drawing.Size(90, 76);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -174,7 +174,7 @@ namespace fermtools
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -182,7 +182,7 @@ namespace fermtools
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -415,6 +415,16 @@ namespace fermtools
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Monitoring setting";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // bt_ResetDefault
+            // 
+            this.bt_ResetDefault.Location = new System.Drawing.Point(386, 194);
+            this.bt_ResetDefault.Name = "bt_ResetDefault";
+            this.bt_ResetDefault.Size = new System.Drawing.Size(89, 29);
+            this.bt_ResetDefault.TabIndex = 44;
+            this.bt_ResetDefault.Text = "Reset def";
+            this.bt_ResetDefault.UseVisualStyleBackColor = true;
+            this.bt_ResetDefault.Click += new System.EventHandler(this.ResetDefaultParam);
             // 
             // bt_Calc
             // 
@@ -1198,16 +1208,6 @@ namespace fermtools
             // 
             this.timer4.Interval = 60000;
             this.timer4.Tick += new System.EventHandler(this.PauseAfterStart);
-            // 
-            // bt_ResetDefault
-            // 
-            this.bt_ResetDefault.Location = new System.Drawing.Point(386, 194);
-            this.bt_ResetDefault.Name = "bt_ResetDefault";
-            this.bt_ResetDefault.Size = new System.Drawing.Size(89, 29);
-            this.bt_ResetDefault.TabIndex = 44;
-            this.bt_ResetDefault.Text = "Reset def";
-            this.bt_ResetDefault.UseVisualStyleBackColor = true;
-            this.bt_ResetDefault.Click += new System.EventHandler(this.ResetDefaultParam);
             // 
             // Form1
             // 

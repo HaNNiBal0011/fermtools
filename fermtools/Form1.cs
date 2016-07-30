@@ -384,6 +384,8 @@ namespace fermtools
                 this.timer2.Stop();
             if (this.timer3.Enabled)
                 this.timer3.Stop();
+            if (this.timer4.Enabled)
+                this.timer4.Stop();
             //Сбрасываем состояние ресета
             Properties.Settings.Default.isReset = false; Properties.Settings.Default.Save();
             Application.Exit();
@@ -406,18 +408,25 @@ namespace fermtools
             }
             else
             {
-                ManagementBaseObject mboReboot = null;
-                ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem"); mcWin32.Get();
-                // You can't shutdown without security privileges
-                mcWin32.Scope.Options.EnablePrivileges = true;
-                ManagementBaseObject mboRebootParams = mcWin32.GetMethodParameters("Win32Shutdown");
-                // Flags: - 0 (0x0) Log Off - 4 (0x4) Forced Log Off (0 4) - 1 (0x1) Shutdown - 5 (0x5) Forced Shutdown (1 4) - 2 (0x2) Reboot 
-                // - 6 (0x6) Forced Reboot (2 4) - 8 (0x8) Power Off - 12 (0xC) Forced Power Off (8 4)
-                mboRebootParams["Flags"] = "6";
-                mboRebootParams["Reserved"] = "0";
-                foreach (ManagementObject manObj in mcWin32.GetInstances())
+                try
                 {
-                    mboReboot = manObj.InvokeMethod("Win32Shutdown", mboRebootParams, null);
+                    ManagementBaseObject mboReboot = null;
+                    ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem"); mcWin32.Get();
+                    // You can't shutdown without security privileges
+                    mcWin32.Scope.Options.EnablePrivileges = true;
+                    ManagementBaseObject mboRebootParams = mcWin32.GetMethodParameters("Win32Shutdown");
+                    // Flags: - 0 (0x0) Log Off - 4 (0x4) Forced Log Off (0 4) - 1 (0x1) Shutdown - 5 (0x5) Forced Shutdown (1 4) - 2 (0x2) Reboot 
+                    // - 6 (0x6) Forced Reboot (2 4) - 8 (0x8) Power Off - 12 (0xC) Forced Power Off (8 4)
+                    mboRebootParams["Flags"] = "6";
+                    mboRebootParams["Reserved"] = "0";
+                    foreach (ManagementObject manObj in mcWin32.GetInstances())
+                    {
+                        mboReboot = manObj.InvokeMethod("Win32Shutdown", mboRebootParams, null);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteEventLog(String.Format("Exception caught in resetToolStripMenuItem_Click(): {0}", ex.ToString()), EventLogEntryType.Error);
                 }
             }
         }
@@ -677,10 +686,10 @@ namespace fermtools
                                 case "/tgpu":
                                     bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label5.Text + "\n" + getParam(4), "", upd.Message.MessageId.ToString());
                                     break;
-                                case "/fanr":
+                                case "/fanp":
                                     bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label6.Text + "\n" + getParam(5), "", upd.Message.MessageId.ToString());
                                     break;
-                                case "/fanp":
+                                case "/fanr":
                                     bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
                                     break;
                                 case "/all":
@@ -692,6 +701,19 @@ namespace fermtools
                                         this.label5.Text + "\n" + getParam(4) + "\n" +
                                         this.label6.Text + "\n" + getParam(5) + "\n" +
                                         this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/resetget":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/reseton":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                    fReset = false;
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                    break;
+                                case "/resetoff":
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                    fReset = true;
+                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
                                     break;
                             }
                         }

@@ -18,12 +18,25 @@ namespace fermtools
         public string lastUpd;
         public string chatID;
         public bool bInit;
+        public ReplyKeyboardMarkup kbmu;
+        public KeyboardButton kb1;
+        public KeyboardButton kb2;
+        public KeyboardButton kb3;
+
         public TelegramBot(string tk = "", string id = "")
         {
             token = tk;
             lastUpd = "";
             chatID = id;
             bInit = false;
+            kb1 = new KeyboardButton(); kb1.Text = "one";
+            kb2 = new KeyboardButton(); kb2.Text = "two";
+            kb3 = new KeyboardButton(); kb3.Text = "tre";
+            kbmu = new ReplyKeyboardMarkup();
+            kbmu.Keyboard = new KeyboardButton[1,3];
+            kbmu.Keyboard[0,0] = kb1;
+            kbmu.Keyboard[0,1] = kb2;
+            kbmu.Keyboard[0,2] = kb3;
         }
         public List<Update> GetUpdates(string offset = "", string limit = "", string timeout = "")
         {
@@ -348,5 +361,38 @@ namespace fermtools
 
         [JsonProperty(PropertyName = "latitude")]
         public float Latitude { get; set; }
+    }
+    public class KeyboardButton
+    {
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
+
+        [JsonProperty(PropertyName = "request_contact")]
+        public bool RequestContact { get; set; }
+
+        [JsonProperty(PropertyName = "request_location")]
+        public bool RequestLocation { get; set; }
+    }
+    public class ReplyKeyboardHide 
+    {
+        [JsonProperty(PropertyName = "hide_keyboard")]
+        public bool HideKeyboard { get; set; }
+
+        [JsonProperty(PropertyName = "selective")]
+        public bool Selective { get; set; }
+    }
+    public class ReplyKeyboardMarkup
+    {
+        [JsonProperty(PropertyName = "keyboard")]
+        public KeyboardButton[,] Keyboard { get; set; }
+
+        [JsonProperty(PropertyName = "resize_keyboard")]
+        public bool ResizeKeyboard { get; set; }
+
+        [JsonProperty(PropertyName = "one_time_keyboard")]
+        public bool OneTimeKeyboard { get; set; }
+
+        [JsonProperty(PropertyName = "selective")]
+        public bool Selective { get; set; }
     }
 }
