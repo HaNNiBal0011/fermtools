@@ -76,8 +76,7 @@ namespace fermtools
             pipeServerTh = new Thread(pipeServerThread); //Поток для работы именованного канала
             signal = new ManualResetEvent(false);
             wdt = new WDT(); //Инициализация WatchDog Timer
-            if (wdt.isWDT) 
-                InitWDT(args);
+            InitWDT(args);
             WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
             timer1.Start(); //Стартуем таймеры и потоки
             pipeServerTh.Start();
@@ -338,10 +337,25 @@ namespace fermtools
             //Цикл тика 10 секунд, нстраивается в графическом конструкторе свойств
             //Логика такова. Если остаток таймера меньше или равен 1 минуте, то перезаряжаем
             //Если больше 1 минуты, выводим в тоолтип сколько осталось и устанавливаем соответствующюу величину прогресса.
-            int progress = wdt.GetWDT();
+            int progress = 0; bool res = false;
+            
+            if (wdt.isWDT)
+                progress = wdt.GetWDT();
+            else
+                progress = wdt.Count;
+
             if (progress <= 1)
             {
-                if (wdt.SetWDT(WDtimer))
+                if (wdt.isWDT)
+                    res = wdt.SetWDT(WDtimer);
+                else
+                {
+                    wdt.Count = WDtimer;
+                    if (!this.timerSoft.Enabled) 
+                        this.timerSoft.Start();
+                    res = true;
+                }
+                if (res)
                 {
                     WriteEventLog("Watchdog timer set to " + WDtimer.ToString() + " min.", EventLogEntryType.Information);
                     //Здесь устанавливаем значение максимума, т.к., возможно, впоследствие, WDtimer будет возможно менять интерактивно
@@ -408,21 +422,30 @@ namespace fermtools
             }
             else
             {
-                try
+                /*ManagementBaseObject mboReboot = null;
+                ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem"); 
+                mcWin32.Get();
+                // You can't shutdown without security privileges
+                mcWin32.Scope.Options.EnablePrivileges = true;
+                ManagementBaseObject mboRebootParams = mcWin32.GetMethodParameters("Win32Shutdown");
+                // Flags: - 0 (0x0) Log Off - 4 (0x4) Forced Log Off (0 4) - 1 (0x1) Shutdown - 5 (0x5) Forced Shutdown (1 4) - 2 (0x2) Reboot 
+                // - 6 (0x6) Forced Reboot (2 4) - 8 (0x8) Power Off - 12 (0xC) Forced Power Off (8 4)
+                mboRebootParams["Flags"] = "6";
+                mboRebootParams["Reserved"] = "0";
+                foreach (ManagementObject manObj in mcWin32.GetInstances())
                 {
-                    ManagementBaseObject mboReboot = null;
-                    ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem"); mcWin32.Get();
-                    // You can't shutdown without security privileges
-                    mcWin32.Scope.Options.EnablePrivileges = true;
-                    ManagementBaseObject mboRebootParams = mcWin32.GetMethodParameters("Win32Shutdown");
-                    // Flags: - 0 (0x0) Log Off - 4 (0x4) Forced Log Off (0 4) - 1 (0x1) Shutdown - 5 (0x5) Forced Shutdown (1 4) - 2 (0x2) Reboot 
-                    // - 6 (0x6) Forced Reboot (2 4) - 8 (0x8) Power Off - 12 (0xC) Forced Power Off (8 4)
-                    mboRebootParams["Flags"] = "6";
-                    mboRebootParams["Reserved"] = "0";
-                    foreach (ManagementObject manObj in mcWin32.GetInstances())
+                    try
                     {
                         mboReboot = manObj.InvokeMethod("Win32Shutdown", mboRebootParams, null);
                     }
+                    catch (Exception ex)
+                    {
+                        WriteEventLog(String.Format("Exception caught in resetToolStripMenuItem_Click(): {0}", ex.ToString()), EventLogEntryType.Error);
+                    }
+                }*/
+                try
+                {
+                    ExitWindows.Reboot(true);
                 }
                 catch (Exception ex)
                 {
@@ -806,6 +829,13 @@ namespace fermtools
             this.nc_DelayFailoverNext.Value = 10M;
             this.nc_DelayMon.Value = 60M;
             this.cb_NoUp.Checked = true;
+        }
+
+        private void SoftReset(object sender, EventArgs e)
+        {
+            if (wdt.Count == 0) 
+                resetToolStripMenuItem_Click(sender, e);
+            wdt.Count--;
         }
     }
 }

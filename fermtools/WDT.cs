@@ -18,6 +18,7 @@ namespace fermtools
 
         public string WDTnameChip;                             //Наименование чипа WDT
         private ushort WDTnumPort;                                      //Порядковый номер порта в массивах REGISTER_PORTS и VALUE_PORTS
+        public int Count;                                               //Счетчик минут для софт. таймера.
         public readonly bool isWDT;                                     //Флаг наличия чипа WDT
         public readonly StringBuilder report = new StringBuilder();     //Для отчета
 
@@ -53,6 +54,7 @@ namespace fermtools
                     isWDT = true;
                 }
             }
+            if (!isWDT) WDTnameChip = "Software";
         }
         private ushort GetWDTChip()
         {
@@ -132,6 +134,11 @@ namespace fermtools
                         {
                             case 0x30: WDTnameChip = "NCT6776F"; return i;
                         } break;
+                    /*case 0xC8:
+                        switch (revision)
+                        {
+                            case 0x03: WDTnameChip = "NCT6791D"; return i;
+                        } break;*/
                 }
             }
             return i;
@@ -177,9 +184,16 @@ namespace fermtools
                 //in al,dx
                 byte xx = Ring0.ReadIoPort(VALUE_PORTS[WDTnumPort]);
                 //or al,08h
+                //Select Watchdog Timer I count mode. 0: Second Mode. 1: Minute Mode.
                 xx |= 0x08;
+                //Enable the rising edge of a KBC reset (P20) to issue a time-out event. 0: Disable. 1: Enable.
+                //or al,04h
+                //xx |= 0x04;
                 //or al,02h
+                //Disable / Enable the Watchdog Timer I output low pulse to the KBRST# pin (PIN28) 0: Disable. 1: Enable.
                 xx |= 0x02;
+                //FOR NCT6779D Pulse or Level mode select 0: Pulse mode 1: Level mode
+                //xx |= 0x01;
                 //out dx,al
                 Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], xx);
 

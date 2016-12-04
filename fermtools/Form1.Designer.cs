@@ -123,6 +123,7 @@ namespace fermtools
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timer4 = new System.Windows.Forms.Timer(this.components);
+            this.timerSoft = new System.Windows.Forms.Timer(this.components);
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -1209,6 +1210,11 @@ namespace fermtools
             this.timer4.Interval = 60000;
             this.timer4.Tick += new System.EventHandler(this.PauseAfterStart);
             // 
+            // timerSoft
+            // 
+            this.timerSoft.Interval = 60000;
+            this.timerSoft.Tick += new System.EventHandler(this.SoftReset);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(508, 286);
@@ -1342,6 +1348,7 @@ namespace fermtools
         private System.Windows.Forms.TextBox tb_K_est;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button bt_ResetDefault;
+        private System.Windows.Forms.Timer timerSoft;
     }
 }
 

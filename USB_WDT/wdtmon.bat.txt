@@ -1,0 +1,6 @@
+@echo off
+SET portname=COM22
+:loop
+set /p x="~U" <nul >\\.\%portname%
+ping -n 2 127.0.0.1 > NUL
+goto loop
