@@ -10,18 +10,18 @@ namespace fermtools
 {
     class AutoClosingMessageBox
     {
-         System.Threading.Timer _timeoutTimer;
-        string _caption;
-        public AutoClosingMessageBox(string text, string caption, int timeout)
+        public string _caption;
+        public System.Threading.Timer _timeoutTimer;
+        public AutoClosingMessageBox(string caption, int timeout)
         {
             _caption = caption;
             _timeoutTimer = new System.Threading.Timer(OnTimerElapsed, null, timeout, System.Threading.Timeout.Infinite);
         }
 
-        public static DialogResult Show(string text, string caption, int timeout)
+        public DialogResult Show(string text)//, string caption, int timeout)
         {
-            new AutoClosingMessageBox(text, caption, timeout);
-            return MessageBox.Show(text, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+            //new AutoClosingMessageBox(text, caption, timeout);
+            return MessageBox.Show(text, _caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
         }
 
         void OnTimerElapsed(object state)

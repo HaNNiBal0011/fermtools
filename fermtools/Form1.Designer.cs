@@ -162,12 +162,12 @@ namespace fermtools
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 76);
+            this.MenuContext.Size = new System.Drawing.Size(90, 82);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -175,7 +175,7 @@ namespace fermtools
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -183,7 +183,7 @@ namespace fermtools
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -497,7 +497,6 @@ namespace fermtools
             this.cb_NoUp.Text = "No react to up";
             this.cb_NoUp.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cb_NoUp.UseVisualStyleBackColor = true;
-            this.cb_NoUp.Click += new System.EventHandler(this.EstimateDuration);
             // 
             // label27
             // 

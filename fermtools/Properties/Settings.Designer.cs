@@ -442,5 +442,17 @@ namespace fermtools.Properties {
                 this["cb_NoUp"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string cmd_Script {
+            get {
+                return ((string)(this["cmd_Script"]));
+            }
+            set {
+                this["cmd_Script"] = value;
+            }
+        }
     }
 }

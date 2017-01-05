@@ -85,9 +85,16 @@ namespace fermtools
         {
             string url = "https://api.telegram.org/bot" + token + "/" + method + ToQueryString(args);
             var client = new HttpClient();
-            var response = await client.GetAsync(url).ConfigureAwait(false);
-            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return responseContent;
+            try
+            {
+                var response = await client.GetAsync(url).ConfigureAwait(false);
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                return responseContent;
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+            }
         }
 
         private static string ToQueryString(NameValueCollection nvc)

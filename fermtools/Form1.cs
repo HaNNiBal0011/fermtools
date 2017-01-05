@@ -66,6 +66,11 @@ namespace fermtools
             nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
             atigr = new ATIGroup(ref gpupar, NumPar); //Группа видеокарт ATI
             CardCount = gpupar.Count; //Сколько всего видеокарт
+            if (CardCount == 0) //Если видеокарт нет, выходим
+            {
+                MessageBox.Show("Not found compatible videocards", "Fermtools", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                Application.Exit();
+            }
             SetMonitoringSetting(); //Восстанавливаем параметры мониторинга из конфига (после инициализации видеокарт)
             //Устанавливаем длительность задержки монторинга и запускаем таймер задержки мониторинга, если он еще не запущен
             this.timer4.Interval = MonDelay;
@@ -258,16 +263,21 @@ namespace fermtools
         }
         private void MessageShowTh(object rep)
         {
-            DialogResult dlg = AutoClosingMessageBox.Show("The monitoring system has identified the wrong setting:\n" + rep + "the computer prepares to reset\n" +
-                "If a reset is not required, disable the monitoring", "Fermtool reset", MsgBoxPause);
+            AutoClosingMessageBox adlg = new AutoClosingMessageBox("Fermtool reset", MsgBoxPause);
+            DialogResult dlg = adlg.Show("The monitoring system has identified the wrong setting:\n" + rep + "the computer prepares to reset\n" +
+                "If a reset is not required, disable the monitoring");
+            adlg._timeoutTimer.Dispose();
             //Если нажали ОК (или само нажалось) то запускаем процесс перезагрузки, иначе нажали Отмена и ждем MsgBoxTimeout для реакции на сработку.
             if (dlg == System.Windows.Forms.DialogResult.OK)
             {
                 object sender = null; EventArgs e = null;
+                if (!String.IsNullOrEmpty(Properties.Settings.Default.cmd_Script)) runCmd();
                 resetToolStripMenuItem_Click(sender, e);
             }
             else
             {
+                //For test
+                //if (!String.IsNullOrEmpty(Properties.Settings.Default.cmd_Script)) runCmd();
                 //Если нажата кнопка отмены ждем, чтобы сразу не вылезло следующее предупреждение
                 Thread.Sleep(MsgBoxTimeout);
                 fMessage = false;
@@ -786,7 +796,6 @@ namespace fermtools
             //Задержка на время timer4 после старта программы
             this.timer4.Stop();
         }
-
         private void EstimateDuration(object sender, EventArgs e)
         {
             //Оценка времени превышения порога наблюдения за параметрами при известном интервале наблюдения, K, Min и Max значенииях
@@ -807,7 +816,6 @@ namespace fermtools
             else
                 MessageBox.Show("Approximate time operation the monitoring\nafter fails can not be calculated\nCheck variables values", "Estimate the duration", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
-
         private void ResetDefaultParam(object sender, EventArgs e)
         {
             this.checkCoreClock.Checked = false;
@@ -829,13 +837,28 @@ namespace fermtools
             this.nc_DelayFailoverNext.Value = 10M;
             this.nc_DelayMon.Value = 60M;
             this.cb_NoUp.Checked = true;
+            Properties.Settings.Default.cmd_Script = "";
+            Properties.Settings.Default.Save();
         }
-
         private void SoftReset(object sender, EventArgs e)
         {
             if (wdt.Count == 0) 
                 resetToolStripMenuItem_Click(sender, e);
             wdt.Count--;
+        }
+        private void runCmd()
+        {
+            ProcessStartInfo psi = new ProcessStartInfo("cmd.exe") 
+                { UseShellExecute = false, RedirectStandardInput = false, Arguments = "/c " + Properties.Settings.Default.cmd_Script };
+            Process proc = new Process() { StartInfo = psi };
+            try
+            {
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                WriteEventLog("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message, EventLogEntryType.Information);
+            }
         }
     }
 }
