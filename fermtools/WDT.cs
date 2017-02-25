@@ -134,6 +134,11 @@ namespace fermtools
                         {
                             case 0x30: WDTnameChip = "NCT6776F"; return i;
                         } break;
+                    case 0xC5:
+                        switch (revision & 0xF0)
+                        {
+                            case 0x60: WDTnameChip = "NCT6779D"; return i;
+                        } break;
                     /*case 0xC8:
                         switch (revision)
                         {
