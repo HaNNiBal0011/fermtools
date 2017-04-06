@@ -85,7 +85,7 @@ namespace fermtools
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
             pipeServerTh = new Thread(pipeServerThread); //Поток для работы именованного канала
             signal = new ManualResetEvent(false);
-            wdt = new WDT(Properties.Settings.Default.wdtPort); //Инициализация WatchDog Timer
+            wdt = new WDT(); //Инициализация WatchDog Timer
             InitWDT(args);
             WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
             timer1.Start(); //Стартуем таймеры и потоки
@@ -358,14 +358,14 @@ namespace fermtools
             //Если больше 1 минуты, выводим в тоолтип сколько осталось и устанавливаем соответствующюу величину прогресса.
             int progress = 0; bool res = false;
             
-            if (wdt.isWDT_onb)
+            if (wdt.isWDT)
                 progress = wdt.GetWDT();
             else
                 progress = wdt.Count;
 
             if (progress <= 1)
             {
-                if (wdt.isWDT_onb)
+                if (wdt.isWDT)
                     res = wdt.SetWDT(WDtimer);
                 else
                 {
@@ -407,7 +407,7 @@ namespace fermtools
             //Прерываем поток pipe
             signal.Set();
             //Останавливаем WDT, если он есть
-            if (wdt.isWDT_onb) 
+            if (wdt.isWDT) 
                 if (wdt.SetWDT(0)) 
                     WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
             //Останавливаем таймеры
@@ -432,7 +432,7 @@ namespace fermtools
             //Если флаг установлен, то перезагрузка уже инициирована
             if (fReset) return;
             fReset = true;
-            if (wdt.isWDT_onb)
+            if (wdt.isWDT)
             {
                 timer2.Stop();
                 wdt.SetWDT(1);

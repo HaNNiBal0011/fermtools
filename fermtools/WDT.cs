@@ -1,11 +1,9 @@
-﻿// Copyright © 2016 Dimasin. All rights reserved.
+﻿ ﻿// Copyright © 2016 Dimasin. All rights reserved.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.IO.Ports;
 
 namespace fermtools
 {
@@ -21,13 +19,10 @@ namespace fermtools
         public string WDTnameChip;                             //Наименование чипа WDT
         private ushort WDTnumPort;                                      //Порядковый номер порта в массивах REGISTER_PORTS и VALUE_PORTS
         public int Count;                                               //Счетчик минут для софт. таймера.
-        public readonly bool isWDT_onb;                                     //Флаг наличия чипа WDT
-        public readonly bool isWDT_usb;                                     //Флаг наличия opendev USB WDT
-        public int MaxTimer;                                            //Максимальное значение таймера в мин.
+        public readonly bool isWDT;                                     //Флаг наличия чипа WDT
         public readonly StringBuilder report = new StringBuilder();     //Для отчета
-        private SerialPort sp;                                          //Порт для opendev USB WDT
 
-        public WDT(string ComPort)
+        public WDT()
         {
             bool isDriver;  //Флаг успешной загрузки драйвера
             //Грузим драйвер для операций IO
@@ -42,7 +37,7 @@ namespace fermtools
                 report.AppendLine("Kernel driver not loaded, see next for detals.");
                 report.AppendLine(Ring0.GetReport());
                 isDriver = false;
-                isWDT_onb = false;
+                isWDT = false;
             }
             //Проверяем, есть ли микросхема
             if (isDriver)
@@ -51,270 +46,181 @@ namespace fermtools
                 if (WDTnumPort >= REGISTER_PORTS.Length)
                 {
                     report.AppendLine("WDT chip not found. Only software reset.");
-                    isWDT_onb = false;
+                    isWDT = false;
                 }
                 else
                 {
                     report.AppendLine("Found chip " + WDTnameChip + "\nRegister port " + String.Format("0x{0:X}", REGISTER_PORTS[WDTnumPort]));
-                    isWDT_onb = true;
+                    isWDT = true;
                 }
             }
-            //Проверяем, есть ли OpenDev USB WDT
-            isWDT_usb = GetOpenDevUSB(ComPort);
-            if (isWDT_usb)
-                report.AppendLine("Found OpenDev USB WDT on port " + ComPort);
-            else
-                report.AppendLine("Not fount OpenDev USB WDT to port " + ComPort);
-        }
-        private bool GetOpenDevUSB(string ComPort)
-        {
-            string answer = new string(string.Empty.ToCharArray());
-            if (!String.IsNullOrEmpty(ComPort))
-            {
-                try
-                {
-                    sp = new SerialPort(ComPort);
-                    sp.WriteTimeout = 500;
-                    sp.ReadTimeout = 5000;
-                    sp.Open();
-                    sp.Write("~U".ToCharArray(),0,2);
-                    answer = sp.ReadExisting();
-                    sp.Close();
-                }
-                catch
-                {
-                    sp.Close();
-                    report.AppendLine("Error initialise OpenDev USB WDT to port " + ComPort);
-                    return false;
-                }
-                if (answer.Equals("~A"))
-                {
-                    WDTnameChip = "OpenDev";
-                    return true;
-                }
-            }
-            return false;
+            if (!isWDT) WDTnameChip = "Software";
         }
         private ushort GetWDTChip()
-        {
-            ushort i = 0xFF;
-            
-            for (i = 0; i < REGISTER_PORTS.Length; i++)
-            {
-                byte id = 0;
-                byte revision = 0;
-                if (Ring0.WaitIsaBusMutex(100))
-                {
-                    //Unlock W83627
-                    Ring0.WriteIoPort(REGISTER_PORTS[i], 0x87);
-                    Ring0.WriteIoPort(REGISTER_PORTS[i], 0x87);
-                    //Read chip id
-                    Ring0.WriteIoPort(REGISTER_PORTS[i], CHIP_ID_REGISTER);
-                    id = Ring0.ReadIoPort(VALUE_PORTS[i]);
-                    //Read chip version
-                    Ring0.WriteIoPort(REGISTER_PORTS[i], CHIP_REVISION_REGISTER);
-                    revision = Ring0.ReadIoPort(VALUE_PORTS[i]);
-                    //Lock W83627
-                    Ring0.WriteIoPort(REGISTER_PORTS[i], 0xAA);
-                    Ring0.ReleaseIsaBusMutex();
-                }
-                else 
-                {
-                    report.AppendLine("Get WDT Chip: ISA bus error.");
-                    return 0xFF;
-                }
-                switch (id)
-                {
-                    case 0x52:
-                        switch (revision)
-                        {
-                            case 0x17:
-                            case 0x3A:
-                            case 0x41: WDTnameChip = "W83627HF"; return i;
-                        } break;
-                    case 0x82:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x80: WDTnameChip = "W83627THF"; return i;
-                        } break;
-                    case 0x85:
-                        switch (revision)
-                        {
-                            case 0x41: WDTnameChip = "W83687THF"; return i;
-                        } break;
-                    case 0x88:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x50:
-                            case 0x60: WDTnameChip = "W83627EHF"; return i;
-                        } break;
-                    case 0xA0:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x20: WDTnameChip = "W83627DHG"; return i;
-                        } break;
-                    case 0xA5:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x10: WDTnameChip = "W83667HG"; return i;
-                        } break;
-                    case 0xB0:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x70: WDTnameChip = "W83627DHGP"; return i;
-                        } break;
-                    case 0xB3:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x50: WDTnameChip = "W83667HGB"; return i;
-                        } break;
-                    case 0xC3:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x30: WDTnameChip = "NCT6776F"; return i;
-                        } break;
-                    case 0xC5:
-                        switch (revision & 0xF0)
-                        {
-                            case 0x60: WDTnameChip = "NCT6779D"; return i;
-                        } break;
-                    /*case 0xC8:
-                        switch (revision)
-                        {
-                            case 0x03: WDTnameChip = "NCT6791D"; return i;
-                        } break;*/
-                }
-            }
-            return i;
-        }
-        public bool SetWDT(ref byte count, int type)
+         {
+             ushort i = 0xFF;
+             
+             for (i = 0; i < REGISTER_PORTS.Length; i++)
+             {
+                 byte id = 0;
+                 byte revision = 0;
+                 if (Ring0.WaitIsaBusMutex(100))
+                 {
+                     //Unlock W83627
+                     Ring0.WriteIoPort(REGISTER_PORTS[i], 0x87);
+                     Ring0.WriteIoPort(REGISTER_PORTS[i], 0x87);
+                     //Read chip id
+                     Ring0.WriteIoPort(REGISTER_PORTS[i], CHIP_ID_REGISTER);
+                     id = Ring0.ReadIoPort(VALUE_PORTS[i]);
+                     //Read chip version
+                     Ring0.WriteIoPort(REGISTER_PORTS[i], CHIP_REVISION_REGISTER);
+                     revision = Ring0.ReadIoPort(VALUE_PORTS[i]);
+                     //Lock W83627
+                     Ring0.WriteIoPort(REGISTER_PORTS[i], 0xAA);
+                     Ring0.ReleaseIsaBusMutex();
+                 }
+                 else 
+                 {
+                     report.AppendLine("Get WDT Chip: ISA bus error.");
+                     return 0xFF;
+                 }
+                 switch (id)
+                 {
+                     case 0x52:
+                         switch (revision)
+                         {
+                             case 0x17:
+                             case 0x3A:
+                             case 0x41: WDTnameChip = "W83627HF"; return i;
+                         } break;
+                     case 0x82:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x80: WDTnameChip = "W83627THF"; return i;
+                         } break;
+                     case 0x85:
+                         switch (revision)
+                         {
+                             case 0x41: WDTnameChip = "W83687THF"; return i;
+                         } break;
+                     case 0x88:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x50:
+                             case 0x60: WDTnameChip = "W83627EHF"; return i;
+                         } break;
+                     case 0xA0:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x20: WDTnameChip = "W83627DHG"; return i;
+                         } break;
+                     case 0xA5:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x10: WDTnameChip = "W83667HG"; return i;
+                         } break;
+                     case 0xB0:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x70: WDTnameChip = "W83627DHGP"; return i;
+                         } break;
+                     case 0xB3:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x50: WDTnameChip = "W83667HGB"; return i;
+                         } break;
+                     case 0xC3:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x30: WDTnameChip = "NCT6776F"; return i;
+                         } break;
+                     case 0xC5:
+                         switch (revision & 0xF0)
+                         {
+                             case 0x60: WDTnameChip = "NCT6779D"; return i;
+                         } break;
+                     /*case 0xC8:
+                         switch (revision)
+                         {
+                             case 0x03: WDTnameChip = "NCT6791D"; return i;
+                         } break;*/
+                 }
+             }
+             return i;
+         }
+        public bool SetWDT(byte count)
         {
             report.Clear();
-            switch (type)
+            if (Ring0.WaitIsaBusMutex(100))
             {
-                case 0:
-                    //Приводим в соответствие с диапазоном значений для onboard WDT
-                    if (count <= 0)
-                    {
-                        count = 0;
-                    }
-                    else
-                    {
-                        if (count > 254)
-                            count = 254;
-                    }
-                    if (Ring0.WaitIsaBusMutex(100))
-                    {
-                        //Unlock W83627
-                        //mov dx,02eh
-                        //mov al,087h
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x87);
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x87);
+                //Unlock W83627
+                //mov dx,02eh
+                //mov al,087h
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x87);
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x87);
 
-                        //Select register of watchdog timer
-                        //mov al,07h
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x07);
-                        //inc dx
-                        //mov al,08h
-                        //out dx,al
-                        Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], 0x08);
+                //Select register of watchdog timer
+                //mov al,07h
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x07);
+                //inc dx
+                //mov al,08h
+                //out dx,al
+                Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], 0x08);
 
-                        //Enable the function of watchdog timer
-                        //dec dx
-                        //mov al,030h
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x30);
-                        //inc dx
-                        //mov al,01h
-                        //out dx,al
-                        Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], 0x01);
+                //Enable the function of watchdog timer
+                //dec dx
+                //mov al,030h
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0x30);
+                //inc dx
+                //mov al,01h
+                //out dx,al
+                Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], 0x01);
 
-                        //Set minute as counting unit and enable the WDTO#
-                        //dec dx
-                        //mov al,0f5h
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xF5);
-                        //inc dx
-                        //in al,dx
-                        byte xx = Ring0.ReadIoPort(VALUE_PORTS[WDTnumPort]);
-                        //or al,08h
-                        //Select Watchdog Timer I count mode. 0: Second Mode. 1: Minute Mode.
-                        xx |= 0x08;
-                        //Enable the rising edge of a KBC reset (P20) to issue a time-out event. 0: Disable. 1: Enable.
-                        //or al,04h
-                        //xx |= 0x04;
-                        //or al,02h
-                        //Disable / Enable the Watchdog Timer I output low pulse to the KBRST# pin (PIN28) 0: Disable. 1: Enable.
-                        xx |= 0x02;
-                        //FOR NCT6779D Pulse or Level mode select 0: Pulse mode 1: Level mode
-                        //xx |= 0x01;
-                        //out dx,al
-                        Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], xx);
+                //Set minute as counting unit and enable the WDTO#
+                //dec dx
+                //mov al,0f5h
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xF5);
+                //inc dx
+                //in al,dx
+                byte xx = Ring0.ReadIoPort(VALUE_PORTS[WDTnumPort]);
+                //or al,08h
+                //Select Watchdog Timer I count mode. 0: Second Mode. 1: Minute Mode.
+                xx |= 0x08;
+                //Enable the rising edge of a KBC reset (P20) to issue a time-out event. 0: Disable. 1: Enable.
+                //or al,04h
+                //xx |= 0x04;
+                //or al,02h
+                //Disable / Enable the Watchdog Timer I output low pulse to the KBRST# pin (PIN28) 0: Disable. 1: Enable.
+                xx |= 0x02;
+                //FOR NCT6779D Pulse or Level mode select 0: Pulse mode 1: Level mode
+                //xx |= 0x01;
+                //out dx,al
+                Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], xx);
 
-                        //Set timeout interval as COUNT minute and start
-                        //dec dx
-                        //mov al,0f6h
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xF6);
-                        //inc dx
-                        //mov al,count
-                        //out dx,al
-                        Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], count);
+                //Set timeout interval as COUNT minute and start
+                //dec dx
+                //mov al,0f6h
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xF6);
+                //inc dx
+                //mov al,count
+                //out dx,al
+                Ring0.WriteIoPort(VALUE_PORTS[WDTnumPort], count);
 
-                        //Lock W83627
-                        //dec dx
-                        //mov al,0aah
-                        //out dx,al
-                        Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xAA);
-                        Ring0.ReleaseIsaBusMutex();
-                        return true;
-                    }       
-                    else 
-                        report.AppendLine("ISA bus error. Watchdog timer not set.");
-                    break;
-                case 1:
-                    //Приводим в соответствие с диапазоном значений для opendev WDT
-                    if (count <= 0)
-                    {
-                        //Если 0, отключаем таймер
-                        count = 0;
-                        try
-                        {
-                            sp.Open();
-                            sp.Write(("~P1").ToCharArray(), 0, 3);
-                            sp.Close();
-                            return true;
-                        }
-                        catch
-                        {
-                            sp.Close();
-                            report.AppendLine("Pause enable error OpenDev USB WDT");
-                        }
-
-                    }
-                    else
-                    {
-                        if (count > 9)
-                            count = 9;
-                        try
-                        {
-                            sp.Open();
-                            sp.Write(("~P0").ToCharArray(), 0, 3);
-                            sp.Write(("~W" + count.ToString()).ToCharArray(), 0, 3);
-                            sp.Close();
-                            return true;
-                        }
-                        catch
-                        {
-                            sp.Close();
-                            report.AppendLine("Error write timeout to OpenDev USB WDT");
-                        }
-                    }
-                    break;
+                //Lock W83627
+                //dec dx
+                //mov al,0aah
+                //out dx,al
+                Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xAA);
+                Ring0.ReleaseIsaBusMutex();
+                return true;
             }
+            else report.AppendLine("ISA bus error. Watchdog timer not set.");
             return false;
         }
         public byte GetWDT()
