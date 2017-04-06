@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Pipes;
+using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Net;
@@ -30,6 +31,9 @@ namespace fermtools
     public partial class Form1 : Form
     {
         const int NumPar = 7;                   //Число параметров GPU выводимых в окошки
+        const int WDT_SOFT = 0;                 //Выбран софтовый WDT
+        const int WDT_ONBOARD = 1;               //Выбран WDT на мат. плате
+        const int WDT_USBOPEN = 2;              //Выбран OpenHadrdware USB WDT
         int TickCountMax = 60;                  //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
         int MonDelay = 60;                      //Время задержки начала мониторинга при старте, сек
         int MsgBoxPause = 20000;                //Пауза для отображения сообщения, когда пользователь сможет нажать Отмену перезагрузки (мс)
@@ -59,6 +63,7 @@ namespace fermtools
         public Form1(string[] args)
         {
             InitializeComponent();
+            FindComPorts();
             RestoreSetting();
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
@@ -80,7 +85,7 @@ namespace fermtools
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
             pipeServerTh = new Thread(pipeServerThread); //Поток для работы именованного канала
             signal = new ManualResetEvent(false);
-            wdt = new WDT(); //Инициализация WatchDog Timer
+            wdt = new WDT(Properties.Settings.Default.wdtPort); //Инициализация WatchDog Timer
             InitWDT(args);
             WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
             timer1.Start(); //Стартуем таймеры и потоки
@@ -105,14 +110,14 @@ namespace fermtools
             //свойство формы AutoScaleMode, нужно чтобы в свойствах формы было AutoScaleMode = Inherit
             //Добавляем на форму текст боксы для вывода параметров видеокарт
             ToolTip tt = new ToolTip();
-            int txtBoxWith = (this.tabPage1.Width - 200) / CardCount;
+            int txtBoxWith = (this.tabGPU.Width - 200) / CardCount;
             for (int i = 0; i < CardCount; i++)
             {
                 for (int j = 0; j < NumPar; j++)
                 {
                     int m = i * NumPar + j;
                     this.par.Insert(m, new System.Windows.Forms.TextBox());
-                    this.tabPage1.Controls.Add(this.par[m]);
+                    this.tabGPU.Controls.Add(this.par[m]);
                     this.par[m].Size = new System.Drawing.Size(txtBoxWith - 6, 22);
                     this.par[m].Location = new System.Drawing.Point(180 + txtBoxWith * i, 10 + 30 * j); //X = 234 (180 + 48 + 6) Y = 40 (10 + 22 + 8)
                     this.par[m].ReadOnly = true;
@@ -147,8 +152,12 @@ namespace fermtools
         private void InitWDT(string[] args)
         {
             //Пытаемся брать значение таймера из командной строки, если не выходит, WDT устанавливаем 10 минут
-            if (CmdString(args)) WDtimer = (byte)Convert.ToInt16(args[0]);
-            else WDtimer = 10;
+            if (CmdString(args))
+            {
+                WDtimer = (byte)Convert.ToInt16(args[0]);
+                numericTimeout.Value = WDtimer;
+                SaveWDTSetting(null, null);
+            }
             //Добавляем в панель статуса информацию о чипе и показываем
             this.toolStripStatusLabel1.Text = "WDT Chip " + wdt.WDTnameChip;
             this.toolStripStatusLabel1.Visible = true;
@@ -349,14 +358,14 @@ namespace fermtools
             //Если больше 1 минуты, выводим в тоолтип сколько осталось и устанавливаем соответствующюу величину прогресса.
             int progress = 0; bool res = false;
             
-            if (wdt.isWDT)
+            if (wdt.isWDT_onb)
                 progress = wdt.GetWDT();
             else
                 progress = wdt.Count;
 
             if (progress <= 1)
             {
-                if (wdt.isWDT)
+                if (wdt.isWDT_onb)
                     res = wdt.SetWDT(WDtimer);
                 else
                 {
@@ -398,7 +407,7 @@ namespace fermtools
             //Прерываем поток pipe
             signal.Set();
             //Останавливаем WDT, если он есть
-            if (wdt.isWDT) 
+            if (wdt.isWDT_onb) 
                 if (wdt.SetWDT(0)) 
                     WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
             //Останавливаем таймеры
@@ -423,7 +432,7 @@ namespace fermtools
             //Если флаг установлен, то перезагрузка уже инициирована
             if (fReset) return;
             fReset = true;
-            if (wdt.isWDT)
+            if (wdt.isWDT_onb)
             {
                 timer2.Stop();
                 wdt.SetWDT(1);
@@ -582,6 +591,24 @@ namespace fermtools
             this.textFermaName.Text = Properties.Settings.Default.textFermaName;
             this.cbTelegramOn.Checked = Properties.Settings.Default.cbTelegramOn;
             this.cbResponceCmd.Checked = Properties.Settings.Default.cbResponceCmd;
+            //WDT setting
+            this.WDtimer = Properties.Settings.Default.timeout_WDT;
+            this.numericTimeout.Value = WDtimer;
+            switch (Properties.Settings.Default.select_WDT)
+            {
+                case WDT_SOFT:
+                    radioSoftWDT.Checked = true;
+                    break;
+                case WDT_ONBOARD:
+                    radioOnboardWDT.Checked = true;
+                    break;
+                case WDT_USBOPEN:
+                    radioOpendevUSBWDT.Checked = true;
+                    break;
+                default:
+                    radioSoftWDT.Checked = true;
+                    break;
+            }
         }
         public static string Encrypt(string data)
         {
@@ -858,6 +885,43 @@ namespace fermtools
             catch (Exception ex)
             {
                 WriteEventLog("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message, EventLogEntryType.Information);
+            }
+        }
+
+        private void SaveWDTSetting(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.timeout_WDT = (Byte) this.numericTimeout.Value;
+            Properties.Settings.Default.wdtPort = cbCOMPort.Text;
+            if (radioSoftWDT.Checked)
+                Properties.Settings.Default.select_WDT = WDT_SOFT;
+            if (radioOnboardWDT.Checked)
+                Properties.Settings.Default.select_WDT = WDT_ONBOARD;
+            if (radioOpendevUSBWDT.Checked)
+                Properties.Settings.Default.select_WDT = WDT_USBOPEN;
+            Properties.Settings.Default.Save();
+            MessageBox.Show("WDT settings save successfully", "Save WDT setting", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+        private void FindComPorts()
+        {
+            try
+            {
+                //Перечисляем все СОМ порты в системе
+                string[] ports = SerialPort.GetPortNames();
+                //Заполняем комбо бокс найденными значениями
+                if (ports.Length > 0)
+                {
+                    for (int i = 0; i < ports.Length; i++)
+                    {
+                        cbCOMPort.Items.Add(ports.GetValue(i));
+                        //Устанавливаем нужный СОМ порт текущим
+                        if (ports.GetValue(i).Equals(Properties.Settings.Default.wdtPort))
+                            cbCOMPort.SelectedIndex = i;
+                    }
+                }
+            }
+            catch
+            {
+                WriteEventLog("Error serial port: GetPortNames()", EventLogEntryType.Information);
             }
         }
     }

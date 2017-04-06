@@ -454,5 +454,41 @@ namespace fermtools.Properties {
                 this["cmd_Script"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public byte timeout_WDT {
+            get {
+                return ((byte)(this["timeout_WDT"]));
+            }
+            set {
+                this["timeout_WDT"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int select_WDT {
+            get {
+                return ((int)(this["select_WDT"]));
+            }
+            set {
+                this["select_WDT"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string wdtPort {
+            get {
+                return ((string)(this["wdtPort"]));
+            }
+            set {
+                this["wdtPort"] = value;
+            }
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace fermtools
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabGPU = new System.Windows.Forms.TabPage();
             this.checkFanRPM = new System.Windows.Forms.CheckBox();
             this.checkFanLoad = new System.Windows.Forms.CheckBox();
             this.checkGPUTemp = new System.Windows.Forms.CheckBox();
@@ -56,7 +56,7 @@ namespace fermtools
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabMonitoring = new System.Windows.Forms.TabPage();
             this.bt_ResetDefault = new System.Windows.Forms.Button();
             this.bt_Calc = new System.Windows.Forms.Button();
             this.tb_Max_est = new System.Windows.Forms.TextBox();
@@ -89,7 +89,16 @@ namespace fermtools
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.nc_K_gpu_clock = new System.Windows.Forms.NumericUpDown();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabWDT = new System.Windows.Forms.TabPage();
+            this.btSaveWDT = new System.Windows.Forms.Button();
+            this.numericTimeout = new System.Windows.Forms.NumericUpDown();
+            this.label31 = new System.Windows.Forms.Label();
+            this.groupBoxWDT = new System.Windows.Forms.GroupBox();
+            this.cbCOMPort = new System.Windows.Forms.ComboBox();
+            this.radioOpendevUSBWDT = new System.Windows.Forms.RadioButton();
+            this.radioSoftWDT = new System.Windows.Forms.RadioButton();
+            this.radioOnboardWDT = new System.Windows.Forms.RadioButton();
+            this.tabEmail = new System.Windows.Forms.TabPage();
             this.cbOnSendStart = new System.Windows.Forms.CheckBox();
             this.cbOnEmail = new System.Windows.Forms.CheckBox();
             this.btSaveMail = new System.Windows.Forms.Button();
@@ -105,7 +114,7 @@ namespace fermtools
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabTelegram = new System.Windows.Forms.TabPage();
             this.btBotSave = new System.Windows.Forms.Button();
             this.btBotTest = new System.Windows.Forms.Button();
             this.cbResponceCmd = new System.Windows.Forms.CheckBox();
@@ -127,8 +136,8 @@ namespace fermtools
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.tabGPU.SuspendLayout();
+            this.tabMonitoring.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nc_DelayMon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailoverNext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailover)).BeginInit();
@@ -140,8 +149,11 @@ namespace fermtools
             ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_load)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_K_mem_clock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_clock)).BeginInit();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabWDT.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericTimeout)).BeginInit();
+            this.groupBoxWDT.SuspendLayout();
+            this.tabEmail.SuspendLayout();
+            this.tabTelegram.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -162,12 +174,12 @@ namespace fermtools
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 82);
+            this.MenuContext.Size = new System.Drawing.Size(90, 76);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -175,7 +187,7 @@ namespace fermtools
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -183,7 +195,7 @@ namespace fermtools
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -215,10 +227,11 @@ namespace fermtools
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabGPU);
+            this.tabControl1.Controls.Add(this.tabMonitoring);
+            this.tabControl1.Controls.Add(this.tabWDT);
+            this.tabControl1.Controls.Add(this.tabEmail);
+            this.tabControl1.Controls.Add(this.tabTelegram);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -226,29 +239,29 @@ namespace fermtools
             this.tabControl1.Size = new System.Drawing.Size(508, 264);
             this.tabControl1.TabIndex = 2;
             // 
-            // tabPage1
+            // tabGPU
             // 
-            this.tabPage1.Controls.Add(this.checkFanRPM);
-            this.tabPage1.Controls.Add(this.checkFanLoad);
-            this.tabPage1.Controls.Add(this.checkGPUTemp);
-            this.tabPage1.Controls.Add(this.checkMemCtrlLoad);
-            this.tabPage1.Controls.Add(this.checkGPULoad);
-            this.tabPage1.Controls.Add(this.checkMemoryClock);
-            this.tabPage1.Controls.Add(this.checkCoreClock);
-            this.tabPage1.Controls.Add(this.label7);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.label5);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(500, 235);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "GPU Info";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabGPU.Controls.Add(this.checkFanRPM);
+            this.tabGPU.Controls.Add(this.checkFanLoad);
+            this.tabGPU.Controls.Add(this.checkGPUTemp);
+            this.tabGPU.Controls.Add(this.checkMemCtrlLoad);
+            this.tabGPU.Controls.Add(this.checkGPULoad);
+            this.tabGPU.Controls.Add(this.checkMemoryClock);
+            this.tabGPU.Controls.Add(this.checkCoreClock);
+            this.tabGPU.Controls.Add(this.label7);
+            this.tabGPU.Controls.Add(this.label6);
+            this.tabGPU.Controls.Add(this.label5);
+            this.tabGPU.Controls.Add(this.label4);
+            this.tabGPU.Controls.Add(this.label3);
+            this.tabGPU.Controls.Add(this.label2);
+            this.tabGPU.Controls.Add(this.label1);
+            this.tabGPU.Location = new System.Drawing.Point(4, 25);
+            this.tabGPU.Name = "tabGPU";
+            this.tabGPU.Padding = new System.Windows.Forms.Padding(3);
+            this.tabGPU.Size = new System.Drawing.Size(500, 235);
+            this.tabGPU.TabIndex = 0;
+            this.tabGPU.Text = "GPU Info";
+            this.tabGPU.UseVisualStyleBackColor = true;
             // 
             // checkFanRPM
             // 
@@ -376,46 +389,46 @@ namespace fermtools
             this.label1.TabIndex = 7;
             this.label1.Text = "GPU Core Clock, MHz";
             // 
-            // tabPage4
+            // tabMonitoring
             // 
-            this.tabPage4.Controls.Add(this.bt_ResetDefault);
-            this.tabPage4.Controls.Add(this.bt_Calc);
-            this.tabPage4.Controls.Add(this.tb_Max_est);
-            this.tabPage4.Controls.Add(this.label30);
-            this.tabPage4.Controls.Add(this.tb_Min_est);
-            this.tabPage4.Controls.Add(this.label29);
-            this.tabPage4.Controls.Add(this.tb_K_est);
-            this.tabPage4.Controls.Add(this.label28);
-            this.tabPage4.Controls.Add(this.cb_NoUp);
-            this.tabPage4.Controls.Add(this.label27);
-            this.tabPage4.Controls.Add(this.nc_DelayMon);
-            this.tabPage4.Controls.Add(this.label26);
-            this.tabPage4.Controls.Add(this.nc_DelayFailoverNext);
-            this.tabPage4.Controls.Add(this.label25);
-            this.tabPage4.Controls.Add(this.nc_DelayFailover);
-            this.tabPage4.Controls.Add(this.btSaveMon);
-            this.tabPage4.Controls.Add(this.label24);
-            this.tabPage4.Controls.Add(this.nc_Span_integration);
-            this.tabPage4.Controls.Add(this.nc_K_fan_speed_r);
-            this.tabPage4.Controls.Add(this.nc_K_fan_speed_p);
-            this.tabPage4.Controls.Add(this.nc_K_gpu_temp);
-            this.tabPage4.Controls.Add(this.nc_K_mem_load);
-            this.tabPage4.Controls.Add(this.nc_K_gpu_load);
-            this.tabPage4.Controls.Add(this.nc_K_mem_clock);
-            this.tabPage4.Controls.Add(this.label17);
-            this.tabPage4.Controls.Add(this.label18);
-            this.tabPage4.Controls.Add(this.label19);
-            this.tabPage4.Controls.Add(this.label20);
-            this.tabPage4.Controls.Add(this.label21);
-            this.tabPage4.Controls.Add(this.label22);
-            this.tabPage4.Controls.Add(this.label23);
-            this.tabPage4.Controls.Add(this.nc_K_gpu_clock);
-            this.tabPage4.Location = new System.Drawing.Point(4, 25);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(500, 235);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Monitoring setting";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabMonitoring.Controls.Add(this.bt_ResetDefault);
+            this.tabMonitoring.Controls.Add(this.bt_Calc);
+            this.tabMonitoring.Controls.Add(this.tb_Max_est);
+            this.tabMonitoring.Controls.Add(this.label30);
+            this.tabMonitoring.Controls.Add(this.tb_Min_est);
+            this.tabMonitoring.Controls.Add(this.label29);
+            this.tabMonitoring.Controls.Add(this.tb_K_est);
+            this.tabMonitoring.Controls.Add(this.label28);
+            this.tabMonitoring.Controls.Add(this.cb_NoUp);
+            this.tabMonitoring.Controls.Add(this.label27);
+            this.tabMonitoring.Controls.Add(this.nc_DelayMon);
+            this.tabMonitoring.Controls.Add(this.label26);
+            this.tabMonitoring.Controls.Add(this.nc_DelayFailoverNext);
+            this.tabMonitoring.Controls.Add(this.label25);
+            this.tabMonitoring.Controls.Add(this.nc_DelayFailover);
+            this.tabMonitoring.Controls.Add(this.btSaveMon);
+            this.tabMonitoring.Controls.Add(this.label24);
+            this.tabMonitoring.Controls.Add(this.nc_Span_integration);
+            this.tabMonitoring.Controls.Add(this.nc_K_fan_speed_r);
+            this.tabMonitoring.Controls.Add(this.nc_K_fan_speed_p);
+            this.tabMonitoring.Controls.Add(this.nc_K_gpu_temp);
+            this.tabMonitoring.Controls.Add(this.nc_K_mem_load);
+            this.tabMonitoring.Controls.Add(this.nc_K_gpu_load);
+            this.tabMonitoring.Controls.Add(this.nc_K_mem_clock);
+            this.tabMonitoring.Controls.Add(this.label17);
+            this.tabMonitoring.Controls.Add(this.label18);
+            this.tabMonitoring.Controls.Add(this.label19);
+            this.tabMonitoring.Controls.Add(this.label20);
+            this.tabMonitoring.Controls.Add(this.label21);
+            this.tabMonitoring.Controls.Add(this.label22);
+            this.tabMonitoring.Controls.Add(this.label23);
+            this.tabMonitoring.Controls.Add(this.nc_K_gpu_clock);
+            this.tabMonitoring.Location = new System.Drawing.Point(4, 25);
+            this.tabMonitoring.Name = "tabMonitoring";
+            this.tabMonitoring.Size = new System.Drawing.Size(500, 235);
+            this.tabMonitoring.TabIndex = 3;
+            this.tabMonitoring.Text = "Monitoring setting";
+            this.tabMonitoring.UseVisualStyleBackColor = true;
             // 
             // bt_ResetDefault
             // 
@@ -899,30 +912,139 @@ namespace fermtools
             0,
             0});
             // 
-            // tabPage2
+            // tabWDT
             // 
-            this.tabPage2.Controls.Add(this.cbOnSendStart);
-            this.tabPage2.Controls.Add(this.cbOnEmail);
-            this.tabPage2.Controls.Add(this.btSaveMail);
-            this.tabPage2.Controls.Add(this.cbEnableSSL);
-            this.tabPage2.Controls.Add(this.btSendTest);
-            this.tabPage2.Controls.Add(this.tbPassword);
-            this.tabPage2.Controls.Add(this.label12);
-            this.tabPage2.Controls.Add(this.tbSubject);
-            this.tabPage2.Controls.Add(this.tbMailTo);
-            this.tabPage2.Controls.Add(this.tbMailFrom);
-            this.tabPage2.Controls.Add(this.tbSmtpServer);
-            this.tabPage2.Controls.Add(this.label11);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(500, 235);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "E-mail setting";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabWDT.Controls.Add(this.btSaveWDT);
+            this.tabWDT.Controls.Add(this.numericTimeout);
+            this.tabWDT.Controls.Add(this.label31);
+            this.tabWDT.Controls.Add(this.groupBoxWDT);
+            this.tabWDT.Location = new System.Drawing.Point(4, 25);
+            this.tabWDT.Name = "tabWDT";
+            this.tabWDT.Padding = new System.Windows.Forms.Padding(3);
+            this.tabWDT.Size = new System.Drawing.Size(500, 235);
+            this.tabWDT.TabIndex = 4;
+            this.tabWDT.Text = "WDT setting";
+            this.tabWDT.UseVisualStyleBackColor = true;
+            // 
+            // btSaveWDT
+            // 
+            this.btSaveWDT.Location = new System.Drawing.Point(238, 123);
+            this.btSaveWDT.Name = "btSaveWDT";
+            this.btSaveWDT.Size = new System.Drawing.Size(89, 29);
+            this.btSaveWDT.TabIndex = 29;
+            this.btSaveWDT.Text = "Save";
+            this.btSaveWDT.UseVisualStyleBackColor = true;
+            this.btSaveWDT.Click += new System.EventHandler(this.SaveWDTSetting);
+            // 
+            // numericTimeout
+            // 
+            this.numericTimeout.Location = new System.Drawing.Point(177, 124);
+            this.numericTimeout.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericTimeout.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericTimeout.Name = "numericTimeout";
+            this.numericTimeout.Size = new System.Drawing.Size(55, 22);
+            this.numericTimeout.TabIndex = 28;
+            this.numericTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericTimeout.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(12, 129);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(125, 17);
+            this.label31.TabIndex = 8;
+            this.label31.Text = "Timeout WDT, min";
+            // 
+            // groupBoxWDT
+            // 
+            this.groupBoxWDT.Controls.Add(this.cbCOMPort);
+            this.groupBoxWDT.Controls.Add(this.radioOpendevUSBWDT);
+            this.groupBoxWDT.Controls.Add(this.radioSoftWDT);
+            this.groupBoxWDT.Controls.Add(this.radioOnboardWDT);
+            this.groupBoxWDT.Location = new System.Drawing.Point(8, 6);
+            this.groupBoxWDT.Name = "groupBoxWDT";
+            this.groupBoxWDT.Size = new System.Drawing.Size(323, 107);
+            this.groupBoxWDT.TabIndex = 0;
+            this.groupBoxWDT.TabStop = false;
+            this.groupBoxWDT.Text = "Select WDT";
+            // 
+            // cbCOMPort
+            // 
+            this.cbCOMPort.FormattingEnabled = true;
+            this.cbCOMPort.Location = new System.Drawing.Point(169, 76);
+            this.cbCOMPort.Name = "cbCOMPort";
+            this.cbCOMPort.Size = new System.Drawing.Size(148, 24);
+            this.cbCOMPort.TabIndex = 3;
+            // 
+            // radioOpendevUSBWDT
+            // 
+            this.radioOpendevUSBWDT.AutoSize = true;
+            this.radioOpendevUSBWDT.Location = new System.Drawing.Point(7, 76);
+            this.radioOpendevUSBWDT.Name = "radioOpendevUSBWDT";
+            this.radioOpendevUSBWDT.Size = new System.Drawing.Size(155, 21);
+            this.radioOpendevUSBWDT.TabIndex = 2;
+            this.radioOpendevUSBWDT.Text = "Opendev USB WDT";
+            this.radioOpendevUSBWDT.UseVisualStyleBackColor = true;
+            // 
+            // radioSoftWDT
+            // 
+            this.radioSoftWDT.AutoSize = true;
+            this.radioSoftWDT.Checked = true;
+            this.radioSoftWDT.Location = new System.Drawing.Point(8, 21);
+            this.radioSoftWDT.Name = "radioSoftWDT";
+            this.radioSoftWDT.Size = new System.Drawing.Size(120, 21);
+            this.radioSoftWDT.TabIndex = 1;
+            this.radioSoftWDT.TabStop = true;
+            this.radioSoftWDT.Text = "Software WDT";
+            this.radioSoftWDT.UseVisualStyleBackColor = true;
+            // 
+            // radioOnboardWDT
+            // 
+            this.radioOnboardWDT.AutoSize = true;
+            this.radioOnboardWDT.Location = new System.Drawing.Point(8, 49);
+            this.radioOnboardWDT.Name = "radioOnboardWDT";
+            this.radioOnboardWDT.Size = new System.Drawing.Size(121, 21);
+            this.radioOnboardWDT.TabIndex = 0;
+            this.radioOnboardWDT.Text = "Onboard WDT";
+            this.radioOnboardWDT.UseVisualStyleBackColor = true;
+            // 
+            // tabEmail
+            // 
+            this.tabEmail.Controls.Add(this.cbOnSendStart);
+            this.tabEmail.Controls.Add(this.cbOnEmail);
+            this.tabEmail.Controls.Add(this.btSaveMail);
+            this.tabEmail.Controls.Add(this.cbEnableSSL);
+            this.tabEmail.Controls.Add(this.btSendTest);
+            this.tabEmail.Controls.Add(this.tbPassword);
+            this.tabEmail.Controls.Add(this.label12);
+            this.tabEmail.Controls.Add(this.tbSubject);
+            this.tabEmail.Controls.Add(this.tbMailTo);
+            this.tabEmail.Controls.Add(this.tbMailFrom);
+            this.tabEmail.Controls.Add(this.tbSmtpServer);
+            this.tabEmail.Controls.Add(this.label11);
+            this.tabEmail.Controls.Add(this.label10);
+            this.tabEmail.Controls.Add(this.label9);
+            this.tabEmail.Controls.Add(this.label8);
+            this.tabEmail.Location = new System.Drawing.Point(4, 25);
+            this.tabEmail.Name = "tabEmail";
+            this.tabEmail.Padding = new System.Windows.Forms.Padding(3);
+            this.tabEmail.Size = new System.Drawing.Size(500, 235);
+            this.tabEmail.TabIndex = 1;
+            this.tabEmail.Text = "E-mail setting";
+            this.tabEmail.UseVisualStyleBackColor = true;
             // 
             // cbOnSendStart
             // 
@@ -1057,27 +1179,27 @@ namespace fermtools
             this.label8.TabIndex = 0;
             this.label8.Text = "SMTP Server";
             // 
-            // tabPage3
+            // tabTelegram
             // 
-            this.tabPage3.Controls.Add(this.btBotSave);
-            this.tabPage3.Controls.Add(this.btBotTest);
-            this.tabPage3.Controls.Add(this.cbResponceCmd);
-            this.tabPage3.Controls.Add(this.cbTelegramOn);
-            this.tabPage3.Controls.Add(this.textFermaName);
-            this.tabPage3.Controls.Add(this.textBotSendTo);
-            this.tabPage3.Controls.Add(this.textBotName);
-            this.tabPage3.Controls.Add(this.textBotToken);
-            this.tabPage3.Controls.Add(this.label13);
-            this.tabPage3.Controls.Add(this.label14);
-            this.tabPage3.Controls.Add(this.label15);
-            this.tabPage3.Controls.Add(this.label16);
-            this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(500, 235);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Telegram setting";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabTelegram.Controls.Add(this.btBotSave);
+            this.tabTelegram.Controls.Add(this.btBotTest);
+            this.tabTelegram.Controls.Add(this.cbResponceCmd);
+            this.tabTelegram.Controls.Add(this.cbTelegramOn);
+            this.tabTelegram.Controls.Add(this.textFermaName);
+            this.tabTelegram.Controls.Add(this.textBotSendTo);
+            this.tabTelegram.Controls.Add(this.textBotName);
+            this.tabTelegram.Controls.Add(this.textBotToken);
+            this.tabTelegram.Controls.Add(this.label13);
+            this.tabTelegram.Controls.Add(this.label14);
+            this.tabTelegram.Controls.Add(this.label15);
+            this.tabTelegram.Controls.Add(this.label16);
+            this.tabTelegram.Location = new System.Drawing.Point(4, 25);
+            this.tabTelegram.Name = "tabTelegram";
+            this.tabTelegram.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTelegram.Size = new System.Drawing.Size(500, 235);
+            this.tabTelegram.TabIndex = 2;
+            this.tabTelegram.Text = "Telegram setting";
+            this.tabTelegram.UseVisualStyleBackColor = true;
             // 
             // btBotSave
             // 
@@ -1231,10 +1353,10 @@ namespace fermtools
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
+            this.tabGPU.ResumeLayout(false);
+            this.tabGPU.PerformLayout();
+            this.tabMonitoring.ResumeLayout(false);
+            this.tabMonitoring.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nc_DelayMon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailoverNext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_DelayFailover)).EndInit();
@@ -1246,10 +1368,15 @@ namespace fermtools
             ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_load)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_K_mem_clock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nc_K_gpu_clock)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
+            this.tabWDT.ResumeLayout(false);
+            this.tabWDT.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericTimeout)).EndInit();
+            this.groupBoxWDT.ResumeLayout(false);
+            this.groupBoxWDT.PerformLayout();
+            this.tabEmail.ResumeLayout(false);
+            this.tabEmail.PerformLayout();
+            this.tabTelegram.ResumeLayout(false);
+            this.tabTelegram.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1262,14 +1389,14 @@ namespace fermtools
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabGPU;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabEmail;
         private System.Windows.Forms.Timer timer1;
         private System.Diagnostics.EventLog eventLog1;
         private System.Windows.Forms.Timer timer2;
@@ -1300,7 +1427,7 @@ namespace fermtools
         private System.Windows.Forms.CheckBox cbOnSendStart;
         private System.Windows.Forms.CheckBox cbOnEmail;
         private System.Windows.Forms.Timer timer3;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabTelegram;
         private System.Windows.Forms.CheckBox cbResponceCmd;
         private System.Windows.Forms.CheckBox cbTelegramOn;
         private System.Windows.Forms.TextBox textFermaName;
@@ -1313,7 +1440,7 @@ namespace fermtools
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btBotSave;
         private System.Windows.Forms.Button btBotTest;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tabMonitoring;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
@@ -1348,6 +1475,15 @@ namespace fermtools
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button bt_ResetDefault;
         private System.Windows.Forms.Timer timerSoft;
+        private System.Windows.Forms.TabPage tabWDT;
+        private System.Windows.Forms.GroupBox groupBoxWDT;
+        private System.Windows.Forms.RadioButton radioSoftWDT;
+        private System.Windows.Forms.RadioButton radioOnboardWDT;
+        private System.Windows.Forms.ComboBox cbCOMPort;
+        private System.Windows.Forms.RadioButton radioOpendevUSBWDT;
+        private System.Windows.Forms.NumericUpDown numericTimeout;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Button btSaveWDT;
     }
 }
 
