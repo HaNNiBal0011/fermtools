@@ -16,7 +16,7 @@ namespace fermtools
         private const byte CHIP_ID_REGISTER = 0x20;
         private const byte CHIP_REVISION_REGISTER = 0x21;
 
-        public string WDTnameChip;                             //Наименование чипа WDT
+        public string WDTnameChip;                                      //Наименование чипа WDT
         private ushort WDTnumPort;                                      //Порядковый номер порта в массивах REGISTER_PORTS и VALUE_PORTS
         public int Count;                                               //Счетчик минут для софт. таймера.
         public readonly bool isWDT;                                     //Флаг наличия чипа WDT
