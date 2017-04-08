@@ -15,6 +15,7 @@ namespace fermtools
         public readonly bool isWDT;                                     //Флаг наличия чипа WDT
         public readonly StringBuilder report = new StringBuilder();     //Для отчета
         public int Count;                                               //Счетчик минут
+        public string PortName;                                         //Имя открытого порта
 
         public OpenWDT(string ComPort)
         {
@@ -33,22 +34,23 @@ namespace fermtools
                 try
                 {
                     sp = new SerialPort(ComPort);
-                    sp.WriteTimeout = 500;
+                    sp.WriteTimeout = 1000;
                     sp.ReadTimeout = 5000;
                     sp.Open();
                     sp.Write("~U".ToCharArray(),0,2);
                     answer = sp.ReadExisting();
                     sp.Close();
                 }
-                catch
+                catch (Exception ex)
                 {
                     sp.Close();
-                    report.AppendLine("Error initialise OpenDev USB WDT to port " + ComPort);
+                    report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: GetOpenDevUSB()" + " Par:" + ComPort);
                     return false;
                 }
                 if (answer.Equals("~A"))
                 {
                     WDTnameChip = "OpenDev";
+                    PortName = sp.PortName;
                     return true;
                 }
             }
@@ -68,10 +70,10 @@ namespace fermtools
                     sp.Close();
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     sp.Close();
-                    report.AppendLine("Pause enable error OpenDev USB WDT on port " + sp.PortName);
+                    report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: SetWdt()" + " Par:" + count.ToString());
                 }
             }
             else
@@ -87,10 +89,10 @@ namespace fermtools
                     sp.Close();
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     sp.Close();
-                    report.AppendLine("Error write timeout to OpenDev USB WDT on port " + sp.PortName);
+                    report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: SetWdt()" + " Par:" + count.ToString());
                 }
             }
             return false;

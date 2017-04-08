@@ -937,7 +937,7 @@ namespace fermtools
             if (radioOpendevUSBWDT.Checked)
                 Properties.Settings.Default.select_WDT = WDT_USBOPEN;
             Properties.Settings.Default.Save();
-            MessageBox.Show("WDT settings save successfully", "Save WDT setting", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            MessageBox.Show("WDT settings save successfully\nNew values will be valid after the restart of the program", "Save WDT setting", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
         private void FindComPorts()
         {
@@ -965,19 +965,23 @@ namespace fermtools
 
         private void TestPortWDT(object sender, EventArgs e)
         {
-            wdt_o = new OpenWDT(cbCOMPort.Text);
-            if (wdt_o.isWDT)
+            if (!cbCOMPort.Text.Equals(wdt_o.PortName))
             {
-                this.radioOpendevUSBWDT.Enabled = true;
-                WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Information);
-                MessageBox.Show("Open WDT found on " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                OpenWDT w = new OpenWDT(cbCOMPort.Text);
+                if (w.isWDT)
+                {
+                    this.radioOpendevUSBWDT.Enabled = true;
+                    WriteEventLog(w.GetReport(), EventLogEntryType.Information);
+                    MessageBox.Show("Open WDT found on " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                }
+                else
+                {
+                    WriteEventLog(w.GetReport(), EventLogEntryType.Warning);
+                    MessageBox.Show("Open WDT not found on port " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                }
             }
             else
-            {
-                this.radioOpendevUSBWDT.Enabled = false;
-                WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Warning);
-                MessageBox.Show("Open WDT not found on port " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-            }
+                MessageBox.Show("Рort " + cbCOMPort.Text + " is already open", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
     }
 }
