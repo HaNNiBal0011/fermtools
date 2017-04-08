@@ -54,7 +54,8 @@ namespace fermtools
                     isWDT = true;
                 }
             }
-            if (!isWDT) WDTnameChip = "Software";
+            if (!isWDT) 
+                WDTnameChip = "Software";
         }
         private ushort GetWDTChip()
          {
@@ -220,7 +221,8 @@ namespace fermtools
                 Ring0.ReleaseIsaBusMutex();
                 return true;
             }
-            else report.AppendLine("ISA bus error. Watchdog timer not set.");
+            else 
+                report.AppendLine("ISA bus error. Watchdog timer not set.");
             return false;
         }
         public byte GetWDT()
@@ -272,7 +274,8 @@ namespace fermtools
                 Ring0.WriteIoPort(REGISTER_PORTS[WDTnumPort], 0xAA);
                 Ring0.ReleaseIsaBusMutex();
             }
-            else report.AppendLine("ISA bus error. Watchdog timer not get.");
+            else 
+                report.AppendLine("ISA bus error. Watchdog timer not get.");
             return xx;
         }
         public string GetReport()

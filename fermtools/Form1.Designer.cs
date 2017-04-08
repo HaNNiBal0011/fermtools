@@ -90,11 +90,12 @@ namespace fermtools
             this.label23 = new System.Windows.Forms.Label();
             this.nc_K_gpu_clock = new System.Windows.Forms.NumericUpDown();
             this.tabWDT = new System.Windows.Forms.TabPage();
+            this.label32 = new System.Windows.Forms.Label();
+            this.cbCOMPort = new System.Windows.Forms.ComboBox();
             this.btSaveWDT = new System.Windows.Forms.Button();
             this.numericTimeout = new System.Windows.Forms.NumericUpDown();
             this.label31 = new System.Windows.Forms.Label();
             this.groupBoxWDT = new System.Windows.Forms.GroupBox();
-            this.cbCOMPort = new System.Windows.Forms.ComboBox();
             this.radioOpendevUSBWDT = new System.Windows.Forms.RadioButton();
             this.radioSoftWDT = new System.Windows.Forms.RadioButton();
             this.radioOnboardWDT = new System.Windows.Forms.RadioButton();
@@ -133,6 +134,7 @@ namespace fermtools
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timer4 = new System.Windows.Forms.Timer(this.components);
             this.timerSoft = new System.Windows.Forms.Timer(this.components);
+            this.btTestPort = new System.Windows.Forms.Button();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -174,12 +176,12 @@ namespace fermtools
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 76);
+            this.MenuContext.Size = new System.Drawing.Size(90, 82);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -187,7 +189,7 @@ namespace fermtools
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -195,7 +197,7 @@ namespace fermtools
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -914,6 +916,9 @@ namespace fermtools
             // 
             // tabWDT
             // 
+            this.tabWDT.Controls.Add(this.btTestPort);
+            this.tabWDT.Controls.Add(this.label32);
+            this.tabWDT.Controls.Add(this.cbCOMPort);
             this.tabWDT.Controls.Add(this.btSaveWDT);
             this.tabWDT.Controls.Add(this.numericTimeout);
             this.tabWDT.Controls.Add(this.label31);
@@ -926,9 +931,26 @@ namespace fermtools
             this.tabWDT.Text = "WDT setting";
             this.tabWDT.UseVisualStyleBackColor = true;
             // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(16, 99);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(70, 17);
+            this.label32.TabIndex = 30;
+            this.label32.Text = "Port WDT";
+            // 
+            // cbCOMPort
+            // 
+            this.cbCOMPort.FormattingEnabled = true;
+            this.cbCOMPort.Location = new System.Drawing.Point(105, 96);
+            this.cbCOMPort.Name = "cbCOMPort";
+            this.cbCOMPort.Size = new System.Drawing.Size(97, 24);
+            this.cbCOMPort.TabIndex = 3;
+            // 
             // btSaveWDT
             // 
-            this.btSaveWDT.Location = new System.Drawing.Point(238, 123);
+            this.btSaveWDT.Location = new System.Drawing.Point(228, 194);
             this.btSaveWDT.Name = "btSaveWDT";
             this.btSaveWDT.Size = new System.Drawing.Size(89, 29);
             this.btSaveWDT.TabIndex = 29;
@@ -938,7 +960,7 @@ namespace fermtools
             // 
             // numericTimeout
             // 
-            this.numericTimeout.Location = new System.Drawing.Point(177, 124);
+            this.numericTimeout.Location = new System.Drawing.Point(147, 68);
             this.numericTimeout.Maximum = new decimal(new int[] {
             255,
             0,
@@ -962,7 +984,7 @@ namespace fermtools
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(12, 129);
+            this.label31.Location = new System.Drawing.Point(16, 70);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(125, 17);
             this.label31.TabIndex = 8;
@@ -970,42 +992,32 @@ namespace fermtools
             // 
             // groupBoxWDT
             // 
-            this.groupBoxWDT.Controls.Add(this.cbCOMPort);
             this.groupBoxWDT.Controls.Add(this.radioOpendevUSBWDT);
             this.groupBoxWDT.Controls.Add(this.radioSoftWDT);
             this.groupBoxWDT.Controls.Add(this.radioOnboardWDT);
             this.groupBoxWDT.Location = new System.Drawing.Point(8, 6);
             this.groupBoxWDT.Name = "groupBoxWDT";
-            this.groupBoxWDT.Size = new System.Drawing.Size(323, 107);
+            this.groupBoxWDT.Size = new System.Drawing.Size(484, 52);
             this.groupBoxWDT.TabIndex = 0;
             this.groupBoxWDT.TabStop = false;
             this.groupBoxWDT.Text = "Select WDT";
             // 
-            // cbCOMPort
-            // 
-            this.cbCOMPort.FormattingEnabled = true;
-            this.cbCOMPort.Location = new System.Drawing.Point(169, 76);
-            this.cbCOMPort.Name = "cbCOMPort";
-            this.cbCOMPort.Size = new System.Drawing.Size(148, 24);
-            this.cbCOMPort.TabIndex = 3;
-            // 
             // radioOpendevUSBWDT
             // 
-            this.radioOpendevUSBWDT.AutoSize = true;
-            this.radioOpendevUSBWDT.Location = new System.Drawing.Point(7, 76);
+            this.radioOpendevUSBWDT.Location = new System.Drawing.Point(323, 21);
             this.radioOpendevUSBWDT.Name = "radioOpendevUSBWDT";
-            this.radioOpendevUSBWDT.Size = new System.Drawing.Size(155, 21);
+            this.radioOpendevUSBWDT.Size = new System.Drawing.Size(155, 24);
             this.radioOpendevUSBWDT.TabIndex = 2;
             this.radioOpendevUSBWDT.Text = "Opendev USB WDT";
             this.radioOpendevUSBWDT.UseVisualStyleBackColor = true;
             // 
             // radioSoftWDT
             // 
-            this.radioSoftWDT.AutoSize = true;
             this.radioSoftWDT.Checked = true;
             this.radioSoftWDT.Location = new System.Drawing.Point(8, 21);
+            this.radioSoftWDT.Margin = new System.Windows.Forms.Padding(0);
             this.radioSoftWDT.Name = "radioSoftWDT";
-            this.radioSoftWDT.Size = new System.Drawing.Size(120, 21);
+            this.radioSoftWDT.Size = new System.Drawing.Size(125, 24);
             this.radioSoftWDT.TabIndex = 1;
             this.radioSoftWDT.TabStop = true;
             this.radioSoftWDT.Text = "Software WDT";
@@ -1013,10 +1025,9 @@ namespace fermtools
             // 
             // radioOnboardWDT
             // 
-            this.radioOnboardWDT.AutoSize = true;
-            this.radioOnboardWDT.Location = new System.Drawing.Point(8, 49);
+            this.radioOnboardWDT.Location = new System.Drawing.Point(166, 21);
             this.radioOnboardWDT.Name = "radioOnboardWDT";
-            this.radioOnboardWDT.Size = new System.Drawing.Size(121, 21);
+            this.radioOnboardWDT.Size = new System.Drawing.Size(121, 24);
             this.radioOnboardWDT.TabIndex = 0;
             this.radioOnboardWDT.Text = "Onboard WDT";
             this.radioOnboardWDT.UseVisualStyleBackColor = true;
@@ -1336,6 +1347,16 @@ namespace fermtools
             this.timerSoft.Interval = 60000;
             this.timerSoft.Tick += new System.EventHandler(this.SoftReset);
             // 
+            // btTestPort
+            // 
+            this.btTestPort.Location = new System.Drawing.Point(135, 194);
+            this.btTestPort.Name = "btTestPort";
+            this.btTestPort.Size = new System.Drawing.Size(89, 29);
+            this.btTestPort.TabIndex = 31;
+            this.btTestPort.Text = "Test Port";
+            this.btTestPort.UseVisualStyleBackColor = true;
+            this.btTestPort.Click += new System.EventHandler(this.TestPortWDT);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(508, 286);
@@ -1372,7 +1393,6 @@ namespace fermtools
             this.tabWDT.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericTimeout)).EndInit();
             this.groupBoxWDT.ResumeLayout(false);
-            this.groupBoxWDT.PerformLayout();
             this.tabEmail.ResumeLayout(false);
             this.tabEmail.PerformLayout();
             this.tabTelegram.ResumeLayout(false);
@@ -1484,6 +1504,8 @@ namespace fermtools
         private System.Windows.Forms.NumericUpDown numericTimeout;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button btSaveWDT;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Button btTestPort;
     }
 }
 

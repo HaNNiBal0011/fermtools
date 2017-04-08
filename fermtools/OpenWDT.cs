@@ -23,7 +23,7 @@ namespace fermtools
             if (isWDT)
                 report.AppendLine("Found OpenDev USB WDT on port " + ComPort);
             else
-                report.AppendLine("Not fount OpenDev USB WDT to port " + ComPort);
+                report.AppendLine("Not found OpenDev USB WDT to port " + ComPort);
         }
         private bool GetOpenDevUSB(string ComPort)
         {
@@ -71,7 +71,7 @@ namespace fermtools
                 catch
                 {
                     sp.Close();
-                    report.AppendLine("Pause enable error OpenDev USB WDT");
+                    report.AppendLine("Pause enable error OpenDev USB WDT on port " + sp.PortName);
                 }
             }
             else
@@ -90,7 +90,7 @@ namespace fermtools
                 catch
                 {
                     sp.Close();
-                    report.AppendLine("Error write timeout to OpenDev USB WDT");
+                    report.AppendLine("Error write timeout to OpenDev USB WDT on port " + sp.PortName);
                 }
             }
             return false;
