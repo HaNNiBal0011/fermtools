@@ -56,8 +56,9 @@ namespace fermtools
             }
             return false;
         }
-        public bool SetWDT(byte count)
+        public bool SetWDT(ref byte count)
         {
+            report.Clear();
             //Приводим в соответствие с диапазоном значений для opendev WDT
             if (count <= 0)
             {
@@ -96,6 +97,48 @@ namespace fermtools
                 }
             }
             return false;
+        }
+        public bool TimerReset()
+        {
+            report.Clear();
+            string answer = new string(string.Empty.ToCharArray());
+            try
+            {
+                sp.Open();
+                sp.Write("~U".ToCharArray(),0,2);
+                answer = sp.ReadExisting();
+                sp.Close();
+            }
+            catch (Exception ex)
+            {
+                sp.Close();
+                report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: TimerReset()");
+                return false;
+            }
+            if (answer.Equals("~A"))
+            {
+                WDTnameChip = "OpenDev";
+                PortName = sp.PortName;
+                return true;
+            }
+            report.AppendLine("The answer from port " + sp.PortName + " is not equal to ~A Func: TimerReset()");
+            return false;
+        }
+
+        public void ResetTest()
+        {
+            report.Clear();
+            try
+            {
+                sp.Open();
+                sp.Write("~T1".ToCharArray(), 0, 3);
+                sp.Close();
+            }
+            catch (Exception ex)
+            {
+                sp.Close();
+                report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: ResetTest()");
+            }
         }
         public string GetReport()
         {

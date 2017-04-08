@@ -591,61 +591,69 @@ namespace fermtools
         }
         private void RestoreSetting()
         {
-            //Send mail setting
-            if (!String.IsNullOrEmpty(Decrypt(Properties.Settings.Default.Password)))
-                this.tbPassword.Text = rand;
-            this.tbSmtpServer.Text = Properties.Settings.Default.SMTPServer;
-            this.tbMailFrom.Text = Properties.Settings.Default.MailFrom;
-            this.tbMailTo.Text = Properties.Settings.Default.MailTo;
-            this.tbSubject.Text = Properties.Settings.Default.Subject;
-            this.cbEnableSSL.Checked = Properties.Settings.Default.EnableSSL;
-            this.cbOnEmail.Checked = Properties.Settings.Default.cbOnEmail;
-            this.cbOnSendStart.Checked = Properties.Settings.Default.cbOnSendStart;
-            //Monitoring setting
-            this.checkCoreClock.Checked = Properties.Settings.Default.mGPUClock;
-            this.checkMemoryClock.Checked = Properties.Settings.Default.mMemClock;
-            this.checkGPULoad.Checked = Properties.Settings.Default.mGPULoad;
-            this.checkMemCtrlLoad.Checked = Properties.Settings.Default.mMemLoad;
-            this.checkGPUTemp.Checked = Properties.Settings.Default.mGPUTemp;
-            this.checkFanLoad.Checked = Properties.Settings.Default.mFanLoad;
-            this.checkFanRPM.Checked = Properties.Settings.Default.mFanRPM;
-            this.nc_K_gpu_clock.Value = Properties.Settings.Default.K_gpu_clock;
-            this.nc_K_mem_clock.Value = Properties.Settings.Default.K_mem_clock;
-            this.nc_K_gpu_load.Value = Properties.Settings.Default.K_gpu_load;
-            this.nc_K_mem_load.Value = Properties.Settings.Default.K_mem_load;
-            this.nc_K_gpu_temp.Value = Properties.Settings.Default.K_gpu_temp;
-            this.nc_K_fan_speed_p.Value = Properties.Settings.Default.K_fan_speed_p;
-            this.nc_K_fan_speed_r.Value = Properties.Settings.Default.K_fan_speed_r;
-            this.nc_Span_integration.Value = Properties.Settings.Default.nc_Span_integration;
-            this.nc_DelayFailover.Value = Properties.Settings.Default.nc_DelayFailover;
-            this.nc_DelayFailoverNext.Value = Properties.Settings.Default.nc_DelayFailoverNext;
-            this.nc_DelayMon.Value = Properties.Settings.Default.nc_DelayMon;
-            this.cb_NoUp.Checked = Properties.Settings.Default.cb_NoUp;
-            //Bot setting
-            this.textBotToken.Text = Properties.Settings.Default.textBotToken;
-            this.textBotName.Text = Properties.Settings.Default.textBotName;
-            this.textBotSendTo.Text = Properties.Settings.Default.textBotSendTo;
-            this.textFermaName.Text = Properties.Settings.Default.textFermaName;
-            this.cbTelegramOn.Checked = Properties.Settings.Default.cbTelegramOn;
-            this.cbResponceCmd.Checked = Properties.Settings.Default.cbResponceCmd;
-            //WDT setting, восстанавливаем значения переменных и элементов управления формы
-            WDtimer = Properties.Settings.Default.timeout_WDT;
-            this.numericTimeout.Value = WDtimer;
-            CurrentWDT = Properties.Settings.Default.select_WDT;
-            switch (CurrentWDT)
+            try
             {
-                case WDT_SOFT:
-                    radioSoftWDT.Checked = true;
-                    break;
-                case WDT_ONBOARD:
-                    radioOnboardWDT.Checked = true;
-                    break;
-                case WDT_USBOPEN:
-                    radioOpendevUSBWDT.Checked = true;
-                    break;
-                default:
-                    radioSoftWDT.Checked = true;
-                    break;
+                //Send mail setting
+                if (!String.IsNullOrEmpty(Decrypt(Properties.Settings.Default.Password)))
+                    this.tbPassword.Text = rand;
+                this.tbSmtpServer.Text = Properties.Settings.Default.SMTPServer;
+                this.tbMailFrom.Text = Properties.Settings.Default.MailFrom;
+                this.tbMailTo.Text = Properties.Settings.Default.MailTo;
+                this.tbSubject.Text = Properties.Settings.Default.Subject;
+                this.cbEnableSSL.Checked = Properties.Settings.Default.EnableSSL;
+                this.cbOnEmail.Checked = Properties.Settings.Default.cbOnEmail;
+                this.cbOnSendStart.Checked = Properties.Settings.Default.cbOnSendStart;
+                //Monitoring setting
+                this.checkCoreClock.Checked = Properties.Settings.Default.mGPUClock;
+                this.checkMemoryClock.Checked = Properties.Settings.Default.mMemClock;
+                this.checkGPULoad.Checked = Properties.Settings.Default.mGPULoad;
+                this.checkMemCtrlLoad.Checked = Properties.Settings.Default.mMemLoad;
+                this.checkGPUTemp.Checked = Properties.Settings.Default.mGPUTemp;
+                this.checkFanLoad.Checked = Properties.Settings.Default.mFanLoad;
+                this.checkFanRPM.Checked = Properties.Settings.Default.mFanRPM;
+                this.nc_K_gpu_clock.Value = Properties.Settings.Default.K_gpu_clock;
+                this.nc_K_mem_clock.Value = Properties.Settings.Default.K_mem_clock;
+                this.nc_K_gpu_load.Value = Properties.Settings.Default.K_gpu_load;
+                this.nc_K_mem_load.Value = Properties.Settings.Default.K_mem_load;
+                this.nc_K_gpu_temp.Value = Properties.Settings.Default.K_gpu_temp;
+                this.nc_K_fan_speed_p.Value = Properties.Settings.Default.K_fan_speed_p;
+                this.nc_K_fan_speed_r.Value = Properties.Settings.Default.K_fan_speed_r;
+                this.nc_Span_integration.Value = Properties.Settings.Default.nc_Span_integration;
+                this.nc_DelayFailover.Value = Properties.Settings.Default.nc_DelayFailover;
+                this.nc_DelayFailoverNext.Value = Properties.Settings.Default.nc_DelayFailoverNext;
+                this.nc_DelayMon.Value = Properties.Settings.Default.nc_DelayMon;
+                this.cb_NoUp.Checked = Properties.Settings.Default.cb_NoUp;
+                //Bot setting
+                this.textBotToken.Text = Properties.Settings.Default.textBotToken;
+                this.textBotName.Text = Properties.Settings.Default.textBotName;
+                this.textBotSendTo.Text = Properties.Settings.Default.textBotSendTo;
+                this.textFermaName.Text = Properties.Settings.Default.textFermaName;
+                this.cbTelegramOn.Checked = Properties.Settings.Default.cbTelegramOn;
+                this.cbResponceCmd.Checked = Properties.Settings.Default.cbResponceCmd;
+                //WDT setting, восстанавливаем значения переменных и элементов управления формы
+                WDtimer = Properties.Settings.Default.timeout_WDT;
+                this.numericTimeout.Value = WDtimer;
+                CurrentWDT = Properties.Settings.Default.select_WDT;
+                switch (CurrentWDT)
+                {
+                    case WDT_SOFT:
+                        radioSoftWDT.Checked = true;
+                        break;
+                    case WDT_ONBOARD:
+                        radioOnboardWDT.Checked = true;
+                        break;
+                    case WDT_USBOPEN:
+                        radioOpendevUSBWDT.Checked = true;
+                        break;
+                    default:
+                        radioSoftWDT.Checked = true;
+                        break;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error load setting from file", "Restore Setting", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                Application.Exit();
             }
         }
         public static string Encrypt(string data)
@@ -905,11 +913,20 @@ namespace fermtools
             Properties.Settings.Default.cmd_Script = "";
             Properties.Settings.Default.Save();
         }
+        //Счетчик минут для OpenDev и Soft таймеров, дополнительно перезагружает софтовый таймер при окончании счета
         private void SoftReset(object sender, EventArgs e)
         {
-            if (wdt.Count == 0) 
-                resetToolStripMenuItem_Click(sender, e);
-            wdt.Count--;
+            switch (CurrentWDT)
+            {
+                case WDT_SOFT:
+                    if (wdt.Count == 0) 
+                        resetToolStripMenuItem_Click(sender, e);
+                    wdt.Count--;
+                    break;
+                case WDT_USBOPEN:
+                    wdt_o.Count--;
+                    break;
+            }
         }
         private void runCmd()
         {
@@ -971,8 +988,7 @@ namespace fermtools
                 if (w.isWDT)
                 {
                     this.radioOpendevUSBWDT.Enabled = true;
-                    WriteEventLog(w.GetReport(), EventLogEntryType.Information);
-                    MessageBox.Show("Open WDT found on " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show("Open WDT found on " + cbCOMPort.Text, "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 }
                 else
                 {
