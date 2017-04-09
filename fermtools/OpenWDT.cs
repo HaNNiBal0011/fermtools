@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Ports;
@@ -33,11 +34,12 @@ namespace fermtools
             {
                 try
                 {
-                    sp = new SerialPort(ComPort);
+                    sp = new SerialPort(ComPort, 9600, Parity.None, 8, StopBits.One);
                     sp.WriteTimeout = 10000;
                     sp.ReadTimeout = 10000;
                     sp.Open();
                     sp.Write("~U".ToCharArray(),0,2);
+                    Thread.Sleep(500);
                     answer = sp.ReadExisting();
                     sp.Close();
                 }
@@ -66,9 +68,9 @@ namespace fermtools
                 count = 0;
                 try
                 {
-                    sp.WriteTimeout = 10000;
                     sp.Open();
                     sp.Write(("~P1").ToCharArray(), 0, 3);
+                    Thread.Sleep(500);
                     sp.Close();
                     return true;
                 }
@@ -85,10 +87,14 @@ namespace fermtools
                     count = 9;
                 try
                 {
-                    sp.WriteTimeout = 10000;
                     sp.Open();
                     sp.Write(("~P0").ToCharArray(), 0, 3);
+                    Thread.Sleep(500);
+                    sp.Close();
+                    Thread.Sleep(500);
+                    sp.Open();
                     sp.Write(("~W" + count.ToString()).ToCharArray(), 0, 3);
+                    Thread.Sleep(500);
                     sp.Close();
                     return true;
                 }
@@ -106,10 +112,9 @@ namespace fermtools
             string answer = new string(string.Empty.ToCharArray());
             try
             {
-                sp.WriteTimeout = 10000;
-                sp.ReadTimeout = 10000;
                 sp.Open();
                 sp.Write("~U".ToCharArray(),0,2);
+                Thread.Sleep(500);
                 answer = sp.ReadExisting();
                 sp.Close();
             }
@@ -132,9 +137,9 @@ namespace fermtools
             report.Clear();
             try
             {
-                sp.WriteTimeout = 10000;
                 sp.Open();
                 sp.Write("~T1".ToCharArray(), 0, 3);
+                Thread.Sleep(500);
                 sp.Close();
                 return true;
             }
