@@ -34,8 +34,8 @@ namespace fermtools
                 try
                 {
                     sp = new SerialPort(ComPort);
-                    sp.WriteTimeout = 1000;
-                    sp.ReadTimeout = 5000;
+                    sp.WriteTimeout = 10000;
+                    sp.ReadTimeout = 10000;
                     sp.Open();
                     sp.Write("~U".ToCharArray(),0,2);
                     answer = sp.ReadExisting();
@@ -66,6 +66,7 @@ namespace fermtools
                 count = 0;
                 try
                 {
+                    sp.WriteTimeout = 10000;
                     sp.Open();
                     sp.Write(("~P1").ToCharArray(), 0, 3);
                     sp.Close();
@@ -84,6 +85,7 @@ namespace fermtools
                     count = 9;
                 try
                 {
+                    sp.WriteTimeout = 10000;
                     sp.Open();
                     sp.Write(("~P0").ToCharArray(), 0, 3);
                     sp.Write(("~W" + count.ToString()).ToCharArray(), 0, 3);
@@ -104,6 +106,8 @@ namespace fermtools
             string answer = new string(string.Empty.ToCharArray());
             try
             {
+                sp.WriteTimeout = 10000;
+                sp.ReadTimeout = 10000;
                 sp.Open();
                 sp.Write("~U".ToCharArray(),0,2);
                 answer = sp.ReadExisting();
@@ -117,8 +121,6 @@ namespace fermtools
             }
             if (answer.Equals("~A"))
             {
-                WDTnameChip = "OpenDev";
-                PortName = sp.PortName;
                 return true;
             }
             report.AppendLine("The answer from port " + sp.PortName + " is not equal to ~A Func: TimerReset()");
@@ -130,6 +132,7 @@ namespace fermtools
             report.Clear();
             try
             {
+                sp.WriteTimeout = 10000;
                 sp.Open();
                 sp.Write("~T1".ToCharArray(), 0, 3);
                 sp.Close();

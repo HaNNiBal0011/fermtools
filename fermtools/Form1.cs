@@ -191,14 +191,15 @@ namespace fermtools
                         this.toolStripStatusLabel1.Text = "WDT Chip " + wdt.WDTnameChip;
                         break;
                     case WDT_USBOPEN: //Если инициализация OpenWDT неудачная, то включаем софт ресет
-                        if (!wdt_o.SetWDT(ref WDtimer))
+                        if (wdt_o.SetWDT(ref WDtimer))
                         {
-                            WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
                             this.toolStripStatusLabel1.Text = "WDT Chip " + wdt_o.WDTnameChip;
                         }
                         else
                         {
+                            WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
                             CurrentWDT = WDT_SOFT;
+                            this.toolStripStatusLabel1.Text = "WDT Chip " + wdt.WDTnameChip;
                             this.radioSoftWDT.Checked = true;
                             Properties.Settings.Default.select_WDT = CurrentWDT;
                             Properties.Settings.Default.Save();
