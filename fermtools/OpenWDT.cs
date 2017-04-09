@@ -125,7 +125,7 @@ namespace fermtools
             return false;
         }
 
-        public void ResetTest()
+        public bool ResetTest()
         {
             report.Clear();
             try
@@ -133,12 +133,14 @@ namespace fermtools
                 sp.Open();
                 sp.Write("~T1".ToCharArray(), 0, 3);
                 sp.Close();
+                return true;
             }
             catch (Exception ex)
             {
                 sp.Close();
                 report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: ResetTest()");
             }
+            return false;
         }
         public string GetReport()
         {

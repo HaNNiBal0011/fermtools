@@ -190,8 +190,19 @@ namespace fermtools
                     case WDT_ONBOARD:
                         this.toolStripStatusLabel1.Text = "WDT Chip " + wdt.WDTnameChip;
                         break;
-                    case WDT_USBOPEN:
-                        this.toolStripStatusLabel1.Text = "WDT Chip " + wdt_o.WDTnameChip;
+                    case WDT_USBOPEN: //Если инициализация OpenWDT неудачная, то включаем софт ресет
+                        if (!wdt_o.SetWDT(ref WDtimer))
+                        {
+                            WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                            this.toolStripStatusLabel1.Text = "WDT Chip " + wdt_o.WDTnameChip;
+                        }
+                        else
+                        {
+                            CurrentWDT = WDT_SOFT;
+                            this.radioSoftWDT.Checked = true;
+                            Properties.Settings.Default.select_WDT = CurrentWDT;
+                            Properties.Settings.Default.Save();
+                        }
                         break;
                 }
             }
@@ -394,22 +405,41 @@ namespace fermtools
             //Логика такова. Если остаток таймера меньше или равен 1 минуте, то перезаряжаем
             //Если больше 1 минуты, выводим в тоолтип сколько осталось и устанавливаем соответствующюу величину прогресса.
             int progress = 0; bool res = false;
-            
-            if (wdt.isWDT)
-                progress = wdt.GetWDT();
-            else
-                progress = wdt.Count;
+
+            switch (CurrentWDT)
+            {
+                case WDT_ONBOARD:
+                    progress = wdt.GetWDT();
+                    break;
+                case WDT_USBOPEN:
+                    progress = wdt_o.Count;
+                    break;
+                case WDT_SOFT:
+                    progress = wdt.Count;
+                    break;
+            }
 
             if (progress <= 1)
             {
-                if (wdt.isWDT)
-                    res = wdt.SetWDT(WDtimer);
-                else
+                switch (CurrentWDT)
                 {
-                    wdt.Count = WDtimer;
-                    if (!this.timerSoft.Enabled) 
-                        this.timerSoft.Start();
-                    res = true;
+                    case WDT_ONBOARD:
+                        res = wdt.SetWDT(WDtimer);
+                        break;
+                    case WDT_SOFT:
+                        wdt.Count = WDtimer;
+                        if (!this.timerSoft.Enabled)
+                            this.timerSoft.Start();
+                        res = true;
+                        break;
+                    case WDT_USBOPEN:
+                        if (!wdt_o.TimerReset())
+                            WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                        wdt_o.Count = WDtimer;
+                        if (!this.timerSoft.Enabled)
+                            this.timerSoft.Start();
+                        res = true;
+                        break;
                 }
                 if (res)
                 {
@@ -467,46 +497,31 @@ namespace fermtools
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Если флаг установлен, то перезагрузка уже инициирована
-            if (fReset) return;
+            if (fReset) 
+                return;
             fReset = true;
-            if (wdt.isWDT)
+            switch (CurrentWDT)
             {
-                timer2.Stop();
-                wdt.SetWDT(1);
-                toolStripProgressBar1.Value = 0;
-                pbTT.SetToolTip(this.statusStrip1, "WDT reset computer after 1 min.");
-            }
-            else
-            {
-                /*ManagementBaseObject mboReboot = null;
-                ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem"); 
-                mcWin32.Get();
-                // You can't shutdown without security privileges
-                mcWin32.Scope.Options.EnablePrivileges = true;
-                ManagementBaseObject mboRebootParams = mcWin32.GetMethodParameters("Win32Shutdown");
-                // Flags: - 0 (0x0) Log Off - 4 (0x4) Forced Log Off (0 4) - 1 (0x1) Shutdown - 5 (0x5) Forced Shutdown (1 4) - 2 (0x2) Reboot 
-                // - 6 (0x6) Forced Reboot (2 4) - 8 (0x8) Power Off - 12 (0xC) Forced Power Off (8 4)
-                mboRebootParams["Flags"] = "6";
-                mboRebootParams["Reserved"] = "0";
-                foreach (ManagementObject manObj in mcWin32.GetInstances())
-                {
+                case WDT_ONBOARD:
+                    timer2.Stop();
+                    wdt.SetWDT(1);
+                    toolStripProgressBar1.Value = 0;
+                    pbTT.SetToolTip(this.statusStrip1, "WDT reset computer after 1 min.");
+                    break;
+                case WDT_SOFT:
                     try
                     {
-                        mboReboot = manObj.InvokeMethod("Win32Shutdown", mboRebootParams, null);
+                        ExitWindows.Reboot(true);
                     }
                     catch (Exception ex)
                     {
                         WriteEventLog(String.Format("Exception caught in resetToolStripMenuItem_Click(): {0}", ex.ToString()), EventLogEntryType.Error);
                     }
-                }*/
-                try
-                {
-                    ExitWindows.Reboot(true);
-                }
-                catch (Exception ex)
-                {
-                    WriteEventLog(String.Format("Exception caught in resetToolStripMenuItem_Click(): {0}", ex.ToString()), EventLogEntryType.Error);
-                }
+                    break;
+                case WDT_USBOPEN:
+                    if (!wdt_o.ResetTest())
+                        WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                    break;
             }
         }
         private bool sendMail(string msg)
