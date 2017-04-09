@@ -421,7 +421,12 @@ namespace fermtools
                         break;
                     case WDT_USBOPEN:
                         if (!wdt_o.TimerReset())
+                        {
+                            //Если первый сброс не прошел, пытаемся снова
                             WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                            if (!wdt_o.TimerReset())
+                                WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                        }
                         wdt_o.Count = WDtimer;
                         if (!this.timerSoft.Enabled)
                             this.timerSoft.Start();
@@ -921,9 +926,9 @@ namespace fermtools
             switch (CurrentWDT)
             {
                 case WDT_SOFT:
-                    if (wdt.Count == 0) 
+                    if (wdt_s.Count == 0) 
                         resetToolStripMenuItem_Click(sender, e);
-                    wdt.Count--;
+                    wdt_s.Count--;
                     break;
                 case WDT_USBOPEN:
                     wdt_o.Count--;
