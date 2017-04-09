@@ -85,6 +85,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ring0.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="SoftWDT.cs" />
     <Compile Include="TelegramBot.cs" />
     <Compile Include="ThreadAffinity.cs" />
     <Compile Include="WDT.cs" />

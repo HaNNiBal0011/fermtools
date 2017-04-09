@@ -18,7 +18,6 @@ namespace fermtools
 
         public string WDTnameChip;                                      //Наименование чипа WDT
         private ushort WDTnumPort;                                      //Порядковый номер порта в массивах REGISTER_PORTS и VALUE_PORTS
-        public int Count;                                               //Счетчик минут для софт. таймера.
         public readonly bool isWDT;                                     //Флаг наличия чипа WDT
         public readonly StringBuilder report = new StringBuilder();     //Для отчета
 

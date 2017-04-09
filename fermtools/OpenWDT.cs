@@ -15,7 +15,7 @@ namespace fermtools
         private SerialPort sp;                                          //Порт для opendev USB WDT
         public readonly bool isWDT;                                     //Флаг наличия чипа WDT
         public readonly StringBuilder report = new StringBuilder();     //Для отчета
-        public int Count;                                               //Счетчик минут
+        public int Count = 0;                                           //Счетчик минут
         public string PortName;                                         //Имя открытого порта
 
         public OpenWDT(string ComPort)
@@ -35,8 +35,8 @@ namespace fermtools
                 try
                 {
                     sp = new SerialPort(ComPort, 9600, Parity.None, 8, StopBits.One);
-                    sp.WriteTimeout = 10000;
-                    sp.ReadTimeout = 10000;
+                    sp.WriteTimeout = 3000;
+                    sp.ReadTimeout = 3000;
                     sp.Open();
                     sp.Write("~U".ToCharArray(),0,2);
                     Thread.Sleep(500);
@@ -70,7 +70,6 @@ namespace fermtools
                 {
                     sp.Open();
                     sp.Write(("~P1").ToCharArray(), 0, 3);
-                    Thread.Sleep(500);
                     sp.Close();
                     return true;
                 }
@@ -89,12 +88,10 @@ namespace fermtools
                 {
                     sp.Open();
                     sp.Write(("~P0").ToCharArray(), 0, 3);
-                    Thread.Sleep(500);
                     sp.Close();
                     Thread.Sleep(500);
                     sp.Open();
                     sp.Write(("~W" + count.ToString()).ToCharArray(), 0, 3);
-                    Thread.Sleep(500);
                     sp.Close();
                     return true;
                 }
