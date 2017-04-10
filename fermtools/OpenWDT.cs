@@ -13,7 +13,7 @@ namespace fermtools
     {
         public string WDTnameChip;                                      //Наименование чипа WDT
         private SerialPort sp;                                          //Порт для opendev USB WDT
-        public readonly bool isWDT;                                     //Флаг наличия чипа WDT
+        public bool isWDT;                                              //Флаг наличия чипа WDT
         public readonly StringBuilder report = new StringBuilder();     //Для отчета
         public int Count = 0;                                           //Счетчик минут
         public string PortName;                                         //Имя открытого порта

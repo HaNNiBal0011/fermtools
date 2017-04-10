@@ -88,19 +88,7 @@ namespace fermtools
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
             pipeServerTh = new Thread(pipeServerThread); //Поток для работы именованного канала
             signal = new ManualResetEvent(false);
-            wdt_s = new SoftWDT();  //Инициализация софтового WDT
-            switch (CurrentWDT)
-            {
-                case WDT_ONBOARD:
-                    wdt = new WDT(); //Инициализация onboard WDT
-                    WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
-                    break;
-                case WDT_USBOPEN:   //Инициализация OpenWDT
-                    wdt_o = new OpenWDT(Properties.Settings.Default.wdtPort);
-                    WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Information);
-                    break;
-            }
-            InitWDT(args);
+            InitWDT(args);  //Инициализация WDT
             timer1.Start(); //Стартуем таймеры и потоки
             pipeServerTh.Start();
             if (this.cbTelegramOn.Checked) //Инициализируем бота, если установлен соответствующий флаг
@@ -162,6 +150,14 @@ namespace fermtools
             this.label.Add(this.label5);
             this.label.Add(this.label6);
         }
+        private void SelectSoftWDT()
+        {
+            CurrentWDT = WDT_SOFT;
+            this.toolStripStatusLabel1.Text = "WDT Chip Software";
+            this.radioSoftWDT.Checked = true;
+            Properties.Settings.Default.select_WDT = CurrentWDT;
+            Properties.Settings.Default.Save();
+        }
         private void InitWDT(string[] args)
         {
             //Пытаемся брать значение таймера из командной строки, иначе используем значение полученное при инициализации
@@ -171,6 +167,7 @@ namespace fermtools
                 numericTimeout.Value = WDtimer;
                 SaveWDTSetting(null, null);
             }
+            wdt_s = new SoftWDT();  //Инициализация софтового WDT
             //Добавляем в панель статуса информацию о чипе и показываем
             switch (CurrentWDT)
             {
@@ -178,22 +175,38 @@ namespace fermtools
                     this.toolStripStatusLabel1.Text = "WDT Chip Software";
                     break;
                 case WDT_ONBOARD:
-                    this.toolStripStatusLabel1.Text = "WDT Chip " + wdt.WDTnameChip;
-                    break;
-                case WDT_USBOPEN: //Если инициализация OpenWDT неудачная, то включаем софт ресет
-                    if (wdt_o.SetWDT(ref WDtimer))
-                        this.toolStripStatusLabel1.Text = "WDT Chip " + wdt_o.WDTnameChip;
+                    wdt = new WDT(); //Инициализация onboard WDT
+                    WriteEventLog(wdt.GetReport(), EventLogEntryType.Information);
+                    if (wdt.isWDT)  //Если инициализация onboard WDT неудачная, то включаем софт ресет
+                        this.toolStripStatusLabel1.Text = "WDT Chip " + wdt.WDTnameChip;
                     else
+                        SelectSoftWDT();
+                    break;
+                case WDT_USBOPEN: //Инициализация OpenWDT
+                    wdt_o = new OpenWDT(Properties.Settings.Default.wdtPort);
+                    WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Information);
+                    if (wdt_o.isWDT)
+                    {
+                        if (wdt_o.SetWDT(ref WDtimer)) //Устанавливаем таймаут
+                            this.toolStripStatusLabel1.Text = "WDT Chip " + wdt_o.WDTnameChip;
+                        else
+                            wdt_o.isWDT = false;
+                    }
+                    if (!wdt_o.isWDT)  //Если инициализация OpenWDT неудачная, то включаем софт ресет
                     {
                         WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
-                        CurrentWDT = WDT_SOFT;
-                        this.toolStripStatusLabel1.Text = "WDT Chip Software";
-                        this.radioSoftWDT.Checked = true;
-                        Properties.Settings.Default.select_WDT = CurrentWDT;
-                        Properties.Settings.Default.Save();
+                        SelectSoftWDT();
                     }
                     break;
             }
+            //Сохраняем значение WDtimer, если изменилось
+            if (this.numericTimeout.Value != WDtimer)
+            {
+                this.numericTimeout.Value = WDtimer;
+                Properties.Settings.Default.timeout_WDT = (Byte)this.numericTimeout.Value;
+                Properties.Settings.Default.Save();
+            }
+            //Показываем элементы управления
             this.toolStripStatusLabel1.Visible = true;
             pbTT = new ToolTip();
             if (WDtimer > 0)
@@ -392,8 +405,7 @@ namespace fermtools
             //Логика такова. Если остаток таймера меньше или равен 1 минуте, то перезаряжаем
             //Если больше 1 минуты, выводим в тоолтип сколько осталось и устанавливаем соответствующюу величину прогресса.
             int progress = 0; bool res = false;
-
-            switch (CurrentWDT)
+            switch (CurrentWDT)         //Получаем значение счетчика, сколько минут осталось до сброса
             {
                 case WDT_ONBOARD:
                     progress = wdt.GetWDT();
@@ -405,32 +417,31 @@ namespace fermtools
                     progress = wdt_s.Count;
                     break;
             }
-
-            if (progress <= 1)
+            if (progress <= 1)      //Если меньше минтуы, то пытаемся сбросить WDT
             {
                 switch (CurrentWDT)
                 {
                     case WDT_ONBOARD:
-                        res = wdt.SetWDT(WDtimer);
+                        res = wdt.SetWDT(WDtimer); //Если сброс не прошел, то при следующем срабатывании таймера пытаемся снова сбросить WDT
+                        if (!res)
+                            WriteEventLog(wdt.GetReport(), EventLogEntryType.Error);
                         break;
                     case WDT_SOFT:
+                        res = true;
                         wdt_s.Count = WDtimer;
                         if (!this.timerSoft.Enabled)
                             this.timerSoft.Start();
-                        res = true;
                         break;
                     case WDT_USBOPEN:
-                        if (!wdt_o.TimerReset())
+                        res = wdt_o.TimerReset();
+                        if (res)     //Если сброс не прошел, то при следующем срабатывании таймера пытаемся снова сбросить WDT
                         {
-                            //Если первый сброс не прошел, пытаемся снова
-                            WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
-                            if (!wdt_o.TimerReset())
-                                WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                            wdt_o.Count = WDtimer;  //Если сброс прошел, то перезаряжаем таймер и запускаем счетчик минут до следующего сброса
+                            if (!this.timerSoft.Enabled)
+                                this.timerSoft.Start();
                         }
-                        wdt_o.Count = WDtimer;
-                        if (!this.timerSoft.Enabled)
-                            this.timerSoft.Start();
-                        res = true;
+                        else
+                            WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
                         break;
                 }
                 if (res)
@@ -441,7 +452,6 @@ namespace fermtools
                     toolStripProgressBar1.Value = WDtimer;
                     pbTT.SetToolTip(this.statusStrip1, "WDT set to " + WDtimer.ToString() + " min.");
                 }
-                else WriteEventLog(wdt.GetReport(), EventLogEntryType.Error);
             }
             else
             {
