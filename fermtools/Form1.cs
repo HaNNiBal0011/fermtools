@@ -475,10 +475,22 @@ namespace fermtools
             fExitCancel = false;
             //Прерываем поток pipe
             signal.Set();
-            //Останавливаем WDT, если он есть
-            if (wdt.isWDT) 
-                if (wdt.SetWDT(0)) 
-                    WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+            switch (CurrentWDT)         //Получаем значение счетчика, сколько минут осталось до сброса
+            {
+                case WDT_ONBOARD:
+                    if (wdt.SetWDT(0)) //Останавливаем WDT
+                        WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+                    else
+                        WriteEventLog(wdt.GetReport(), EventLogEntryType.Error);
+                    break;
+                case WDT_USBOPEN:
+                    byte k = 0;
+                    if (wdt_o.SetWDT(ref k)) //Останавливаем WDT
+                        WriteEventLog("Watchdog timer disabled.", EventLogEntryType.Information);
+                    else
+                        WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
+                    break;
+            }
             //Останавливаем таймеры
             if (this.timer1.Enabled) 
                 this.timer1.Stop();
@@ -999,22 +1011,26 @@ namespace fermtools
 
         private void TestPortWDT(object sender, EventArgs e)
         {
-            if (!cbCOMPort.Text.Equals(wdt_o.PortName))
+            if (CurrentWDT == WDT_USBOPEN)
             {
-                OpenWDT w = new OpenWDT(cbCOMPort.Text);
-                if (w.isWDT)
+                if (cbCOMPort.Text.Equals(wdt_o.PortName))
                 {
-                    this.radioOpendevUSBWDT.Enabled = true;
-                    MessageBox.Show("Open WDT found on " + cbCOMPort.Text, "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                }
-                else
-                {
-                    WriteEventLog(w.GetReport(), EventLogEntryType.Warning);
-                    MessageBox.Show("Open WDT not found on port " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show("Рort " + cbCOMPort.Text + " is already open", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    return;
                 }
             }
+
+            OpenWDT w = new OpenWDT(cbCOMPort.Text);
+            if (w.isWDT)
+            {
+                this.radioOpendevUSBWDT.Enabled = true;
+                MessageBox.Show("Open WDT found on " + cbCOMPort.Text, "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
             else
-                MessageBox.Show("Рort " + cbCOMPort.Text + " is already open", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            {
+                WriteEventLog(w.GetReport(), EventLogEntryType.Warning);
+                MessageBox.Show("Open WDT not found on port " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
         }
     }
 }
