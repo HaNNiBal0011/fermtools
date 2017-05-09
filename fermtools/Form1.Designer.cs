@@ -90,6 +90,7 @@ namespace fermtools
             this.label23 = new System.Windows.Forms.Label();
             this.nc_K_gpu_clock = new System.Windows.Forms.NumericUpDown();
             this.tabWDT = new System.Windows.Forms.TabPage();
+            this.btTestPort = new System.Windows.Forms.Button();
             this.label32 = new System.Windows.Forms.Label();
             this.cbCOMPort = new System.Windows.Forms.ComboBox();
             this.btSaveWDT = new System.Windows.Forms.Button();
@@ -134,7 +135,6 @@ namespace fermtools
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timer4 = new System.Windows.Forms.Timer(this.components);
             this.timerSoft = new System.Windows.Forms.Timer(this.components);
-            this.btTestPort = new System.Windows.Forms.Button();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -176,12 +176,12 @@ namespace fermtools
             this.toolStripMenuItem1});
             this.MenuContext.Name = "MenuContext";
             this.MenuContext.ShowImageMargin = false;
-            this.MenuContext.Size = new System.Drawing.Size(90, 82);
+            this.MenuContext.Size = new System.Drawing.Size(90, 76);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -189,7 +189,7 @@ namespace fermtools
             // 
             this.showToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 26);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(89, 24);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowtoolStripMenuItem1_Click);
             // 
@@ -197,7 +197,7 @@ namespace fermtools
             // 
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 24);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -931,6 +931,16 @@ namespace fermtools
             this.tabWDT.Text = "WDT setting";
             this.tabWDT.UseVisualStyleBackColor = true;
             // 
+            // btTestPort
+            // 
+            this.btTestPort.Location = new System.Drawing.Point(135, 194);
+            this.btTestPort.Name = "btTestPort";
+            this.btTestPort.Size = new System.Drawing.Size(89, 29);
+            this.btTestPort.TabIndex = 31;
+            this.btTestPort.Text = "Test Port";
+            this.btTestPort.UseVisualStyleBackColor = true;
+            this.btTestPort.Click += new System.EventHandler(this.TestPortWDT);
+            // 
             // label32
             // 
             this.label32.AutoSize = true;
@@ -1346,16 +1356,6 @@ namespace fermtools
             // 
             this.timerSoft.Interval = 60000;
             this.timerSoft.Tick += new System.EventHandler(this.SoftReset);
-            // 
-            // btTestPort
-            // 
-            this.btTestPort.Location = new System.Drawing.Point(135, 194);
-            this.btTestPort.Name = "btTestPort";
-            this.btTestPort.Size = new System.Drawing.Size(89, 29);
-            this.btTestPort.TabIndex = 31;
-            this.btTestPort.Text = "Test Port";
-            this.btTestPort.UseVisualStyleBackColor = true;
-            this.btTestPort.Click += new System.EventHandler(this.TestPortWDT);
             // 
             // Form1
             // 

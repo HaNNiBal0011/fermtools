@@ -1,4 +1,6 @@
-﻿namespace fermtools.Properties {
+﻿// Copyright © 2016 Dimasin. All rights reserved.
+
+namespace fermtools.Properties {
     
     
     // Этот класс позволяет обрабатывать определенные события в классе параметров:
