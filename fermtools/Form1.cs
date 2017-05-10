@@ -869,7 +869,13 @@ namespace fermtools
                                     break;
                                 default:
                                     //Проверяем, не рестарт ли
-                                    flagrestart = upd.Message.Text.Equals("/reset " + textFermaName);
+                                    flagrestart = upd.Message.Text.Equals("/reset " + textFermaName.Text);
+                                    if (flagrestart)
+                                    {
+                                        //Очищаем очередь и посылаем реквест
+                                        bot.lastUpd = (botUpdate[botUpdate.Count - 1].UpdateId).ToString();
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + " restarts ...", "", upd.Message.MessageId.ToString());
+                                    }
                                     break;
                             }
                         }
