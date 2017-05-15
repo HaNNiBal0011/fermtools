@@ -1,0 +1,441 @@
+SUDT ACCESSPORT LOG FILE - Monitor mode
+
+Монитор: COM4
+Задать время: 2017-05-13, 22:35:26
+Имя компьютера: NEON
+Версия системы:  (Build 9200)
+
+#	Time		Duration (s)	Process		Request                             	Port	Result	Data ( Hex )	
+
+1	22:34:24.606	0.00004668	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+2	22:34:24.606	0.00045693	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+3	22:34:24.606	0.00002261	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+4	22:34:24.606	0.00008862	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+5	22:34:24.606	0.00035628	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+6	22:34:24.606	0.00000328	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+7	22:34:24.606	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+8	22:34:24.606	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+9	22:34:24.606	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+10	22:34:24.606	0.00000000	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4			
+11	22:34:24.606	0.00004121	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+12	22:34:24.606	0.00000620	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+13	22:34:24.606	0.00024871	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+14	22:34:24.606	0.00040479	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+15	22:34:24.606	0.00004303	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+16	22:34:24.606	0.00016520	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+17	22:34:24.606	0.00033258	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+18	22:34:24.606	0.00011706	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+19	22:34:24.606	0.00015717	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+20	22:34:24.606	0.00005507	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+21	22:34:24.606	0.00018926	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+22	22:34:24.606	0.00003866	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+23	22:34:24.606	0.00026730	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+24	22:34:24.606	0.00000438	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+25	22:34:24.606	0.00018525	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+26	22:34:24.606	0.00025746	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+27	22:34:24.606	0.00000912	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0x68, XoffChar: 0xBB	
+28	22:34:24.606	0.00001021	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+29	22:34:24.606	0.00000547	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+30	22:34:24.606	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+31	22:34:24.606	0.00000000	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4			
+33	22:34:24.619	0.00000656	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 8, Data: 7E 4C 31 0A 7E 50 30 0A 	
+34	22:34:24.619	0.00023339	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+35	22:34:24.621	0.00032602	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+36	22:34:24.621	0.00003209	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+37	22:34:24.621	0.00008643	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+38	22:34:24.621	0.00036978	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+39	22:34:24.622	0.00004558	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0x68, XoffChar: 0xBB	
+40	22:34:24.622	0.00014952	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+41	22:34:24.622	0.00004303	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+42	22:34:24.622	0.00014222	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+43	22:34:27.683	0.00012508	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+44	22:34:27.683	0.00043943	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+45	22:34:27.683	0.00000511	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+46	22:34:27.683	0.00009153	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+47	22:34:27.683	0.00026694	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+48	22:34:27.683	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+49	22:34:27.683	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+50	22:34:27.683	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+51	22:34:27.683	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+52	22:34:27.683	0.00019911	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+53	22:34:27.683	0.00004485	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+54	22:34:27.683	0.00000875	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+56	22:34:27.698	0.00045730	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+57	22:34:27.698	0.00000365	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+58	22:34:27.698	0.00008205	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+59	22:34:27.698	0.00027970	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+60	22:34:27.698	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+61	22:34:27.698	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+62	22:34:27.698	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+63	22:34:27.698	0.00006455	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+64	22:34:30.686	0.00006819	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+65	22:34:30.686	0.00042958	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+66	22:34:30.686	0.00000620	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+67	22:34:30.686	0.00032419	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+68	22:34:30.686	0.00041719	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+69	22:34:30.686	0.00008679	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+70	22:34:30.686	0.00020312	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+71	22:34:30.686	0.00007986	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+72	22:34:30.686	0.00000839	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+73	22:34:30.686	0.00032748	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+74	22:34:30.686	0.00000000	wdtmon3.exe	IRP_MJ_WRITE                        	COM4		Length: 2, Data: 7E 55 	
+75	22:34:30.686	0.00008934	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+76	22:34:30.686	0.00044271	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+77	22:34:30.686	0.00027970	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+78	22:34:30.686	0.00000438	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+79	22:34:30.686	0.00011451	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+80	22:34:30.686	0.00033623	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+81	22:34:30.686	0.00007913	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+82	22:34:30.686	0.00007439	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+83	22:34:30.686	0.00008679	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+84	22:34:30.686	0.00031727	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+85	22:34:33.636	0.00004741	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+86	22:34:33.636	0.00039786	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+87	22:34:33.636	0.00008205	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+88	22:34:33.636	0.00012326	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+89	22:34:33.636	0.00032091	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+90	22:34:33.636	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+91	22:34:33.636	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+92	22:34:33.636	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+93	22:34:33.636	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+94	22:34:33.636	0.00017285	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+95	22:34:33.636	0.00003501	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+96	22:34:33.636	0.00000474	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+97	22:34:33.636	0.00014587	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+98	22:34:33.636	0.00033003	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+99	22:34:33.636	0.00002808	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+100	22:34:33.636	0.00009080	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+101	22:34:33.636	0.00039202	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+102	22:34:33.636	0.00008059	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+103	22:34:33.636	0.00002334	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+104	22:34:33.636	0.00003829	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+105	22:34:33.636	0.00010247	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+106	22:34:36.669	0.00006199	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+107	22:34:36.685	0.00043979	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+108	22:34:36.685	0.00017067	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+109	22:34:36.685	0.00017905	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+110	22:34:36.685	0.00038655	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+112	22:34:36.685	0.00003647	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+113	22:34:36.685	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+114	22:34:36.685	0.00000365	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+115	22:34:36.685	0.00023704	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+116	22:34:36.685	0.00005871	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+117	22:34:36.685	0.00002079	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+118	22:34:36.685	0.00016301	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+119	22:34:36.685	0.00050945	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+120	22:34:36.685	0.00012946	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+121	22:34:36.685	0.00016738	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+122	22:34:36.685	0.00043432	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+126	22:34:36.685	0.00008971	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+127	22:34:39.677	0.00006382	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+128	22:34:39.677	0.00044381	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+129	22:34:39.677	0.00000583	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+130	22:34:39.677	0.00018161	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+131	22:34:39.677	0.00027642	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+132	22:34:39.677	0.00000438	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+133	22:34:39.677	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+134	22:34:39.677	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+135	22:34:39.677	0.00000328	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+136	22:34:39.677	0.00021443	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+137	22:34:39.677	0.00004522	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+138	22:34:39.677	0.00001058	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+140	22:34:39.677	0.00104114	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+141	22:34:39.692	0.00005579	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+142	22:34:39.692	0.00015353	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+143	22:34:39.692	0.00026803	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+144	22:34:39.692	0.00000401	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+145	22:34:39.692	0.00000583	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+146	22:34:39.692	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+147	22:34:39.692	0.00009700	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+148	22:34:42.679	0.00005835	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+149	22:34:42.679	0.00052549	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+150	22:34:42.679	0.00013055	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+151	22:34:42.679	0.00029575	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+152	22:34:42.679	0.00030268	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+153	22:34:42.679	0.00000474	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+154	22:34:42.679	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+155	22:34:42.679	0.00000583	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+156	22:34:42.679	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+157	22:34:42.679	0.00023084	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+158	22:34:42.679	0.00005361	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+159	22:34:42.679	0.00008023	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+160	22:34:42.679	0.00038473	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+161	22:34:42.679	0.00031362	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+162	22:34:42.679	0.00000583	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+163	22:34:42.679	0.00009773	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+164	22:34:42.679	0.00038364	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+165	22:34:42.679	0.00000583	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+166	22:34:42.679	0.00000839	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+167	22:34:42.679	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+168	22:34:42.679	0.00012399	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+169	22:34:45.679	0.00006345	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+170	22:34:45.679	0.00070418	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+171	22:34:45.679	0.00007512	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+172	22:34:45.679	0.00029247	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+173	22:34:45.679	0.00035191	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+174	22:34:45.679	0.00007731	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+175	22:34:45.679	0.00013055	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+176	22:34:45.679	0.00006637	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+177	22:34:45.679	0.00000365	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+178	22:34:45.679	0.00023667	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+179	22:34:45.679	0.00006017	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+180	22:34:45.679	0.00000839	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+181	22:34:45.679	0.00018525	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+182	22:34:45.679	0.00060244	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+183	22:34:45.679	0.00007075	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+184	22:34:45.679	0.00017285	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+185	22:34:45.679	0.00095982	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+186	22:34:45.695	0.00000328	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+187	22:34:45.695	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+188	22:34:45.695	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+189	22:34:45.695	0.00010320	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+190	22:34:48.680	0.00006455	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+191	22:34:48.680	0.00040296	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+192	22:34:48.680	0.00007877	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+193	22:34:48.680	0.00021333	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+194	22:34:48.680	0.00066079	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+195	22:34:48.680	0.00018963	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+196	22:34:48.680	0.00014332	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+197	22:34:48.680	0.00007804	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+198	22:34:48.680	0.00007221	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+199	22:34:48.680	0.00000000	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4			
+200	22:34:48.680	0.00032857	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+201	22:34:48.696	0.00000729	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+202	22:34:48.696	0.00012581	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+203	22:34:48.712	0.00042740	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+204	22:34:48.712	0.00004267	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+205	22:34:48.712	0.00018416	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+206	22:34:48.712	0.00044563	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+207	22:34:48.712	0.00001495	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+208	22:34:48.712	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+209	22:34:48.712	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+210	22:34:48.712	0.00011815	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+211	22:34:51.689	0.00006783	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+212	22:34:51.689	0.00043068	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+213	22:34:51.689	0.00006163	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+214	22:34:51.689	0.00012326	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+215	22:34:51.689	0.00036905	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+216	22:34:51.689	0.00008059	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+217	22:34:51.689	0.00001167	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+218	22:34:51.689	0.00000401	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+219	22:34:51.689	0.00001349	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+220	22:34:51.689	0.00034899	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+221	22:34:51.689	0.00015754	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+222	22:34:51.689	0.00025308	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+223	22:34:51.689	0.00041828	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+224	22:34:51.689	0.00067173	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+225	22:34:51.689	0.00008387	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+226	22:34:51.689	0.00013092	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+227	22:34:51.689	0.00037342	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+228	22:34:51.689	0.00000438	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+229	22:34:51.689	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+230	22:34:51.689	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+231	22:34:51.689	0.00009518	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+232	22:34:54.682	0.00006892	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+233	22:34:54.682	0.00051528	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+234	22:34:54.682	0.00009846	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+235	22:34:54.682	0.00029429	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+236	22:34:54.682	0.00042630	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+237	22:34:54.682	0.00000948	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+238	22:34:54.682	0.00000875	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+239	22:34:54.682	0.00000693	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+240	22:34:54.682	0.00000365	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+241	22:34:54.682	0.00023485	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+242	22:34:54.682	0.00000000	wdtmon3.exe	IRP_MJ_WRITE                        	COM4		Length: 2, Data: 7E 55 	
+243	22:34:54.682	0.00022500	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+244	22:34:54.682	0.00059369	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+245	22:34:54.682	0.00028226	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+246	22:34:54.682	0.00000620	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+247	22:34:54.682	0.00018562	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+248	22:34:54.682	0.00035191	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+249	22:34:54.682	0.00012180	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+250	22:34:54.682	0.00007658	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+251	22:34:54.682	0.00007585	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+252	22:34:54.682	0.00026001	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+253	22:34:57.681	0.00006491	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+254	22:34:57.681	0.00060025	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+255	22:34:57.681	0.00000693	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+256	22:34:57.681	0.00015900	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+257	22:34:57.681	0.00045548	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+258	22:34:57.681	0.00004923	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+259	22:34:57.681	0.00007366	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+260	22:34:57.681	0.00007840	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+261	22:34:57.681	0.00011451	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+262	22:34:57.681	0.00051856	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+263	22:34:57.681	0.00020640	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+264	22:34:57.681	0.00000912	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+265	22:34:57.681	0.00026001	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+266	22:34:57.697	0.00035264	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+267	22:34:57.697	0.00004011	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+268	22:34:57.697	0.00011305	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+269	22:34:57.697	0.00026256	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+270	22:34:57.697	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+271	22:34:57.697	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+272	22:34:57.697	0.00000438	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+273	22:34:57.697	0.00011123	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+274	22:35:00.684	0.00018708	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+275	22:35:00.684	0.00048720	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+276	22:35:00.684	0.00007913	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+277	22:35:00.684	0.00031107	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+278	22:35:00.684	0.00037014	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+279	22:35:00.684	0.00007403	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+280	22:35:00.684	0.00004558	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+281	22:35:00.684	0.00013894	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+282	22:35:00.684	0.00007075	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+283	22:35:00.684	0.00024907	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+284	22:35:00.684	0.00006710	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+285	22:35:00.684	0.00002844	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+286	22:35:00.684	0.00046897	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+287	22:35:00.684	0.00046423	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+288	22:35:00.684	0.00014477	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+289	22:35:00.684	0.00018525	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+290	22:35:00.684	0.00061046	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+291	22:35:00.684	0.00000693	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+292	22:35:00.684	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+293	22:35:00.684	0.00000948	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+294	22:35:00.684	0.00016702	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+295	22:35:03.635	0.00004522	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+296	22:35:03.635	0.00036650	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+297	22:35:03.635	0.00004814	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+298	22:35:03.635	0.00016921	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+299	22:35:03.635	0.00028299	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+300	22:35:03.635	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+301	22:35:03.635	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+302	22:35:03.635	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+303	22:35:03.635	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+304	22:35:03.635	0.00019765	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+305	22:35:03.635	0.00003647	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+306	22:35:03.635	0.00000474	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+307	22:35:03.635	0.00010685	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+308	22:35:03.635	0.00047006	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+309	22:35:03.635	0.00000438	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+310	22:35:03.635	0.00029648	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+311	22:35:03.635	0.00037452	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+312	22:35:03.635	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+313	22:35:03.635	0.00000109	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+314	22:35:03.635	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+315	22:35:03.635	0.00012362	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+316	22:35:06.684	0.00006819	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+317	22:35:06.684	0.00042120	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+318	22:35:06.684	0.00000693	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+319	22:35:06.684	0.00020823	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+320	22:35:06.684	0.00043287	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+321	22:35:06.684	0.00010284	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+322	22:35:06.684	0.00009700	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+325	22:35:06.684	0.00025126	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+326	22:35:06.684	0.00006455	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+327	22:35:06.684	0.00011888	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+328	22:35:06.684	0.00047262	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+329	22:35:06.684	0.00049924	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+330	22:35:06.684	0.00000839	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+331	22:35:06.684	0.00019328	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+332	22:35:06.684	0.00044089	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+333	22:35:06.684	0.00000474	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+334	22:35:06.684	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+335	22:35:06.684	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+336	22:35:06.684	0.00012691	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+337	22:35:09.666	0.00010138	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+338	22:35:09.666	0.00036321	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+339	22:35:09.666	0.00003683	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+340	22:35:09.666	0.00010867	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+341	22:35:09.666	0.00036066	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+342	22:35:09.666	0.00003610	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+343	22:35:09.666	0.00003428	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+344	22:35:09.666	0.00003537	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+345	22:35:09.666	0.00003501	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+346	22:35:09.666	0.00024907	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+347	22:35:09.666	0.00007476	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+348	22:35:09.666	0.00007038	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+349	22:35:09.666	0.00015061	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+350	22:35:09.666	0.00032237	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+351	22:35:09.666	0.00003756	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+352	22:35:09.666	0.00017869	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+353	22:35:09.666	0.00039312	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+354	22:35:09.666	0.00003866	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+355	22:35:09.666	0.00004084	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+356	22:35:09.666	0.00003720	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+357	22:35:09.666	0.00010831	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+358	22:35:12.677	0.00006345	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+359	22:35:12.677	0.00054628	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+360	22:35:12.677	0.00011305	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+361	22:35:12.677	0.00011305	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+362	22:35:12.677	0.00033039	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+363	22:35:12.677	0.00007038	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+364	22:35:12.677	0.00011779	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+365	22:35:12.677	0.00007585	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+366	22:35:12.677	0.00008387	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+367	22:35:12.677	0.00037124	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+368	22:35:12.677	0.00011560	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+369	22:35:12.677	0.00000802	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+370	22:35:12.677	0.00030596	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+371	22:35:12.693	0.00033404	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+372	22:35:12.693	0.00000401	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+373	22:35:12.693	0.00007512	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+374	22:35:12.693	0.00027277	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+375	22:35:12.693	0.00003610	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+376	22:35:12.693	0.00003464	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+377	22:35:12.693	0.00003501	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+378	22:35:12.693	0.00009956	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+379	22:35:15.681	0.00006272	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+380	22:35:15.681	0.00042448	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+381	22:35:15.681	0.00008497	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+382	22:35:15.681	0.00026876	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+383	22:35:15.681	0.00049523	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+384	22:35:15.681	0.00007111	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+385	22:35:15.681	0.00007184	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+386	22:35:15.681	0.00004230	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+387	22:35:15.681	0.00015754	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+388	22:35:15.681	0.00000000	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4			
+389	22:35:15.681	0.00006674	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+390	22:35:15.681	0.00006746	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+391	22:35:15.681	0.00039312	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+392	22:35:15.681	0.00048647	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+393	22:35:15.681	0.00000620	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+394	22:35:15.681	0.00012362	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+395	22:35:15.681	0.00030487	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+396	22:35:15.681	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+397	22:35:15.681	0.00000438	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+398	22:35:15.681	0.00000292	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+399	22:35:15.681	0.00016009	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+400	22:35:18.676	0.00005543	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+401	22:35:18.676	0.00052294	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+402	22:35:18.676	0.00000620	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+403	22:35:18.676	0.00016337	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+404	22:35:18.676	0.00038765	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+405	22:35:18.676	0.00000547	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+406	22:35:18.676	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+407	22:35:18.676	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+408	22:35:18.676	0.00000438	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+409	22:35:18.676	0.00021297	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+410	22:35:18.676	0.00004887	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+411	22:35:18.676	0.00000693	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+412	22:35:18.676	0.00046605	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+413	22:35:18.676	0.00052148	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+414	22:35:18.676	0.00005908	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+415	22:35:18.676	0.00022209	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+416	22:35:18.676	0.00044125	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+417	22:35:18.676	0.00006309	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+418	22:35:18.676	0.00005361	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+419	22:35:18.676	0.00003756	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+420	22:35:18.676	0.00023230	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	
+421	22:35:21.677	0.00006163	wdtmon3.exe	IRP_MJ_CREATE                       	COM4	SUCCESS	Port Opened	
+422	22:35:21.677	0.00043688	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+423	22:35:21.677	0.00000547	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+424	22:35:21.677	0.00019911	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+425	22:35:21.677	0.00057691	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+426	22:35:21.677	0.00000802	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+427	22:35:21.677	0.00001276	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+428	22:35:21.677	0.00000255	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: 0, ReadTotalTimeoutConstant: 0, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 0	
+429	22:35:21.677	0.00001058	wdtmon3.exe	IOCTL_SERIAL_SET_WAIT_MASK          	COM4	SUCCESS	Mask: RXCHAR	
+430	22:35:21.677	0.00023011	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	SUCCESS		
+431	22:35:21.677	0.00005725	wdtmon3.exe	IRP_MJ_WRITE                        	COM4	SUCCESS	Length: 2, Data: 7E 55 	
+432	22:35:21.677	0.00007439	wdtmon3.exe	IRP_MJ_READ                         	COM4	SUCCESS	Length: 3, Data: 7E 41 0A 	
+433	22:35:21.677	0.00016410	wdtmon3.exe	IOCTL_SERIAL_WAIT_ON_MASK           	COM4	CANCELLED		
+434	22:35:21.693	0.00039458	wdtmon3.exe	IOCTL_SERIAL_SET_BAUD_RATE          	COM4	SUCCESS	Baud Rate: 9600	
+435	22:35:21.693	0.00009700	wdtmon3.exe	IOCTL_SERIAL_CLR_RTS                	COM4	SUCCESS		
+436	22:35:21.693	0.00015097	wdtmon3.exe	IOCTL_SERIAL_CLR_DTR                	COM4	SUCCESS		
+437	22:35:21.693	0.00028700	wdtmon3.exe	IOCTL_SERIAL_SET_LINE_CONTROL       	COM4	SUCCESS	StopBits: 1, Parity: No, DataBits: 8	
+438	22:35:21.693	0.00000219	wdtmon3.exe	IOCTL_SERIAL_SET_CHARS              	COM4	SUCCESS	EofChar: 0x0, ErrorChar: 0x0, BreakChar: 0x0, EventChar: 0x0, XonChar: 0xB8, XoffChar: 0xC3	
+439	22:35:21.693	0.00000182	wdtmon3.exe	IOCTL_SERIAL_SET_HANDFLOW           	COM4	SUCCESS	ControlHandShake: 0x0, FlowReplace: 0x0, XonLimit: 4096, XoffLimit: 4096	
+440	22:35:21.693	0.00000146	wdtmon3.exe	IOCTL_SERIAL_SET_TIMEOUTS           	COM4	SUCCESS	ReadIntervalTimeout: -1, ReadTotalTimeoutMultiplier: -1, ReadTotalTimeoutConstant: 3000, WriteTotalTimeoutMultiplier: 0, WriteTotalTimeoutConstant: 3000	
+441	22:35:21.693	0.00011013	wdtmon3.exe	IRP_MJ_CLOSE                        	COM4	SUCCESS	Port Closed	

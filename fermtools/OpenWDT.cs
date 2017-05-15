@@ -51,7 +51,7 @@ namespace fermtools
                     report.AppendLine("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message + " Func: GetOpenDevUSB()" + " Par:" + ComPort);
                     return false;
                 }
-                if (answer.Equals("~A"))
+                if (answer.Substring(0,2).Equals("~A"))
                 {
                     WDTnameChip = "OpenDev";
                     PortName = sp.PortName;
