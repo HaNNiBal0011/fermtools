@@ -120,6 +120,18 @@ namespace fermtools
                 sendMail("Computer restart after freze"); //Если был хардресет отправляем мыло
             config.conf.othset.isReset = true;
             config.WriteParam(ref config_path);//Устанавливаем и сохраняем состояние ресета
+            if (config.conf.othset.CompareGPUCountReset) //Перезагрузка, если видеокарт меньше, чем должно быть
+            {
+                if (config.conf.othset.GPUCount > CardCount)
+                {
+                    if (bot.bInit) //Если бот инициализирован отправляем сообщение
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": does not match the number of video cards. Restarting...");
+                    if (this.cbOnEmail.Checked)
+                        sendMail("Does not match the number of video cards. Restarting..."); //Если нужно отправляем мыло
+                    WriteEventLog("Does not match the number of video cards. Restarting...", EventLogEntryType.Information);
+                    resetToolStripMenuItem_Click(null, null);
+                }
+            }
         }
         private string GetReportVideoCard()
         {

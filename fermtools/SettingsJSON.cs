@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace fermtools
 {
@@ -14,12 +15,30 @@ namespace fermtools
         {
             conf = new SetingRoot();
         }
+        public bool ReadParam(ref string config_path)
+        {
+            try
+            {
+                StreamReader sr = new StreamReader(config_path);
+                string json = sr.ReadToEnd();
+                sr.Close();
+                conf = JsonConvert.DeserializeObject<SetingRoot>(json);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public bool WriteParam(ref string config_path)
         {
             try
             {
                 string json = JsonConvert.SerializeObject(conf, Formatting.Indented);
-                System.IO.File.WriteAllText(config_path, json);
+                StreamWriter sw = new StreamWriter(config_path, false);
+                sw.Write(json);
+                sw.Flush();
+                sw.Close();
             }
             catch
             {
@@ -73,30 +92,10 @@ namespace fermtools
             conf.othset.cb_startPipe = false;
             conf.othset.isReset = true;
             conf.othset.cmd_Script = "";
+            conf.othset.GPUCount = 0;
+            conf.othset.CompareGPUCountReset = false;
 
-            try
-            {
-                string json = JsonConvert.SerializeObject(conf, Formatting.Indented);
-                System.IO.File.WriteAllText(config_path, json);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-        public bool ReadParam(ref string config_path)
-        {
-            try
-            {
-                string json = System.IO.File.ReadAllText(config_path);
-                conf = JsonConvert.DeserializeObject<SetingRoot>(json);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
+            return WriteParam(ref config_path); ;
         }
     }
     public class SetingRoot
@@ -174,6 +173,8 @@ namespace fermtools
         public bool cb_startPipe { get; set; }
         public string cmd_Script { get; set; }
         public bool isReset { get; set; }
+        public int GPUCount { get; set; }
+        public bool CompareGPUCountReset { get; set; }
     }
 
 }
