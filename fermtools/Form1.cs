@@ -124,11 +124,11 @@ namespace fermtools
             {
                 if (config.conf.othset.GPUCount > CardCount)
                 {
-                    if (bot.bInit) //Если бот инициализирован отправляем сообщение
+                    /*if (bot.bInit) //Если бот инициализирован отправляем сообщение
                         bot.SendMessage(bot.chatID, this.textFermaName.Text + ": does not match the number of video cards. Restarting...");
                     if (this.cbOnEmail.Checked)
                         sendMail("Does not match the number of video cards. Restarting..."); //Если нужно отправляем мыло
-                    WriteEventLog("Does not match the number of video cards. Restarting...", EventLogEntryType.Information);
+                    WriteEventLog("Does not match the number of video cards. Restarting...", EventLogEntryType.Information);*/
                     resetToolStripMenuItem_Click(null, null);
                 }
             }
@@ -553,6 +553,7 @@ namespace fermtools
                 return;
             fReset = true;
             config.wait_write.WaitOne(10000); //Ждем пока закончится запись файла или 10 секунд
+            Thread.Sleep(3000); //Ждем 3 секунды
             switch (CurrentWDT)
             {
                 case WDT_ONBOARD:

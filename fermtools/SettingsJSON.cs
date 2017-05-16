@@ -36,13 +36,11 @@ namespace fermtools
         public bool WriteParam(ref string config_path)
         {
             wait_write.WaitOne();
-            FileStream fs = null;
             bool res = false;
             try
             {
                 string json = JsonConvert.SerializeObject(conf, Formatting.Indented);
-                fs = new FileStream(config_path, FileMode.OpenOrCreate);
-                StreamWriter sw = new StreamWriter(fs, Encoding.ASCII, 2048);
+                StreamWriter sw = new StreamWriter(config_path, false);
                 sw.Write(json);
                 sw.Flush();
                 sw.Close();
@@ -50,8 +48,6 @@ namespace fermtools
             }
             finally
             {
-                if (fs != null)
-                    fs.Dispose();
                 wait_write.ReleaseMutex();
             }
             return res;
