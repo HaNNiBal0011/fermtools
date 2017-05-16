@@ -506,6 +506,7 @@ namespace fermtools
         }
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            config.wait_write.WaitOne(10000); //Ждем пока закончится запись файла или 10 секунд
             //Разрешаем завершение программы
             fExitCancel = false;
             //Если запущен поток канала, завершаем его
@@ -551,6 +552,7 @@ namespace fermtools
             if (fReset) 
                 return;
             fReset = true;
+            config.wait_write.WaitOne(10000); //Ждем пока закончится запись файла или 10 секунд
             switch (CurrentWDT)
             {
                 case WDT_ONBOARD:

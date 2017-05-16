@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
@@ -11,9 +12,11 @@ namespace fermtools
     class SettingsJSON
     {
         public SetingRoot conf;
+        public Mutex wait_write;  //Ждать пока не закончтся запись
         public SettingsJSON()
         {
             conf = new SetingRoot();
+            wait_write = new Mutex();
         }
         public bool ReadParam(ref string config_path)
         {
@@ -32,19 +35,26 @@ namespace fermtools
         }
         public bool WriteParam(ref string config_path)
         {
+            wait_write.WaitOne();
+            FileStream fs = null;
+            bool res = false;
             try
             {
                 string json = JsonConvert.SerializeObject(conf, Formatting.Indented);
-                StreamWriter sw = new StreamWriter(config_path, false);
+                fs = new FileStream(config_path, FileMode.OpenOrCreate);
+                StreamWriter sw = new StreamWriter(fs, Encoding.ASCII, 2048);
                 sw.Write(json);
                 sw.Flush();
                 sw.Close();
+                res = true;
             }
-            catch
+            finally
             {
-                return false;
+                if (fs != null)
+                    fs.Dispose();
+                wait_write.ReleaseMutex();
             }
-            return true;
+            return res;
         }
         public bool WriteParamDefault(ref string config_path)
         {
