@@ -69,20 +69,26 @@ namespace fermtools
         {
             InitializeComponent();
             config_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools.json";
+            string config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
             if (!config.ReadParam(ref config_path))
-            { 
-                if (config.WriteParamDefault(ref config_path))
+            {
+                if (config.ReadParam(ref config_path0)) //Читаем резервную копию
+                    config.WriteParam(ref config_path);
+                else
                 {
-                    if (!config.ReadParam(ref config_path))
+                    if (config.WriteParamDefault(ref config_path))
+                    {
+                        if (!config.ReadParam(ref config_path))
+                        {
+                            MessageBox.Show("Error load setting from file", "Restore Setting", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                            Application.Exit();
+                        }
+                    }
+                    else
                     {
                         MessageBox.Show("Error load setting from file", "Restore Setting", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                         Application.Exit();
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Error load setting from file", "Restore Setting", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                    Application.Exit();
                 }
             }
             FindComPorts();
@@ -124,11 +130,11 @@ namespace fermtools
             {
                 if (config.conf.othset.GPUCount > CardCount)
                 {
-                    /*if (bot.bInit) //Если бот инициализирован отправляем сообщение
+                    if (bot.bInit) //Если бот инициализирован отправляем сообщение
                         bot.SendMessage(bot.chatID, this.textFermaName.Text + ": does not match the number of video cards. Restarting...");
                     if (this.cbOnEmail.Checked)
                         sendMail("Does not match the number of video cards. Restarting..."); //Если нужно отправляем мыло
-                    WriteEventLog("Does not match the number of video cards. Restarting...", EventLogEntryType.Information);*/
+                    WriteEventLog("Does not match the number of video cards. Restarting...", EventLogEntryType.Information);
                     resetToolStripMenuItem_Click(null, null);
                 }
             }

@@ -27,10 +27,9 @@ namespace fermtools
                 sr.Close();
                 conf = JsonConvert.DeserializeObject<SetingRoot>(json);
             }
-            catch
-            {
+            catch { }
+            if (conf == null)
                 return false;
-            }
             return true;
         }
         public bool WriteParam(ref string config_path)
