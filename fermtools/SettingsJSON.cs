@@ -27,7 +27,7 @@ namespace fermtools
                 sr.Close();
                 conf = JsonConvert.DeserializeObject<SetingRoot>(json);
             }
-            catch { }
+            catch { return false; }
             if (conf == null)
                 return false;
             return true;
@@ -38,17 +38,21 @@ namespace fermtools
             bool res = false;
             try
             {
-                string json = JsonConvert.SerializeObject(conf, Formatting.Indented);
                 StreamWriter sw = new StreamWriter(config_path, false);
-                sw.Write(json);
-                sw.Flush();
-                sw.Close();
-                res = true;
+                try
+                {
+                    string json = JsonConvert.SerializeObject(conf, Formatting.Indented);
+                    sw.Write(json);
+                    res = true;
+                }
+                finally
+                {
+                    sw.Flush();
+                    sw.Close();
+                }
             }
-            finally
-            {
-                wait_write.ReleaseMutex();
-            }
+            catch { }
+            wait_write.ReleaseMutex();
             return res;
         }
         public bool WriteParamDefault(ref string config_path)

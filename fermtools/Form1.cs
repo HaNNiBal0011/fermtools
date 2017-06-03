@@ -135,7 +135,7 @@ namespace fermtools
                     if (this.cbOnEmail.Checked)
                         sendMail("Does not match the number of video cards. Restarting..."); //Если нужно отправляем мыло
                     WriteEventLog("Does not match the number of video cards. Restarting...", EventLogEntryType.Information);
-                    resetToolStripMenuItem_Click(null, null);
+                    Reset_Click(null, null);
                 }
             }
         }
@@ -370,7 +370,7 @@ namespace fermtools
             {
                 object sender = null; EventArgs e = null;
                 if (!String.IsNullOrEmpty(config.conf.othset.cmd_Script)) runCmd();
-                resetToolStripMenuItem_Click(sender, e);
+                Reset_Click(sender, e);
             }
             else
             {
@@ -510,9 +510,8 @@ namespace fermtools
             catch { return false; }
             return true;
         }
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void Exit_Click(object sender, EventArgs e)
         {
-            config.wait_write.WaitOne(10000); //Ждем пока закончится запись файла или 10 секунд
             //Разрешаем завершение программы
             fExitCancel = false;
             //Если запущен поток канала, завершаем его
@@ -543,23 +542,22 @@ namespace fermtools
                 this.timer3.Stop();
             if (this.timer4.Enabled)
                 this.timer4.Stop();
-            //Сбрасываем состояние ресета
+            //Сбрасываем состояние ресета и сохраняем в файл
             config.conf.othset.isReset = false;
             config.WriteParam(ref config_path);
             Application.Exit();
         }
-        private void ShowtoolStripMenuItem1_Click(object sender, EventArgs e)
+        private void Show_Click(object sender, EventArgs e)
         {
             this.Show();
         }
-        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Reset_Click(object sender, EventArgs e)
         {
             //Если флаг установлен, то перезагрузка уже инициирована
             if (fReset) 
                 return;
             fReset = true;
             config.wait_write.WaitOne(10000); //Ждем пока закончится запись файла или 10 секунд
-            Thread.Sleep(3000); //Ждем 3 секунды
             switch (CurrentWDT)
             {
                 case WDT_ONBOARD:
@@ -579,6 +577,7 @@ namespace fermtools
                     }
                     break;
                 case WDT_USBOPEN:
+                    Thread.Sleep(30000); //Ресет этого типа происходит практически моментально, поэтому, на всякий случай ждем еще 30 секунд, чтобы сбросились буферы
                     if (!wdt_o.ResetTest())
                         WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
                     break;
@@ -906,8 +905,11 @@ namespace fermtools
                     //Сохраняем последний чатИД, чтобы бот мог ответить
                     if (!String.IsNullOrEmpty(bot.chatID))
                     {
-                        config.conf.botset.botChatID = bot.chatID;
-                        config.WriteParam(ref config_path);
+                        if (!config.conf.botset.botChatID.Equals(bot.chatID))
+                        {
+                            config.conf.botset.botChatID = bot.chatID;
+                            config.WriteParam(ref config_path);
+                        }
                     }
                 }
                 //Защита от спама: если запросы были не мои, чтобы не копились
@@ -915,7 +917,7 @@ namespace fermtools
                     bot.lastUpd = (botUpdate[botUpdate.Count - 1].UpdateId).ToString();
             }
             if (flagrestart)
-                resetToolStripMenuItem_Click(null, null);
+                Reset_Click(null, null);
         }
         private void SaveMonitoringSetting(object sender, EventArgs e)
         {
@@ -999,7 +1001,7 @@ namespace fermtools
             {
                 case WDT_SOFT: //перезагружает софтовый таймер при окончании счета
                     if (wdt_s.Count == 0) 
-                        resetToolStripMenuItem_Click(sender, e);
+                        Reset_Click(sender, e);
                     wdt_s.Count--;
                     break;
                 case WDT_USBOPEN:
