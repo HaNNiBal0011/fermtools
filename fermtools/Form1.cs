@@ -55,7 +55,6 @@ namespace fermtools
         int CardCount;                          //Количество найденных видеокарт
         private string config_path;             //Путь конфига
         const string rand = "xBW8skR2lmmMs";    //Случайная строка для эмуляции пароля
-        Random rndTimer = new Random();         //Случайное число для таймера бота от 3 до 8 секунд с интервалом 0.1 сек
         TelegramBot bot = new TelegramBot();    //Бот Telegram
 
         private SettingsJSON config = new SettingsJSON();                   //Конфиг
@@ -792,7 +791,6 @@ namespace fermtools
                 User us = bot.GetMe();
                 if ((us != null) && (us.Username == this.textBotName.Text))
                 {
-                    this.timer3.Interval = rndTimer.Next(30, 80) * 100; //Случаный интервал
                     bot.bInit = true;
                     this.timer3.Start();
                     return true;
@@ -811,9 +809,12 @@ namespace fermtools
         }
         private void timer3Tick(object sender, EventArgs e)
         {
+            //Останавливаем таймер, чтобы исключить повторный запуск цикла сообщений бота
+            timer3.Stop();
             //Обработка сообщений для бота
             botMessageCycle();
-            this.timer3.Interval = rndTimer.Next(30, 99) * 100; //Случаный интервал от 3 до 10 секунд
+            //Вновь запускаем таймер
+            timer3.Start();
         }
         private void Send_TestBot(object sender, EventArgs e)
         {
@@ -830,7 +831,7 @@ namespace fermtools
             {
                 foreach (var upd in botUpdate)
                 {
-                    //Если сообщение уже обработано, прерывваемся
+                    //Если сообщение уже обработано, идем дальше
                     if (bot.lastUpd < upd.UpdateId)
                     {
                         //Берем сообщения только конкретного пользователя
