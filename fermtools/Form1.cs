@@ -368,9 +368,9 @@ namespace fermtools
             //Если нажали ОК (или само нажалось) то запускаем процесс перезагрузки, иначе нажали Отмена и ждем MsgBoxTimeout для реакции на сработку.
             if (dlg == System.Windows.Forms.DialogResult.OK)
             {
-                object sender = null; EventArgs e = null;
-                if (!String.IsNullOrEmpty(config.conf.othset.cmd_Script)) runCmd();
-                Reset_Click(sender, e);
+                if (!String.IsNullOrEmpty(config.conf.othset.cmd_Script)) 
+                    runCmd();
+                Reset_Click(null, null);
             }
             else
             {
@@ -828,11 +828,14 @@ namespace fermtools
         private void botMessageCycle()
         {
             bool flagrestart = false;
-            botUpdate = bot.GetUpdates(bot.lastUpd);
+            botUpdate = bot.GetUpdates((bot.lastUpd).ToString());
             if (botUpdate != null)
             {
-                foreach (var upd in botUpdate.Skip(1))
+                foreach (var upd in botUpdate)
                 {
+                    //Если сообщение уже обработано, прерывваемся
+                    if (bot.lastUpd >= upd.UpdateId)
+                        break;
                     //Берем сообщения только конкретного пользователя
                     if (upd.Message.Chat.Username == this.textBotSendTo.Text)
                     {
@@ -892,15 +895,20 @@ namespace fermtools
                                     flagrestart = upd.Message.Text.Equals("/reset " + textFermaName.Text);
                                     if (flagrestart)
                                     {
-                                        //Очищаем очередь и посылаем реквест
-                                        bot.lastUpd = (botUpdate[botUpdate.Count - 1].UpdateId).ToString();
+                                        //чтобы избежать ошибки при увеличении UpdateId, подстрахуемся, при этом upd.UpdateId сохранит старое значение, а очередь очистится значением Int32.MaxValue
+                                        int id = upd.UpdateId;
+                                        try { id++; }
+                                        catch { id = Int32.MaxValue; }
+                                        //Чтобы избежать последующего ресета при перезагрузке фермы, очищаем очередь на сервере
+                                        bot.GetUpdates(id.ToString());
+                                        //Посылаем реквест
                                         bot.SendMessage(bot.chatID, this.textFermaName.Text + " restarts ...", "", upd.Message.MessageId.ToString());
                                     }
                                     break;
                             }
                         }
                         //Сохраняем ИД сообщения для очистки очереди
-                        bot.lastUpd = (upd.UpdateId).ToString();
+                        bot.lastUpd = upd.UpdateId;
                     }
                     //Сохраняем последний чатИД, чтобы бот мог ответить
                     if (!String.IsNullOrEmpty(bot.chatID))
@@ -914,7 +922,7 @@ namespace fermtools
                 }
                 //Защита от спама: если запросы были не мои, чтобы не копились
                 if (botUpdate.Count > 10)
-                    bot.lastUpd = (botUpdate[botUpdate.Count - 1].UpdateId).ToString();
+                    bot.lastUpd = botUpdate[botUpdate.Count - 1].UpdateId;
             }
             if (flagrestart)
                 Reset_Click(null, null);

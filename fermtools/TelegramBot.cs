@@ -17,7 +17,7 @@ namespace fermtools
     class TelegramBot
     {
         public string token;
-        public string lastUpd;
+        public int lastUpd;
         public string chatID;
         public bool bInit;
         public ReplyKeyboardMarkup kbmu;
@@ -28,7 +28,7 @@ namespace fermtools
         public TelegramBot(string tk = "", string id = "")
         {
             token = tk;
-            lastUpd = "";
+            lastUpd = 0;
             chatID = id;
             bInit = false;
             kb1 = new KeyboardButton(); kb1.Text = "one";
