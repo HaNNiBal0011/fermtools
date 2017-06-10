@@ -203,11 +203,8 @@ namespace fermtools
         {
             //Пытаемся брать значение таймера из командной строки, иначе используем значение полученное при инициализации
             if (CmdString(args))
-            {
                 WDtimer = (byte)Convert.ToInt16(args[0]);
-                numericTimeout.Value = WDtimer;
-                SaveWDTSetting(null, null);
-            }
+                
             wdt_s = new SoftWDT();  //Инициализация софтового WDT
             //Добавляем в панель статуса информацию о чипе и показываем
             switch (CurrentWDT)
@@ -834,81 +831,82 @@ namespace fermtools
                 foreach (var upd in botUpdate)
                 {
                     //Если сообщение уже обработано, прерывваемся
-                    if (bot.lastUpd >= upd.UpdateId)
-                        break;
-                    //Берем сообщения только конкретного пользователя
-                    if (upd.Message.Chat.Username == this.textBotSendTo.Text)
+                    if (bot.lastUpd < upd.UpdateId)
                     {
-                        //Сохраняем чатИД
-                        bot.chatID = upd.Message.Chat.Id.ToString();
-                        //Обрабатываем Цикл команд, если установлен соотвествующий флаг, если флаг сброшен, то единственная польза цикла получить чат ИД для уведомлений.
-                        if (this.cbResponceCmd.Checked)
+                        //Берем сообщения только конкретного пользователя
+                        if (upd.Message.Chat.Username == this.textBotSendTo.Text)
                         {
-                            switch (upd.Message.Text)
+                            //Сохраняем чатИД
+                            bot.chatID = upd.Message.Chat.Id.ToString();
+                            //Обрабатываем Цикл команд, если установлен соотвествующий флаг, если флаг сброшен, то единственная польза цикла получить чат ИД для уведомлений.
+                            if (this.cbResponceCmd.Checked)
                             {
-                                case "/fgpu":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label1.Text + "\n" + getParam(0), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/fmem":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label2.Text + "\n" + getParam(1), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/lgpu":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label3.Text + "\n" + getParam(2), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/lmem":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label4.Text + "\n" + getParam(3), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/tgpu":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label5.Text + "\n" + getParam(4), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/fanp":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label6.Text + "\n" + getParam(5), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/fanr":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/all":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ":\n" +
-                                        this.label1.Text + "\n" + getParam(0) + "\n" +
-                                        this.label2.Text + "\n" + getParam(1) + "\n" +
-                                        this.label3.Text + "\n" + getParam(2) + "\n" +
-                                        this.label4.Text + "\n" + getParam(3) + "\n" +
-                                        this.label5.Text + "\n" + getParam(4) + "\n" +
-                                        this.label6.Text + "\n" + getParam(5) + "\n" +
-                                        this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/resetget":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/reseton":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
-                                    fReset = false;
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
-                                    break;
-                                case "/resetoff":
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
-                                    fReset = true;
-                                    bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
-                                    break;
-                                default:
-                                    //Проверяем, не рестарт ли
-                                    flagrestart = upd.Message.Text.Equals("/reset " + textFermaName.Text);
-                                    if (flagrestart)
-                                    {
-                                        //чтобы избежать ошибки при увеличении UpdateId, подстрахуемся, при этом upd.UpdateId сохранит старое значение, а очередь очистится значением Int32.MaxValue
-                                        int id = upd.UpdateId;
-                                        try { id++; }
-                                        catch { id = Int32.MaxValue; }
-                                        //Чтобы избежать последующего ресета при перезагрузке фермы, очищаем очередь на сервере
-                                        bot.GetUpdates(id.ToString());
-                                        //Посылаем реквест
-                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + " restarts ...", "", upd.Message.MessageId.ToString());
-                                    }
-                                    break;
+                                switch (upd.Message.Text)
+                                {
+                                    case "/fgpu":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label1.Text + "\n" + getParam(0), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/fmem":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label2.Text + "\n" + getParam(1), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/lgpu":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label3.Text + "\n" + getParam(2), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/lmem":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label4.Text + "\n" + getParam(3), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/tgpu":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label5.Text + "\n" + getParam(4), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/fanp":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label6.Text + "\n" + getParam(5), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/fanr":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": " + this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/all":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ":\n" +
+                                            this.label1.Text + "\n" + getParam(0) + "\n" +
+                                            this.label2.Text + "\n" + getParam(1) + "\n" +
+                                            this.label3.Text + "\n" + getParam(2) + "\n" +
+                                            this.label4.Text + "\n" + getParam(3) + "\n" +
+                                            this.label5.Text + "\n" + getParam(4) + "\n" +
+                                            this.label6.Text + "\n" + getParam(5) + "\n" +
+                                            this.label7.Text + "\n" + getParam(6), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/resetget":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/reseton":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                        fReset = false;
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    case "/resetoff":
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset is " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                        fReset = true;
+                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
+                                        break;
+                                    default:
+                                        //Проверяем, не рестарт ли
+                                        flagrestart = upd.Message.Text.Equals("/reset " + textFermaName.Text);
+                                        if (flagrestart)
+                                        {
+                                            //чтобы избежать ошибки при увеличении UpdateId, подстрахуемся, при этом upd.UpdateId сохранит старое значение, а очередь очистится значением Int32.MaxValue
+                                            int id = upd.UpdateId;
+                                            try { id++; }
+                                            catch { id = Int32.MaxValue; }
+                                            //Чтобы избежать последующего ресета при перезагрузке фермы, очищаем очередь на сервере
+                                            bot.GetUpdates(id.ToString());
+                                            //Посылаем реквест
+                                            bot.SendMessage(bot.chatID, this.textFermaName.Text + " restarts ...", "", upd.Message.MessageId.ToString());
+                                        }
+                                        break;
+                                }
                             }
+                            //Сохраняем ИД сообщения для очистки очереди
+                            bot.lastUpd = upd.UpdateId;
                         }
-                        //Сохраняем ИД сообщения для очистки очереди
-                        bot.lastUpd = upd.UpdateId;
                     }
                     //Сохраняем последний чатИД, чтобы бот мог ответить
                     if (!String.IsNullOrEmpty(bot.chatID))
