@@ -24,6 +24,7 @@ namespace fermtools
         public string GPUName;
         public string Subsys;
         public int Slot;
+        public int BusWidth;
         public List<OneParam> GPUParams;
         GPUType type;
         //Specific parametr for Nvidia GPU
@@ -69,6 +70,15 @@ namespace fermtools
                         Subsys = "0" + Subsys;
                 }
             }
+            //BusWidth
+            if (NVAPI._NvAPI_GPU_GetCurrentPCIEDownstreamWidth != null)
+            {
+                uint busWidth = 0;
+                if (NVAPI._NvAPI_GPU_GetCurrentPCIEDownstreamWidth(handle, out busWidth) == NvStatus.OK)
+                    BusWidth = (int)busWidth;
+                else
+                    BusWidth = -1;
+            }
             //Param GPU
             GPUParams = new List<OneParam>();
             for (int i = 0; i != num; i++)
@@ -88,6 +98,11 @@ namespace fermtools
             Slot = adapterInfo.BusNumber;
             //Subsys
             Subsys = adapterInfo.UDID.Substring(adapterInfo.UDID.IndexOf("SUBSYS") + 7, 8);
+            //BusWidth
+            if (ADL.ADL_Overdrive5_CurrentActivity_Get(adapterInfo.AdapterIndex, ref adlp) == ADL.ADL_OK)
+                BusWidth = adlp.CurrentBusLanes;
+            else
+                BusWidth = -1;
             //Param GPU
             GPUParams = new List<OneParam>();
             for (int i = 0; i != num; i++)

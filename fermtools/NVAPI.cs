@@ -263,6 +263,7 @@ namespace fermtools
     public delegate NvStatus NvAPI_GPU_GetPCIIdentifiersDelegate(NvPhysicalGpuHandle gpuHandle, out uint deviceId, out uint subSystemId, out uint revisionId, out uint extDeviceId);
     public delegate NvStatus NvAPI_GPU_GetBusSlotIdDelegate(NvPhysicalGpuHandle gpuHandle, out uint busSlotId);
     public delegate NvStatus NvAPI_GPU_GetBusIdDelegate(NvPhysicalGpuHandle gpuHandle, out uint busId);
+    public delegate NvStatus NvAPI_GPU_GetCurrentPCIEDownstreamWidthDelegate(NvPhysicalGpuHandle gpuHandle, out uint busWidth);
 
     private static readonly bool available;
     private static readonly nvapi_QueryInterfaceDelegate nvapi_QueryInterface;
@@ -285,6 +286,7 @@ namespace fermtools
     public static readonly NvAPI_GPU_GetPCIIdentifiersDelegate NvAPI_GPU_GetPCIIdentifiers;
     public static readonly NvAPI_GPU_GetBusSlotIdDelegate NvAPI_GPU_GetBusSlotId;
     public static readonly NvAPI_GPU_GetBusIdDelegate NvAPI_GPU_GetBusId;
+    public static readonly NvAPI_GPU_GetCurrentPCIEDownstreamWidthDelegate _NvAPI_GPU_GetCurrentPCIEDownstreamWidth;
 
     private NVAPI() { }
 
@@ -356,6 +358,7 @@ namespace fermtools
         GetDelegate(0x2DDFB66E, out NvAPI_GPU_GetPCIIdentifiers);
         GetDelegate(0x2A0A350F, out NvAPI_GPU_GetBusSlotId);
         GetDelegate(0x1BE0B8E5, out NvAPI_GPU_GetBusId);
+        GetDelegate(0xD048C3B1, out _NvAPI_GPU_GetCurrentPCIEDownstreamWidth);
 
         available = true;
       }

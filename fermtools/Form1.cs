@@ -165,7 +165,7 @@ namespace fermtools
                     this.par[m].TextAlign = HorizontalAlignment.Right;
                     this.par[m].BackColor = System.Drawing.SystemColors.Window;
                     if (j==0)
-                        tt.SetToolTip(this.par[m], gpupar[i].GPUName + "\nSubsys " + gpupar[i].Subsys + "\nSlot " + gpupar[i].Slot.ToString());
+                        tt.SetToolTip(this.par[m], gpupar[i].GPUName + "\nDevice ID - " + gpupar[i].Subsys.Substring(4) + " " + gpupar[i].Subsys.Substring(0, 4) + "\nSlot - " + gpupar[i].Slot.ToString() + "; BusWidth - x" + gpupar[i].BusWidth.ToString());
                 }
                 //Коэффициенты для срабатывания порога отслеживания
                 gpupar[i].GPUParams[0].Rate = gpupar[i].GPUParams[1].Rate = gpupar[i].GPUParams[2].Rate = gpupar[i].GPUParams[3].Rate = 2;
