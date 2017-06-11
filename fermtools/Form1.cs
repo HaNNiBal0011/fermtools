@@ -56,6 +56,7 @@ namespace fermtools
         private string config_path;             //Путь конфига
         const string rand = "xBW8skR2lmmMs";    //Случайная строка для эмуляции пароля
         TelegramBot bot = new TelegramBot();    //Бот Telegram
+        MinerRemote miner = new MinerRemote();  //Подключение к клеймору
 
         private SettingsJSON config = new SettingsJSON();                   //Конфиг
         private List<Update> botUpdate = new List<Update>();                //Сообщения боту
@@ -67,6 +68,11 @@ namespace fermtools
         public Form1(string[] args)
         {
             InitializeComponent();
+            miner.server = "127.0.0.1";
+            miner.port = 3333;
+            miner.GetStatistic();
+            miner.RestartMiner();
+
             config_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools.json";
             string config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
             if (!config.ReadParam(ref config_path))

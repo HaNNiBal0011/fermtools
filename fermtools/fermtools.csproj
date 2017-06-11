@@ -76,6 +76,7 @@
     <Compile Include="GPUParam.cs" />
     <Compile Include="IOControlCode.cs" />
     <Compile Include="KernelDriver.cs" />
+    <Compile Include="MinerStat.cs" />
     <Compile Include="NVAPI.cs" />
     <Compile Include="NvidiaGroup.cs" />
     <Compile Include="OpenWDT.cs" />
