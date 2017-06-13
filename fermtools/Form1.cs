@@ -71,7 +71,7 @@ namespace fermtools
             miner.server = "127.0.0.1";
             miner.port = 3333;
             miner.GetStatistic();
-            miner.RestartMiner();
+            //miner.RestartMiner();
 
             config_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools.json";
             string config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
@@ -579,7 +579,6 @@ namespace fermtools
                     }
                     break;
                 case WDT_USBOPEN:
-                    Thread.Sleep(30000); //Ресет этого типа происходит практически моментально, поэтому, на всякий случай ждем еще 30 секунд, чтобы сбросились буферы
                     if (!wdt_o.ResetTest())
                         WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
                     break;
