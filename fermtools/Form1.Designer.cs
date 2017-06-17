@@ -90,6 +90,7 @@ namespace fermtools
             this.label23 = new System.Windows.Forms.Label();
             this.nc_K_gpu_clock = new System.Windows.Forms.NumericUpDown();
             this.tabWDT = new System.Windows.Forms.TabPage();
+            this.chPoolConnect = new System.Windows.Forms.CheckBox();
             this.btMiner = new System.Windows.Forms.Button();
             this.label33 = new System.Windows.Forms.Label();
             this.tbClaymorPort = new System.Windows.Forms.TextBox();
@@ -141,7 +142,7 @@ namespace fermtools
             this.timer4 = new System.Windows.Forms.Timer(this.components);
             this.timerSoft = new System.Windows.Forms.Timer(this.components);
             this.timerMiner = new System.Windows.Forms.Timer(this.components);
-            this.chPoolConnect = new System.Windows.Forms.CheckBox();
+            this.thMinerStat = new System.ComponentModel.BackgroundWorker();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -944,6 +945,18 @@ namespace fermtools
             this.tabWDT.Text = "WDT setting";
             this.tabWDT.UseVisualStyleBackColor = true;
             // 
+            // chPoolConnect
+            // 
+            this.chPoolConnect.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chPoolConnect.Location = new System.Drawing.Point(19, 158);
+            this.chPoolConnect.Name = "chPoolConnect";
+            this.chPoolConnect.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chPoolConnect.Size = new System.Drawing.Size(305, 25);
+            this.chPoolConnect.TabIndex = 44;
+            this.chPoolConnect.Text = "Do not restart if there is no pool connection";
+            this.chPoolConnect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chPoolConnect.UseVisualStyleBackColor = true;
+            // 
             // btMiner
             // 
             this.btMiner.Location = new System.Drawing.Point(42, 194);
@@ -1427,17 +1440,10 @@ namespace fermtools
             this.timerMiner.Interval = 10000;
             this.timerMiner.Tick += new System.EventHandler(this.timerMinerStat);
             // 
-            // chPoolConnect
+            // thMinerStat
             // 
-            this.chPoolConnect.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chPoolConnect.Location = new System.Drawing.Point(19, 158);
-            this.chPoolConnect.Name = "chPoolConnect";
-            this.chPoolConnect.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chPoolConnect.Size = new System.Drawing.Size(305, 25);
-            this.chPoolConnect.TabIndex = 44;
-            this.chPoolConnect.Text = "Do not restart if there is no pool connection";
-            this.chPoolConnect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chPoolConnect.UseVisualStyleBackColor = true;
+            this.thMinerStat.WorkerSupportsCancellation = true;
+            this.thMinerStat.DoWork += new System.ComponentModel.DoWorkEventHandler(this.getMinerStat);
             // 
             // Form1
             // 
@@ -1595,6 +1601,7 @@ namespace fermtools
         private System.Windows.Forms.Button btMiner;
         private System.Windows.Forms.Timer timerMiner;
         private System.Windows.Forms.CheckBox chPoolConnect;
+        private System.ComponentModel.BackgroundWorker thMinerStat;
     }
 }
 

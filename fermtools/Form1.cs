@@ -895,7 +895,12 @@ namespace fermtools
                                         bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
                                         break;
                                     case "/miner":
-                                        timerMiner.Start();
+                                        if (this.chClaymoreStat.Checked)
+                                        {
+                                            if (thMinerStat.IsBusy)
+                                                thMinerStat.CancelAsync();
+                                            thMinerStat.RunWorkerAsync();
+                                        }
                                         break;
                                     default:
                                         //Проверяем, не рестарт ли
@@ -1129,7 +1134,11 @@ namespace fermtools
 
         private void timerMinerStat(object sender, EventArgs e)
         {
-            timerMiner.Stop();
+            miner.GetStatistic();
+        }
+
+        private void getMinerStat(object sender, DoWorkEventArgs e)
+        {
             if (miner.GetStatistic())
                 if (bot.bInit)
                     bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + miner.report.ToString());
