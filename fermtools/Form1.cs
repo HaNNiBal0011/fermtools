@@ -894,6 +894,9 @@ namespace fermtools
                                         fReset = true;
                                         bot.SendMessage(bot.chatID, this.textFermaName.Text + ": flag reset set to " + (!fReset).ToString(), "", upd.Message.MessageId.ToString());
                                         break;
+                                    case "/miner":
+                                        timerMiner.Start();
+                                        break;
                                     default:
                                         //Проверяем, не рестарт ли
                                         flagrestart = upd.Message.Text.Equals("/reset " + textFermaName.Text);
@@ -1109,11 +1112,6 @@ namespace fermtools
             }
         }
 
-        private void MinerStat(object sender, EventArgs e)
-        {
-            miner.GetStatistic();
-        }
-
         private void TestMiner(object sender, EventArgs e)
         {
             if (tbClaymorPort.Text.Length > 1)
@@ -1127,6 +1125,14 @@ namespace fermtools
                 MessageBox.Show(miner.report.ToString(), "Test Miner", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             else
                 MessageBox.Show("Claymore miner not found on port " + tbClaymorPort.Text, "Test Miner", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
+        private void timerMinerStat(object sender, EventArgs e)
+        {
+            timerMiner.Stop();
+            if (miner.GetStatistic())
+                if (bot.bInit)
+                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + miner.report.ToString());
         }
     }
 }

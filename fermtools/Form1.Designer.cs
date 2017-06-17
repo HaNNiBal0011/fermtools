@@ -1425,7 +1425,7 @@ namespace fermtools
             // timerMiner
             // 
             this.timerMiner.Interval = 10000;
-            this.timerMiner.Tick += new System.EventHandler(this.MinerStat);
+            this.timerMiner.Tick += new System.EventHandler(this.timerMinerStat);
             // 
             // chPoolConnect
             // 
