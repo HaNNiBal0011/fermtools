@@ -68,10 +68,6 @@ namespace fermtools
         public Form1(string[] args)
         {
             InitializeComponent();
-            miner.server = "127.0.0.1";
-            miner.port = 3333;
-            miner.GetStatistic();
-            //miner.RestartMiner();
 
             config_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools.json";
             string config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
@@ -725,6 +721,7 @@ namespace fermtools
             this.chClaymoreStat.Checked = config.conf.miner.bClaymoreStat;
             this.chClaymoreMon.Checked = config.conf.miner.bClaymoreMon;
             this.tbClaymorPort.Text = config.conf.miner.ClaymorePort.ToString();
+            this.chPoolConnect.Checked = config.conf.miner.bPoolConnect;
         }
         public static string Encrypt(string data)
         {
@@ -1053,6 +1050,7 @@ namespace fermtools
             //Miner setting
             config.conf.miner.bClaymoreMon = chClaymoreMon.Checked;
             config.conf.miner.bClaymoreStat = chClaymoreStat.Checked;
+            config.conf.miner.bPoolConnect = chPoolConnect.Checked;
             if (tbClaymorPort.Text.Length > 1)
             {
                 if (!int.TryParse(tbClaymorPort.Text, out port))
@@ -1113,7 +1111,22 @@ namespace fermtools
 
         private void MinerStat(object sender, EventArgs e)
         {
+            miner.GetStatistic();
+        }
 
+        private void TestMiner(object sender, EventArgs e)
+        {
+            if (tbClaymorPort.Text.Length > 1)
+            {
+                if (!int.TryParse(tbClaymorPort.Text, out miner.port))
+                    miner.port = 3333;
+            }
+            else
+                miner.port = 3333;
+            if (miner.GetStatistic())
+                MessageBox.Show(miner.report.ToString(), "Test Miner", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            else
+                MessageBox.Show("Claymore miner not found on port " + tbClaymorPort.Text, "Test Miner", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
     }
 }

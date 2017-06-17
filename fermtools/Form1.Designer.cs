@@ -141,6 +141,7 @@ namespace fermtools
             this.timer4 = new System.Windows.Forms.Timer(this.components);
             this.timerSoft = new System.Windows.Forms.Timer(this.components);
             this.timerMiner = new System.Windows.Forms.Timer(this.components);
+            this.chPoolConnect = new System.Windows.Forms.CheckBox();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -922,6 +923,7 @@ namespace fermtools
             // 
             // tabWDT
             // 
+            this.tabWDT.Controls.Add(this.chPoolConnect);
             this.tabWDT.Controls.Add(this.btMiner);
             this.tabWDT.Controls.Add(this.label33);
             this.tabWDT.Controls.Add(this.tbClaymorPort);
@@ -950,6 +952,7 @@ namespace fermtools
             this.btMiner.TabIndex = 43;
             this.btMiner.Text = "Test miner";
             this.btMiner.UseVisualStyleBackColor = true;
+            this.btMiner.Click += new System.EventHandler(this.TestMiner);
             // 
             // label33
             // 
@@ -1424,6 +1427,18 @@ namespace fermtools
             this.timerMiner.Interval = 10000;
             this.timerMiner.Tick += new System.EventHandler(this.MinerStat);
             // 
+            // chPoolConnect
+            // 
+            this.chPoolConnect.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chPoolConnect.Location = new System.Drawing.Point(19, 158);
+            this.chPoolConnect.Name = "chPoolConnect";
+            this.chPoolConnect.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chPoolConnect.Size = new System.Drawing.Size(305, 25);
+            this.chPoolConnect.TabIndex = 44;
+            this.chPoolConnect.Text = "Do not restart if there is no pool connection";
+            this.chPoolConnect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chPoolConnect.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(508, 286);
@@ -1579,6 +1594,7 @@ namespace fermtools
         private System.Windows.Forms.CheckBox chClaymoreStat;
         private System.Windows.Forms.Button btMiner;
         private System.Windows.Forms.Timer timerMiner;
+        private System.Windows.Forms.CheckBox chPoolConnect;
     }
 }
 

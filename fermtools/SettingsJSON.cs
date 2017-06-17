@@ -84,6 +84,7 @@ namespace fermtools
             conf.miner.bClaymoreStat = false;
             conf.miner.bClaymoreMon = false;
             conf.miner.ClaymorePort = 3333;
+            conf.miner.bPoolConnect = false;
 
             conf.mailset.tbSmtpServer = "";
             conf.mailset.tbMailFrom = "";
@@ -166,6 +167,7 @@ namespace fermtools
         public bool bClaymoreStat { get; set; }
         public bool bClaymoreMon { get; set; }
         public int ClaymorePort { get; set; }
+        public bool bPoolConnect { get; set; }
     }
     public class MailSettings
     {

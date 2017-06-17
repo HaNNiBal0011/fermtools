@@ -17,12 +17,14 @@ namespace fermtools
         public SatisticResult statres;
         public RestartResult restartres;
         public string server;
+        public StringBuilder report;
         public int port;
         public MinerRemote()
         {
             statcmd = new CommandSet("miner_getstat1");
             restartcmd = new CommandSet("miner_restart");
             statres = new SatisticResult();
+            report = new StringBuilder();
             server = "127.0.0.1";
             port = 3333;
         }
@@ -31,18 +33,36 @@ namespace fermtools
             statcmd = new CommandSet("miner_getstat1");
             restartcmd = new CommandSet("miner_restart");
             statres = new SatisticResult();
+            report = new StringBuilder();
             server = "127.0.0.1";
             port = p;
         }
         public bool GetStatistic()
         {
+            report.Clear();
             string json = JsonConvert.SerializeObject(statcmd, Formatting.Indented);
             if (Communicate(ref json))
             {
                 try { statres = JsonConvert.DeserializeObject<SatisticResult>(json); }
                 catch { return false; }
                 if (statres != null)
+                {
+                    if (statres.result.Count == 9)
+                    {
+                        report.AppendLine("Version: Claymore " + statres.result[0]);
+                        report.AppendLine("Runing, min: " + statres.result[1]);
+                        report.AppendLine("ETH  (hr, sh, rej): " + statres.result[2]);
+                        report.AppendLine("ETH hr for GPUs: " + statres.result[3]);
+                        report.AppendLine("DCR  (hr, sh, rej): " + statres.result[4]);
+                        report.AppendLine("DCR hr for GPUs: " + statres.result[5]);
+                        report.AppendLine("GPUs  (T, fan %): " + statres.result[6]);
+                        report.AppendLine(statres.result[7]);
+                        report.AppendLine("ETH inv,ETH pool sw,DCR inv,DCR pool sw: " + statres.result[8]);
+                    }
+                    else
+                        report.AppendLine("This version Fermtools is not compatible with the version miner.");
                     return true;
+                }
             }
             return false;
         }
