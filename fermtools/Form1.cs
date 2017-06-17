@@ -721,6 +721,10 @@ namespace fermtools
                     radioSoftWDT.Checked = true;
                     break;
             }
+            //Miner setting
+            this.chClaymoreStat.Checked = config.conf.miner.bClaymoreStat;
+            this.chClaymoreMon.Checked = config.conf.miner.bClaymoreMon;
+            this.tbClaymorPort.Text = config.conf.miner.ClaymorePort.ToString();
         }
         public static string Encrypt(string data)
         {
@@ -1037,6 +1041,7 @@ namespace fermtools
         }
         private void SaveWDTSetting(object sender, EventArgs e)
         {
+            int port;
             config.conf.wdtset.WDtimer = (Byte) this.numericTimeout.Value;
             config.conf.wdtset.wdtPort = cbCOMPort.Text;
             if (radioSoftWDT.Checked)
@@ -1045,8 +1050,19 @@ namespace fermtools
                 config.conf.wdtset.CurrentWDT = WDT_ONBOARD;
             if (radioOpendevUSBWDT.Checked)
                 config.conf.wdtset.CurrentWDT = WDT_USBOPEN;
+            //Miner setting
+            config.conf.miner.bClaymoreMon = chClaymoreMon.Checked;
+            config.conf.miner.bClaymoreStat = chClaymoreStat.Checked;
+            if (tbClaymorPort.Text.Length > 1)
+            {
+                if (!int.TryParse(tbClaymorPort.Text, out port))
+                    port = 3333;
+            }
+            else
+                port = 3333;
+            config.conf.miner.ClaymorePort = port;
             config.WriteParam(ref config_path);
-            MessageBox.Show("WDT settings save successfully\nNew values will be valid after the restart of the program", "Save WDT setting", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            MessageBox.Show("WDT and miner settings save successfully\nNew values will be valid after the restart of the program", "Save WDT and miner setting", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
         private void FindComPorts()
         {
@@ -1093,6 +1109,11 @@ namespace fermtools
                 WriteEventLog(w.GetReport(), EventLogEntryType.Warning);
                 MessageBox.Show("Open WDT not found on port " + cbCOMPort.Text + "\nFor details, see the eventlog", "Test WDT port", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             }
+        }
+
+        private void MinerStat(object sender, EventArgs e)
+        {
+
         }
     }
 }

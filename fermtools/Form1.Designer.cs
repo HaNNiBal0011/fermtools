@@ -90,6 +90,11 @@ namespace fermtools
             this.label23 = new System.Windows.Forms.Label();
             this.nc_K_gpu_clock = new System.Windows.Forms.NumericUpDown();
             this.tabWDT = new System.Windows.Forms.TabPage();
+            this.btMiner = new System.Windows.Forms.Button();
+            this.label33 = new System.Windows.Forms.Label();
+            this.tbClaymorPort = new System.Windows.Forms.TextBox();
+            this.chClaymoreMon = new System.Windows.Forms.CheckBox();
+            this.chClaymoreStat = new System.Windows.Forms.CheckBox();
             this.btTestPort = new System.Windows.Forms.Button();
             this.label32 = new System.Windows.Forms.Label();
             this.cbCOMPort = new System.Windows.Forms.ComboBox();
@@ -135,6 +140,7 @@ namespace fermtools
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timer4 = new System.Windows.Forms.Timer(this.components);
             this.timerSoft = new System.Windows.Forms.Timer(this.components);
+            this.timerMiner = new System.Windows.Forms.Timer(this.components);
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -916,6 +922,11 @@ namespace fermtools
             // 
             // tabWDT
             // 
+            this.tabWDT.Controls.Add(this.btMiner);
+            this.tabWDT.Controls.Add(this.label33);
+            this.tabWDT.Controls.Add(this.tbClaymorPort);
+            this.tabWDT.Controls.Add(this.chClaymoreMon);
+            this.tabWDT.Controls.Add(this.chClaymoreStat);
             this.tabWDT.Controls.Add(this.btTestPort);
             this.tabWDT.Controls.Add(this.label32);
             this.tabWDT.Controls.Add(this.cbCOMPort);
@@ -931,6 +942,57 @@ namespace fermtools
             this.tabWDT.Text = "WDT setting";
             this.tabWDT.UseVisualStyleBackColor = true;
             // 
+            // btMiner
+            // 
+            this.btMiner.Location = new System.Drawing.Point(42, 194);
+            this.btMiner.Name = "btMiner";
+            this.btMiner.Size = new System.Drawing.Size(89, 29);
+            this.btMiner.TabIndex = 43;
+            this.btMiner.Text = "Test miner";
+            this.btMiner.UseVisualStyleBackColor = true;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(282, 99);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(135, 17);
+            this.label33.TabIndex = 42;
+            this.label33.Text = "Claymore miner port";
+            // 
+            // tbClaymorPort
+            // 
+            this.tbClaymorPort.Location = new System.Drawing.Point(423, 96);
+            this.tbClaymorPort.Name = "tbClaymorPort";
+            this.tbClaymorPort.Size = new System.Drawing.Size(63, 22);
+            this.tbClaymorPort.TabIndex = 41;
+            this.tbClaymorPort.Text = "3333";
+            this.tbClaymorPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // chClaymoreMon
+            // 
+            this.chClaymoreMon.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chClaymoreMon.Location = new System.Drawing.Point(19, 127);
+            this.chClaymoreMon.Name = "chClaymoreMon";
+            this.chClaymoreMon.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chClaymoreMon.Size = new System.Drawing.Size(260, 25);
+            this.chClaymoreMon.TabIndex = 38;
+            this.chClaymoreMon.Text = "Monitoring Claymore miner statistics";
+            this.chClaymoreMon.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chClaymoreMon.UseVisualStyleBackColor = true;
+            // 
+            // chClaymoreStat
+            // 
+            this.chClaymoreStat.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chClaymoreStat.Location = new System.Drawing.Point(19, 96);
+            this.chClaymoreStat.Name = "chClaymoreStat";
+            this.chClaymoreStat.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chClaymoreStat.Size = new System.Drawing.Size(230, 25);
+            this.chClaymoreStat.TabIndex = 37;
+            this.chClaymoreStat.Text = "Claymore miner statistics send";
+            this.chClaymoreStat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chClaymoreStat.UseVisualStyleBackColor = true;
+            // 
             // btTestPort
             // 
             this.btTestPort.Location = new System.Drawing.Point(135, 194);
@@ -944,16 +1006,16 @@ namespace fermtools
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(16, 99);
+            this.label32.Location = new System.Drawing.Point(282, 70);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(70, 17);
+            this.label32.Size = new System.Drawing.Size(102, 17);
             this.label32.TabIndex = 30;
-            this.label32.Text = "Port WDT";
+            this.label32.Text = "Port USB WDT";
             // 
             // cbCOMPort
             // 
             this.cbCOMPort.FormattingEnabled = true;
-            this.cbCOMPort.Location = new System.Drawing.Point(105, 96);
+            this.cbCOMPort.Location = new System.Drawing.Point(390, 66);
             this.cbCOMPort.Name = "cbCOMPort";
             this.cbCOMPort.Size = new System.Drawing.Size(97, 24);
             this.cbCOMPort.TabIndex = 3;
@@ -1357,6 +1419,11 @@ namespace fermtools
             this.timerSoft.Interval = 60000;
             this.timerSoft.Tick += new System.EventHandler(this.SoftReset);
             // 
+            // timerMiner
+            // 
+            this.timerMiner.Interval = 10000;
+            this.timerMiner.Tick += new System.EventHandler(this.MinerStat);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(508, 286);
@@ -1506,6 +1573,12 @@ namespace fermtools
         private System.Windows.Forms.Button btSaveWDT;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Button btTestPort;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox tbClaymorPort;
+        private System.Windows.Forms.CheckBox chClaymoreMon;
+        private System.Windows.Forms.CheckBox chClaymoreStat;
+        private System.Windows.Forms.Button btMiner;
+        private System.Windows.Forms.Timer timerMiner;
     }
 }
 

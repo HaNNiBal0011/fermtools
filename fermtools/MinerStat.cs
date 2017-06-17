@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 
@@ -24,15 +23,15 @@ namespace fermtools
             statcmd = new CommandSet("miner_getstat1");
             restartcmd = new CommandSet("miner_restart");
             statres = new SatisticResult();
-            server = string.Empty;
-            port = 0;
+            server = "127.0.0.1";
+            port = 3333;
         }
-        public MinerRemote(string srv, int p)
+        public MinerRemote(int p)
         {
             statcmd = new CommandSet("miner_getstat1");
             restartcmd = new CommandSet("miner_restart");
             statres = new SatisticResult();
-            server = srv;
+            server = "127.0.0.1";
             port = p;
         }
         public bool GetStatistic()

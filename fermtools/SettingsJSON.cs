@@ -81,6 +81,10 @@ namespace fermtools
             conf.wdtset.WDtimer = 10;
             conf.wdtset.wdtPort = "";
 
+            conf.miner.bClaymoreStat = false;
+            conf.miner.bClaymoreMon = false;
+            conf.miner.ClaymorePort = 3333;
+
             conf.mailset.tbSmtpServer = "";
             conf.mailset.tbMailFrom = "";
             conf.mailset.tbMailTo = "";
@@ -113,12 +117,14 @@ namespace fermtools
         {
             monset = new MonitoringSettings();
             wdtset = new WDTSettings();
+            miner = new MinerSettings();
             mailset = new MailSettings();
             botset = new BotSettings();
             othset = new OtherSettings();
         }
         public MonitoringSettings monset { get; set; }
         public WDTSettings wdtset { get; set; }
+        public MinerSettings miner { get; set; }
         public MailSettings mailset { get; set; }
         public BotSettings botset { get; set; }
         public OtherSettings othset { get; set; }
@@ -152,6 +158,14 @@ namespace fermtools
         public byte WDtimer { get; set; }
         public int CurrentWDT { get; set; }
         public string wdtPort { get; set; }
+    }
+
+    public class MinerSettings
+    {
+        //WDT setting
+        public bool bClaymoreStat { get; set; }
+        public bool bClaymoreMon { get; set; }
+        public int ClaymorePort { get; set; }
     }
     public class MailSettings
     {
