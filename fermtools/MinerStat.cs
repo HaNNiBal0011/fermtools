@@ -19,6 +19,8 @@ namespace fermtools
         public string server;
         public StringBuilder report;
         public int port;
+        public int cardcount;
+        public List<int> hr = new List<int>();
         public MinerRemote()
         {
             statcmd = new CommandSet("miner_getstat1");
@@ -27,6 +29,7 @@ namespace fermtools
             report = new StringBuilder();
             server = "127.0.0.1";
             port = 3333;
+            cardcount = 0;
         }
         public MinerRemote(int p)
         {
@@ -36,35 +39,78 @@ namespace fermtools
             report = new StringBuilder();
             server = "127.0.0.1";
             port = p;
+            cardcount = 0;
         }
         public bool GetStatistic()
         {
+            bool res = false;
             report.Clear();
             string json = JsonConvert.SerializeObject(statcmd, Formatting.Indented);
             if (Communicate(ref json))
             {
                 try { statres = JsonConvert.DeserializeObject<SatisticResult>(json); }
-                catch { return false; }
+                catch { return res; }
                 if (statres != null)
                 {
                     if (statres.result.Count == 9)
                     {
                         report.AppendLine("Version: Claymore " + statres.result[0]);
                         report.AppendLine("Runing, min: " + statres.result[1]);
-                        report.AppendLine("ETH  (hr, sh, rej): " + statres.result[2]);
-                        report.AppendLine("ETH hr for GPUs: " + statres.result[3]);
-                        report.AppendLine("DCR  (hr, sh, rej): " + statres.result[4]);
-                        report.AppendLine("DCR hr for GPUs: " + statres.result[5]);
-                        report.AppendLine("GPUs  (T, fan %): " + statres.result[6]);
+                        report.AppendLine("ETH (hr,sh,rej): " + statres.result[2]);
+                        report.AppendLine("ETH hr GPUs: " + statres.result[3]);
+                        report.AppendLine("DCR (hr,sh,rej): " + statres.result[4]);
+                        report.AppendLine("DCR hr GPUs: " + statres.result[5]);
+                        report.AppendLine("GPUs (T, fan %): " + statres.result[6]);
                         report.AppendLine(statres.result[7]);
-                        report.AppendLine("ETH inv,ETH pool sw,DCR inv,DCR pool sw: " + statres.result[8]);
+                        report.AppendLine("ETH(inv,pool sw),DCR(inv,pool sw): " + statres.result[8]);
+                        if (hr.Capacity == 0)
+                            res = InitHr(statres.result[3]);
+                        else
+                            res = GettHr(statres.result[3]);
                     }
                     else
                         report.AppendLine("This version Fermtools is not compatible with the version miner.");
-                    return true;
                 }
             }
-            return false;
+            return res;
+        }
+        public bool InitHr(string sres)
+        {
+            bool res = false;
+            string[] shr = sres.Split(';');
+            if (shr.Length > 0)
+            {
+                for (int i = 0; i < shr.Length; i++)
+                {
+                    int hash = 0;
+                    if (int.TryParse(shr[i], out hash))
+                        hr.Add(hash);
+                    else
+                        hr.Add(0);
+                }
+                res = true;
+            }
+            return res;
+        }
+        public bool GettHr(string sres)
+        {
+            bool res = false;
+            string[] shr = sres.Split(';');
+            if (shr.Length > 0)
+            {
+                if (hr.Count != shr.Length)
+                    return res;
+                for (int i = 0; i < shr.Length; i++)
+                {
+                    int hash = 0;
+                    if (int.TryParse(shr[i], out hash))
+                        hr[i] = hash;
+                    else
+                        hr[i] = 0;
+                }
+                res = true;
+            }
+            return res;
         }
         public bool RestartMiner()
         {
