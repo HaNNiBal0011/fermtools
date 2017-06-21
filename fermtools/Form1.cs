@@ -840,7 +840,7 @@ namespace fermtools
                     //Если сообщение уже обработано, идем дальше
                     if (bot.lastUpd < upd.UpdateId)
                     {
-                        if (upd.Message != null)
+                        if ((upd.Message != null) && (upd.Message.Chat != null) && (upd.Message.Chat.Username != null))
                         {
                             //Берем сообщения только конкретного пользователя
                             if (upd.Message.Chat.Username == this.textBotSendTo.Text)
