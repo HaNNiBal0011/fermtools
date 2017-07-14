@@ -105,6 +105,8 @@ namespace fermtools
                 MessageBox.Show("Not found compatible videocards", "Fermtools", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 Application.Exit();
             }
+            //Сортировка видеокарт по номеру слота
+            gpupar.Sort(delegate(GPUParam one, GPUParam two) { return one.Slot.CompareTo(two.Slot); });
             SetMonitoringSetting(); //Восстанавливаем параметры мониторинга из конфига (после инициализации видеокарт)
             //Устанавливаем длительность задержки монторинга и запускаем таймер задержки мониторинга, если он еще не запущен
             this.timer4.Interval = MonDelay;
