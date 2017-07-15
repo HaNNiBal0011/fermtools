@@ -386,6 +386,15 @@ namespace fermtools
             {
                 if (!String.IsNullOrEmpty(config.conf.othset.cmd_Script)) 
                     runCmd();
+                if (config.conf.miner.bPoolConnect) //Если установлен ффлаг контроля пула через майнер отменяем ресет если майнер не видит пула
+                {
+                    if (!miner.fPools)
+                    {
+                        Thread.Sleep(MsgBoxTimeout);
+                        fMessage = false;
+                        return;
+                    }
+                }
                 Reset_Click(null, null);
             }
             else
@@ -1168,7 +1177,6 @@ namespace fermtools
             else
                 MessageBox.Show("Claymore miner not found on port " + tbClaymorPort.Text, "Test Miner", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
-
         private void timerMinerStat(object sender, EventArgs e)
         {
             StringBuilder report = new StringBuilder();

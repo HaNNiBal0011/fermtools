@@ -20,6 +20,7 @@ namespace fermtools
         public StringBuilder report;
         public int port;
         public int cardcount;
+        public bool fPools;
         public List<int> hr = new List<int>();
         public MinerRemote()
         {
@@ -30,6 +31,7 @@ namespace fermtools
             server = "127.0.0.1";
             port = 3333;
             cardcount = 0;
+            fPools = true;
         }
         public MinerRemote(int p)
         {
@@ -40,6 +42,7 @@ namespace fermtools
             server = "127.0.0.1";
             port = p;
             cardcount = 0;
+            fPools = true;
         }
         public bool GetStatistic()
         {
@@ -62,6 +65,10 @@ namespace fermtools
                         report.AppendLine("DCR hr GPUs: " + statres.result[5]);
                         report.AppendLine("GPUs (T, fan %): " + statres.result[6]);
                         report.AppendLine(statres.result[7]);
+                        if (String.IsNullOrEmpty(statres.result[7]))
+                            fPools = false;
+                        else
+                            fPools = true;
                         report.AppendLine("ETH(inv,sw),DCR(inv,sw): " + statres.result[8]);
                         if (hr.Capacity == 0)
                             res = InitHr(statres.result[3]);
