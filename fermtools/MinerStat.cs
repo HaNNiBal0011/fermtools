@@ -62,7 +62,7 @@ namespace fermtools
                         report.AppendLine("DCR hr GPUs: " + statres.result[5]);
                         report.AppendLine("GPUs (T, fan %): " + statres.result[6]);
                         report.AppendLine(statres.result[7]);
-                        report.AppendLine("ETH(inv,pool sw),DCR(inv,pool sw): " + statres.result[8]);
+                        report.AppendLine("ETH(inv,sw),DCR(inv,sw): " + statres.result[8]);
                         if (hr.Capacity == 0)
                             res = InitHr(statres.result[3]);
                         else

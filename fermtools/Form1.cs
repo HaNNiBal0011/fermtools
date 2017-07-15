@@ -144,7 +144,7 @@ namespace fermtools
             if (config.conf.miner.bClaymoreMon) //Стартуем поток мониторинга майнера время мониторинга задается в конструкторе формы
             {
                 this.timerMiner.Start();
-                this.label4.Text = "Hasrate, MH/s"; //Меняем запись для вывода хэшрейта в 3-м параметре
+                this.label4.Text = "Hashrate, MH/s"; //Меняем запись для вывода хэшрейта в 3-м параметре
             }
             config.conf.othset.isReset = true;
             config.WriteParam(ref config_path); //Устанавливаем и сохраняем состояние ресета
@@ -353,8 +353,12 @@ namespace fermtools
                 gpupar[i].Update(TickCountMax);
                 for (int j = 0; j != NumPar; j++)
                 {
-                    if (config.conf.miner.bClaymoreMon && (j == 3) && (miner.hr.Count == CardCount))
-                        this.par[j + i * NumPar].Text = (miner.hr[i]/1000.0).ToString("0.0");
+                    if (this.timerMiner.Enabled && (j == 3) && (miner.hr.Count == CardCount))
+                    {
+                        //Выводим значение хэшрейта и пишем его в параметры ГПУ
+                        this.par[j + i * NumPar].Text = (miner.hr[i] / 1000.0).ToString("0.0");
+                        gpupar[i].GPUParams[j].ParCollect[gpupar[i].GPUParams[j].ParCollect.Count - 1] = miner.hr[i];
+                    }
                     else
                         this.par[j + i * NumPar].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
                 }
@@ -441,7 +445,7 @@ namespace fermtools
                 }
             }
             //Мониторим майнер, если выставлен соответствующий флаг
-            if (config.conf.miner.bClaymoreMon)
+            if (this.timerMiner.Enabled)
             {
                 for (int j=0; j!=miner.hr.Count; j++)
                 {
@@ -1168,37 +1172,47 @@ namespace fermtools
         private void timerMinerStat(object sender, EventArgs e)
         {
             StringBuilder report = new StringBuilder();
-            if (!this.timer4.Enabled) //Выключаем мониторинг на время задержки
-            {
-                if (miner.GetStatistic())
-                {
-                    fMinerFail = false; //Сбрасываем флаг, если майнер ответил
-                }
-                else
-                {
-                    if (!fMinerFail) //Сообщаем один раз
-                    {
-                        WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
-                        if (bot.bInit)
-                            bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found");
-                        fMinerFail = true;
-                    }
-                }
-            }
-        }
-
-        private void getMinerStat(object sender, DoWorkEventArgs e)
-        {
             if (miner.GetStatistic())
             {
-                if (bot.bInit)
-                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + miner.report.ToString());
+                fMinerFail = false; //Сбрасываем флаг, если майнер ответил
             }
             else
             {
-                WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
+                if (!fMinerFail) //Сообщаем один раз
+                {
+                    WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
+                    if (bot.bInit)
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
+                    fMinerFail = true;
+                }
+            }
+        }
+        private void getMinerStat(object sender, DoWorkEventArgs e)
+        {
+            if (this.timerMiner.Enabled)
+            {
                 if (bot.bInit)
-                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
+                {
+                    if (!String.IsNullOrEmpty(miner.report.ToString()))
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + miner.report.ToString());
+                    else
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\nMiner stat empty, retrive after 1-2 min.");
+                }
+
+            }
+            else
+            {
+                if (miner.GetStatistic())
+                {
+                    if (bot.bInit)
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + miner.report.ToString());
+                }
+                else
+                {
+                    WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
+                    if (bot.bInit)
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
+                }
             }
         }
     }
