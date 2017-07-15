@@ -55,6 +55,7 @@ namespace fermtools
         ToolTip pbTT;                           //Инфа для отображения состояния WDT
         int CardCount;                          //Количество найденных видеокарт
         private string config_path;             //Путь конфига
+        private string config_path0;
         const string rand = "xBW8skR2lmmMs";    //Случайная строка для эмуляции пароля
         TelegramBot bot = new TelegramBot();    //Бот Telegram
         MinerRemote miner = new MinerRemote();  //Подключение к клеймору
@@ -71,7 +72,7 @@ namespace fermtools
             InitializeComponent();
 
             config_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools.json";
-            string config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
+            config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
             if (!config.ReadParam(ref config_path))
             {
                 if (config.ReadParam(ref config_path0)) //Читаем резервную копию
@@ -689,6 +690,7 @@ namespace fermtools
             config.conf.mailset.cbOnEmail = this.cbOnEmail.Checked;
             config.conf.mailset.cbOnSendStart = this.cbOnSendStart.Checked;
             config.WriteParam(ref config_path);
+            config.WriteParam(ref config_path0);
             MessageBox.Show("Mail settings save successfully", "Save mail", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
         private void SaveBotSetting(object sender, EventArgs e)
@@ -701,6 +703,7 @@ namespace fermtools
             config.conf.botset.cbTelegramOn = this.cbTelegramOn.Checked;
             config.conf.botset.cbResponceCmd = this.cbResponceCmd.Checked;
             config.WriteParam(ref config_path);
+            config.WriteParam(ref config_path0);
             MessageBox.Show("Bot settings save successfully", "Save bot", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
         private void RestoreSetting()
@@ -1009,6 +1012,7 @@ namespace fermtools
             config.conf.monset.nc_DelayMon = this.nc_DelayMon.Value;
             config.conf.monset.cb_NoUp = this.cb_NoUp.Checked;
             config.WriteParam(ref config_path);
+            config.WriteParam(ref config_path0);
             SetMonitoringSetting(); //Устанавливаем текущие параметры мониторинга из котролов в переменные
             MessageBox.Show("Monitoring settings save successfully", "Save monitoring", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
@@ -1114,6 +1118,7 @@ namespace fermtools
                 port = 3333;
             config.conf.miner.ClaymorePort = port;
             config.WriteParam(ref config_path);
+            config.WriteParam(ref config_path0);
             MessageBox.Show("WDT and miner settings save successfully\nNew values will be valid after the restart of the program", "Save WDT and miner setting", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
         private void FindComPorts()
@@ -1221,6 +1226,30 @@ namespace fermtools
                     if (bot.bInit)
                         bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
                 }
+            }
+        }
+
+        private void chClaymoreStat_Changed(object sender, EventArgs e)
+        {
+            if (chClaymoreStat.Checked)
+                chClaymoreMon.Enabled = true;
+            else
+            {
+                chClaymoreMon.Enabled = false;
+                chClaymoreMon.Checked = false;
+                chPoolConnect.Enabled = false;
+                chPoolConnect.Checked = false;
+            }
+        }
+
+        private void chClaymoreMon_Changed(object sender, EventArgs e)
+        {
+            if (chClaymoreMon.Checked)
+                chPoolConnect.Enabled = true;
+            else
+            {
+                chPoolConnect.Enabled = false;
+                chPoolConnect.Checked = false;
             }
         }
     }

@@ -948,6 +948,7 @@ namespace fermtools
             // chPoolConnect
             // 
             this.chPoolConnect.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chPoolConnect.Enabled = false;
             this.chPoolConnect.Location = new System.Drawing.Point(19, 158);
             this.chPoolConnect.Name = "chPoolConnect";
             this.chPoolConnect.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -988,6 +989,7 @@ namespace fermtools
             // chClaymoreMon
             // 
             this.chClaymoreMon.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chClaymoreMon.Enabled = false;
             this.chClaymoreMon.Location = new System.Drawing.Point(19, 127);
             this.chClaymoreMon.Name = "chClaymoreMon";
             this.chClaymoreMon.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -996,6 +998,7 @@ namespace fermtools
             this.chClaymoreMon.Text = "Monitoring Claymore miner statistics";
             this.chClaymoreMon.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chClaymoreMon.UseVisualStyleBackColor = true;
+            this.chClaymoreMon.CheckedChanged += new System.EventHandler(this.chClaymoreMon_Changed);
             // 
             // chClaymoreStat
             // 
@@ -1008,6 +1011,7 @@ namespace fermtools
             this.chClaymoreStat.Text = "Claymore miner statistics send";
             this.chClaymoreStat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chClaymoreStat.UseVisualStyleBackColor = true;
+            this.chClaymoreStat.CheckedChanged += new System.EventHandler(this.chClaymoreStat_Changed);
             // 
             // btTestPort
             // 
