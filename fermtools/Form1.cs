@@ -45,6 +45,7 @@ namespace fermtools
         bool fReset;                            //Устанавливается, если уже запущен процесс перезагрузки компьютера
         bool fMessage;                          //Устанавливается, если выведена сообщение перезагрузки
         bool fNoUp;                             //Не реагировать на повышение параметров при мониторинге
+        bool fMinerFail;                        //Флаг отправки сообщения о сбое мониторинга майнера
         byte WDtimer;                           //Интервал в минутах для записи в WatchDog Timer
         Thread pipeServerTh;                    //Поток для работы именованного канала
         ManualResetEvent signal;                //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
@@ -97,6 +98,7 @@ namespace fermtools
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
             fMessage = false; //Сообщение не выведено
+            fMinerFail = false; //Пока не знаем что с майнером
             nvigr = new NvidiaGroup(ref gpupar, NumPar); //Добавляем в группу видеокарты NVIDIA
             atigr = new ATIGroup(ref gpupar, NumPar); //Группа видеокарт ATI
             CardCount = gpupar.Count; //Сколько всего видеокарт
@@ -127,8 +129,6 @@ namespace fermtools
                     bot.SendMessage(bot.chatID, this.textFermaName.Text + " restart after freze");
             if (this.cbOnEmail.Checked && this.cbOnSendStart.Checked && config.conf.othset.isReset)
                 sendMail("Computer restart after freze"); //Если был хардресет отправляем мыло
-            config.conf.othset.isReset = true;
-            config.WriteParam(ref config_path);//Устанавливаем и сохраняем состояние ресета
             if (config.conf.othset.CompareGPUCountReset) //Перезагрузка, если видеокарт меньше, чем должно быть
             {
                 if (config.conf.othset.GPUCount > CardCount)
@@ -141,6 +141,13 @@ namespace fermtools
                     Reset_Click(null, null);
                 }
             }
+            if (config.conf.miner.bClaymoreMon) //Стартуем поток мониторинга майнера время мониторинга задается в конструкторе формы
+            {
+                this.timerMiner.Start();
+                this.label4.Text = "Hasrate, MH/s"; //Меняем запись для вывода хэшрейта в 3-м параметре
+            }
+            config.conf.othset.isReset = true;
+            config.WriteParam(ref config_path); //Устанавливаем и сохраняем состояние ресета
         }
         private string GetReportVideoCard()
         {
@@ -345,7 +352,12 @@ namespace fermtools
             {
                 gpupar[i].Update(TickCountMax);
                 for (int j = 0; j != NumPar; j++)
-                    this.par[j+i*NumPar].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
+                {
+                    if (config.conf.miner.bClaymoreMon && (j == 3) && (miner.hr.Count == CardCount))
+                        this.par[j + i * NumPar].Text = (miner.hr[i]/1000.0).ToString("0.0");
+                    else
+                        this.par[j + i * NumPar].Text = gpupar[i].GPUParams[j].ParCollect.Last().ToString();
+                }
             }
             //Мониторим, если не инициирована перезагрузка, не отображается сообщение и не кончилось время задержки на запуск мониторинга
             if (!fReset && !fMessage && !this.timer4.Enabled)
@@ -425,6 +437,20 @@ namespace fermtools
                             report.AppendLine();
                             res = true;
                         }
+                    }
+                }
+            }
+            //Мониторим майнер, если выставлен соответствующий флаг
+            if (config.conf.miner.bClaymoreMon)
+            {
+                for (int j=0; j!=miner.hr.Count; j++)
+                {
+                    if (miner.hr[j] == 0)
+                    {
+                        report.AppendLine(gpupar[j].GPUName + ", subsys: " + gpupar[j].Subsys + ", slot: " + gpupar[j].Slot.ToString());
+                        report.AppendLine("Hashrate = " + miner.hr[j].ToString());
+                        report.AppendLine();
+                        res = true;
                     }
                 }
             }
@@ -542,6 +568,8 @@ namespace fermtools
                 this.timer3.Stop();
             if (this.timer4.Enabled)
                 this.timer4.Stop();
+            if (this.timerMiner.Enabled)
+                this.timerMiner.Stop();
             //Сбрасываем состояние ресета и сохраняем в файл
             config.conf.othset.isReset = false;
             config.WriteParam(ref config_path);
@@ -1140,14 +1168,22 @@ namespace fermtools
         private void timerMinerStat(object sender, EventArgs e)
         {
             StringBuilder report = new StringBuilder();
-            if (miner.GetStatistic())
+            if (!this.timer4.Enabled) //Выключаем мониторинг на время задержки
             {
-
-            }
-            else
-            {
-                WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
-                bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found");
+                if (miner.GetStatistic())
+                {
+                    fMinerFail = false; //Сбрасываем флаг, если майнер ответил
+                }
+                else
+                {
+                    if (!fMinerFail) //Сообщаем один раз
+                    {
+                        WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
+                        if (bot.bInit)
+                            bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found");
+                        fMinerFail = true;
+                    }
+                }
             }
         }
 
@@ -1161,7 +1197,8 @@ namespace fermtools
             else
             {
                 WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
-                bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found");
+                if (bot.bInit)
+                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
             }
         }
     }
