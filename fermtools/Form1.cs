@@ -112,13 +112,13 @@ namespace fermtools
             gpupar.Sort(delegate(GPUParam one, GPUParam two) { return one.Slot.CompareTo(two.Slot); });
             SetMonitoringSetting(); //Восстанавливаем параметры мониторинга из конфига (после инициализации видеокарт)
             //Устанавливаем длительность задержки монторинга и запускаем таймер задержки мониторинга, если он еще не запущен
-            this.timer4.Interval = MonDelay;
-            if (!this.timer4.Enabled)
-                this.timer4.Start();
+            this.timerDelayMonitoring.Interval = MonDelay;
+            if (!this.timerDelayMonitoring.Enabled)
+                this.timerDelayMonitoring.Start();
             WriteEventLog(GetReportVideoCard(), EventLogEntryType.Information);
             InitVideoCards(); //Добавление элементов формы для отображения параметров видеокарт
             InitWDT(args);  //Инициализация WDT
-            timer1.Start(); //Стартуем таймер мониторинга
+            timerMonitoring.Start(); //Стартуем таймер мониторинга
             if (config.conf.othset.cb_startPipe) //Стартуем поток канала, если нужен
             {
                 signal = new ManualResetEvent(false);
@@ -144,8 +144,9 @@ namespace fermtools
             }
             if (config.conf.miner.bClaymoreMon) //Стартуем поток мониторинга майнера время мониторинга задается в конструкторе формы
             {
-                this.timerMiner.Start();
+                this.timerMinerStat.Start();
                 this.label4.Text = "Hashrate, MH/s"; //Меняем запись для вывода хэшрейта в 3-м параметре
+                this.label20.Text = "K_hashrate";
             }
             config.conf.othset.isReset = true;
             config.WriteParam(ref config_path); //Устанавливаем и сохраняем состояние ресета
@@ -263,7 +264,7 @@ namespace fermtools
                 this.toolStripProgressBar1.Visible = true;
                 //Добавляем информацию о состоянии таймера
                 pbTT.SetToolTip(this.statusStrip1, "WDT not set");
-                timer2.Start();
+                timerWDT.Start();
             }
             else 
                 pbTT.SetToolTip(this.statusStrip1, "WDT disabled");
@@ -345,7 +346,7 @@ namespace fermtools
             if ((t > 254) || (t < 0)) return false;
             return true;
         }
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timerMonitoring_Tick(object sender, EventArgs e)
         {
             string repmon = "";
             //Цикл тика 1 секунда, нстраивается в графическом конструкторе свойств
@@ -354,7 +355,7 @@ namespace fermtools
                 gpupar[i].Update(TickCountMax);
                 for (int j = 0; j != NumPar; j++)
                 {
-                    if (this.timerMiner.Enabled && (j == 3) && (miner.hr.Count == CardCount))
+                    if (this.timerMinerStat.Enabled && (j == 3) && (miner.hr.Count == CardCount))
                     {
                         //Выводим значение хэшрейта и пишем его в параметры ГПУ
                         this.par[j + i * NumPar].Text = (miner.hr[i] / 1000.0).ToString("0.0");
@@ -365,7 +366,7 @@ namespace fermtools
                 }
             }
             //Мониторим, если не инициирована перезагрузка, не отображается сообщение и не кончилось время задержки на запуск мониторинга
-            if (!fReset && !fMessage && !this.timer4.Enabled)
+            if (!fReset && !fMessage && !this.timerDelayMonitoring.Enabled)
             {
                 if (Monitoring(ref repmon))
                 {
@@ -409,7 +410,10 @@ namespace fermtools
         }
         private void SetMonitoringSetting()
         {
-            TickCountMax = (int)this.nc_Span_integration.Value;
+            //Значение времени анализа задается в секундах, чтобы можно было варьировать интервалом запросов параметров видеокарт, а в первоначальном варианте это была 1 сек., 
+            //Нужно привести количество значений к этому же интервалу, т.к. анализатор работает только с массивом чисел и ничего не знает о времени усреднения,
+            //т.е. среднее вычисляется по массиву значений за определенный интевал времени и ратягивая и сжимая интервал взятия отсчетов нужно интервал анализа сохранить равным nc_Span_integration
+            TickCountMax = (int)(this.nc_Span_integration.Value/(this.timerMonitoring.Interval/1000));
             MsgBoxPause = (int)(this.nc_DelayFailover.Value) * 1000;
             MsgBoxTimeout = (int)(this.nc_DelayFailoverNext.Value) * 1000;
             MonDelay = (int)(this.nc_DelayMon.Value) * 1000;
@@ -455,7 +459,7 @@ namespace fermtools
                 }
             }
             //Мониторим майнер, если выставлен соответствующий флаг
-            if (this.timerMiner.Enabled)
+            if (this.timerMinerStat.Enabled)
             {
                 for (int j=0; j!=miner.hr.Count; j++)
                 {
@@ -480,7 +484,7 @@ namespace fermtools
             }
             return res;
         }
-        private void timer2_Tick(object sender, EventArgs e)
+        private void timerWDT_Tick(object sender, EventArgs e)
         {
             //Цикл тика 10 секунд, нстраивается в графическом конструкторе свойств
             //Логика такова. Если остаток таймера меньше или равен 1 минуте, то перезаряжаем
@@ -510,16 +514,16 @@ namespace fermtools
                     case WDT_SOFT:
                         res = true;
                         wdt_s.Count = WDtimer;
-                        if (!this.timerSoft.Enabled)
-                            this.timerSoft.Start();
+                        if (!this.timerSoftReset.Enabled)
+                            this.timerSoftReset.Start();
                         break;
                     case WDT_USBOPEN:
                         res = wdt_o.TimerReset();
                         if (res)     //Если сброс не прошел, то при следующем срабатывании таймера пытаемся снова сбросить WDT
                         {
                             wdt_o.Count = WDtimer;  //Если сброс прошел, то перезаряжаем таймер и запускаем счетчик минут до следующего сброса
-                            if (!this.timerSoft.Enabled)
-                                this.timerSoft.Start();
+                            if (!this.timerSoftReset.Enabled)
+                                this.timerSoftReset.Start();
                         }
                         else
                             WriteEventLog(wdt_o.GetReport(), EventLogEntryType.Error);
@@ -574,16 +578,16 @@ namespace fermtools
                     break;
             }
             //Останавливаем таймеры
-            if (this.timer1.Enabled) 
-                this.timer1.Stop();
-            if (this.timer2.Enabled)
-                this.timer2.Stop();
-            if (this.timer3.Enabled)
-                this.timer3.Stop();
-            if (this.timer4.Enabled)
-                this.timer4.Stop();
-            if (this.timerMiner.Enabled)
-                this.timerMiner.Stop();
+            if (this.timerMonitoring.Enabled) 
+                this.timerMonitoring.Stop();
+            if (this.timerWDT.Enabled)
+                this.timerWDT.Stop();
+            if (this.timerBotMSGCycle.Enabled)
+                this.timerBotMSGCycle.Stop();
+            if (this.timerDelayMonitoring.Enabled)
+                this.timerDelayMonitoring.Stop();
+            if (this.timerMinerStat.Enabled)
+                this.timerMinerStat.Stop();
             //Сбрасываем состояние ресета и сохраняем в файл
             config.conf.othset.isReset = false;
             config.WriteParam(ref config_path);
@@ -603,7 +607,7 @@ namespace fermtools
             switch (CurrentWDT)
             {
                 case WDT_ONBOARD:
-                    timer2.Stop();
+                    timerWDT.Stop();
                     wdt.SetWDT(1);
                     toolStripProgressBar1.Value = 0;
                     pbTT.SetToolTip(this.statusStrip1, "WDT reset computer after 1 min.");
@@ -844,7 +848,7 @@ namespace fermtools
                 if ((us != null) && (us.Username == this.textBotName.Text))
                 {
                     bot.bInit = true;
-                    this.timer3.Start();
+                    this.timerBotMSGCycle.Start();
                     return true;
                 }
                 else
@@ -859,14 +863,14 @@ namespace fermtools
                 report.AppendLine("Slot " + gpupar[i].Slot.ToString() + ": " + gpupar[i].GPUParams[par].ParCollect.Last().ToString());
             return report.ToString();
         }
-        private void timer3Tick(object sender, EventArgs e)
+        private void timerBotMSGCycle_Tick(object sender, EventArgs e)
         {
             //Останавливаем таймер, чтобы исключить повторный запуск цикла сообщений бота
-            timer3.Stop();
+            timerBotMSGCycle.Stop();
             //Обработка сообщений для бота
             botMessageCycle();
             //Вновь запускаем таймер
-            timer3.Start();
+            timerBotMSGCycle.Start();
         }
         private void Send_TestBot(object sender, EventArgs e)
         {
@@ -1016,10 +1020,10 @@ namespace fermtools
             SetMonitoringSetting(); //Устанавливаем текущие параметры мониторинга из котролов в переменные
             MessageBox.Show("Monitoring settings save successfully", "Save monitoring", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
-        private void PauseAfterStart(object sender, EventArgs e)
+        private void timerDelayMonitoring_Stop(object sender, EventArgs e)
         {
             //Задержка на время timer4 после старта программы
-            this.timer4.Stop();
+            this.timerDelayMonitoring.Stop();
         }
         private void EstimateDuration(object sender, EventArgs e)
         {
@@ -1065,7 +1069,7 @@ namespace fermtools
             config.conf.othset.cmd_Script = "";
             config.WriteParam(ref config_path);
         }
-        private void SoftReset(object sender, EventArgs e)
+        private void timerSoftReset_Tick(object sender, EventArgs e)
         {
             //Счетчик минут для OpenDev и Soft таймеров
             switch (CurrentWDT)
@@ -1182,7 +1186,7 @@ namespace fermtools
             else
                 MessageBox.Show("Claymore miner not found on port " + tbClaymorPort.Text, "Test Miner", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
-        private void timerMinerStat(object sender, EventArgs e)
+        private void timerMinerStat_Tick(object sender, EventArgs e)
         {
             StringBuilder report = new StringBuilder();
             if (miner.GetStatistic())
@@ -1202,7 +1206,7 @@ namespace fermtools
         }
         private void getMinerStat(object sender, DoWorkEventArgs e)
         {
-            if (this.timerMiner.Enabled)
+            if (this.timerMinerStat.Enabled)
             {
                 if (bot.bInit)
                 {

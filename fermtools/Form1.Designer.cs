@@ -135,13 +135,13 @@ namespace fermtools
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timerMonitoring = new System.Windows.Forms.Timer(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.timer3 = new System.Windows.Forms.Timer(this.components);
-            this.timer4 = new System.Windows.Forms.Timer(this.components);
-            this.timerSoft = new System.Windows.Forms.Timer(this.components);
-            this.timerMiner = new System.Windows.Forms.Timer(this.components);
+            this.timerWDT = new System.Windows.Forms.Timer(this.components);
+            this.timerBotMSGCycle = new System.Windows.Forms.Timer(this.components);
+            this.timerDelayMonitoring = new System.Windows.Forms.Timer(this.components);
+            this.timerSoftReset = new System.Windows.Forms.Timer(this.components);
+            this.timerMinerStat = new System.Windows.Forms.Timer(this.components);
             this.thMinerStat = new System.ComponentModel.BackgroundWorker();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -1408,10 +1408,10 @@ namespace fermtools
             this.label16.TabIndex = 15;
             this.label16.Text = "Token Bot:";
             // 
-            // timer1
+            // timerMonitoring
             // 
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timerMonitoring.Interval = 10000;
+            this.timerMonitoring.Tick += new System.EventHandler(this.timerMonitoring_Tick);
             // 
             // eventLog1
             // 
@@ -1419,30 +1419,30 @@ namespace fermtools
             this.eventLog1.Source = "FermTools";
             this.eventLog1.SynchronizingObject = this;
             // 
-            // timer2
+            // timerWDT
             // 
-            this.timer2.Interval = 10000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.timerWDT.Interval = 10000;
+            this.timerWDT.Tick += new System.EventHandler(this.timerWDT_Tick);
             // 
-            // timer3
+            // timerBotMSGCycle
             // 
-            this.timer3.Interval = 5000;
-            this.timer3.Tick += new System.EventHandler(this.timer3Tick);
+            this.timerBotMSGCycle.Interval = 5000;
+            this.timerBotMSGCycle.Tick += new System.EventHandler(this.timerBotMSGCycle_Tick);
             // 
-            // timer4
+            // timerDelayMonitoring
             // 
-            this.timer4.Interval = 60000;
-            this.timer4.Tick += new System.EventHandler(this.PauseAfterStart);
+            this.timerDelayMonitoring.Interval = 60000;
+            this.timerDelayMonitoring.Tick += new System.EventHandler(this.timerDelayMonitoring_Stop);
             // 
-            // timerSoft
+            // timerSoftReset
             // 
-            this.timerSoft.Interval = 60000;
-            this.timerSoft.Tick += new System.EventHandler(this.SoftReset);
+            this.timerSoftReset.Interval = 60000;
+            this.timerSoftReset.Tick += new System.EventHandler(this.timerSoftReset_Tick);
             // 
-            // timerMiner
+            // timerMinerStat
             // 
-            this.timerMiner.Interval = 10000;
-            this.timerMiner.Tick += new System.EventHandler(this.timerMinerStat);
+            this.timerMinerStat.Interval = 10000;
+            this.timerMinerStat.Tick += new System.EventHandler(this.timerMinerStat_Tick);
             // 
             // thMinerStat
             // 
@@ -1509,9 +1509,9 @@ namespace fermtools
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabEmail;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerMonitoring;
         private System.Diagnostics.EventLog eventLog1;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer timerWDT;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.Label label7;
@@ -1538,7 +1538,7 @@ namespace fermtools
         private System.Windows.Forms.Button btSaveMail;
         private System.Windows.Forms.CheckBox cbOnSendStart;
         private System.Windows.Forms.CheckBox cbOnEmail;
-        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.Timer timerBotMSGCycle;
         private System.Windows.Forms.TabPage tabTelegram;
         private System.Windows.Forms.CheckBox cbResponceCmd;
         private System.Windows.Forms.CheckBox cbTelegramOn;
@@ -1574,7 +1574,7 @@ namespace fermtools
         private System.Windows.Forms.NumericUpDown nc_DelayFailoverNext;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.NumericUpDown nc_DelayFailover;
-        private System.Windows.Forms.Timer timer4;
+        private System.Windows.Forms.Timer timerDelayMonitoring;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.NumericUpDown nc_DelayMon;
         private System.Windows.Forms.CheckBox cb_NoUp;
@@ -1586,7 +1586,7 @@ namespace fermtools
         private System.Windows.Forms.TextBox tb_K_est;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button bt_ResetDefault;
-        private System.Windows.Forms.Timer timerSoft;
+        private System.Windows.Forms.Timer timerSoftReset;
         private System.Windows.Forms.TabPage tabWDT;
         private System.Windows.Forms.GroupBox groupBoxWDT;
         private System.Windows.Forms.RadioButton radioSoftWDT;
@@ -1603,7 +1603,7 @@ namespace fermtools
         private System.Windows.Forms.CheckBox chClaymoreMon;
         private System.Windows.Forms.CheckBox chClaymoreStat;
         private System.Windows.Forms.Button btMiner;
-        private System.Windows.Forms.Timer timerMiner;
+        private System.Windows.Forms.Timer timerMinerStat;
         private System.Windows.Forms.CheckBox chPoolConnect;
         private System.ComponentModel.BackgroundWorker thMinerStat;
     }
