@@ -119,7 +119,8 @@ namespace fermtools
                     UpdateAMD();
                     break;
             }
-            if (GPUParams[0].ParCollect.Count >= (TickCountMax - 1))
+            //10-0-20-1-30-2-40-3-50-4-60-5
+            if (GPUParams[0].ParCollect.Count > (TickCountMax - 1))
                 for (int i = 0; i != GPUParams.Count; i++)
                     GPUParams[i].ParCollect.RemoveAt(0);
         }
