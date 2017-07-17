@@ -29,7 +29,10 @@ namespace fermtools
             }
             catch { return false; }
             if (conf == null)
+            {
+                conf = new SetingRoot();
                 return false;
+            }
             return true;
         }
         public bool WriteParam(ref string config_path)
