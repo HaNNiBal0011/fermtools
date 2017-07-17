@@ -865,7 +865,16 @@ namespace fermtools
         {
             StringBuilder report = new StringBuilder();
             for (int i = 0; i != CardCount; i++)
-                report.AppendLine("Slot " + gpupar[i].Slot.ToString() + ": " + gpupar[i].GPUParams[par].ParCollect.Last().ToString());
+            {
+                try
+                {
+                    report.AppendLine("Slot " + gpupar[i].Slot.ToString() + ": " + gpupar[i].GPUParams[par].ParCollect.Last().ToString());
+                }
+                catch
+                {
+                    report.AppendLine("Slot " + gpupar[i].Slot.ToString() + ": Delay reading");
+                }
+            }
             return report.ToString();
         }
         private void timerBotMSGCycle_Tick(object sender, EventArgs e)
@@ -892,6 +901,9 @@ namespace fermtools
             {
                 foreach (var upd in botUpdate)
                 {
+                    //Если бот только инициализирован, пропускаем первое сообщение, скорее всего оно уже было передано (дубль после ресета)
+                    if (bot.lastUpd == 0)
+                        bot.lastUpd = upd.UpdateId;
                     //Если сообщение уже обработано, идем дальше
                     if (bot.lastUpd < upd.UpdateId)
                     {
