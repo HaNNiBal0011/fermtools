@@ -464,7 +464,7 @@ namespace fermtools
             }
             //Мониторим майнер, если выставлен соответствующий флаг
             //Если майнер упал, то статистика не изменится и мониторинг не сработает, поэтому нужно мониторить хотя бы один параметр, кроме хэшрейта
-            if (this.timerMinerStat.Enabled)
+            /*if (this.timerMinerStat.Enabled)
             {
                 for (int j=0; j!=miner.hr.Count; j++)
                 {
@@ -476,7 +476,7 @@ namespace fermtools
                         res = true;
                     }
                 }
-            }
+            }*/
             //Если что то где то упало, сообщаем в EVENLOG, шлем e-mail и телеграмму
             if (res)
             {
