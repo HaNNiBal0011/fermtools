@@ -79,6 +79,13 @@ namespace fermtools
             };
             RequestCore.Get("sendMessage", token, coll).Wait();
         }
+        public void MsgQueueClear(int id) //Очистка очереди бота
+        {
+            try { id++; }
+            catch { id = Int32.MaxValue; }
+            //Очищаем очередь на сервере
+            GetUpdates(id.ToString());
+        }
     }
 
     public class RequestCore
@@ -109,6 +116,7 @@ namespace fermtools
             return "";
         }
     }
+    
     public class RootObject<T>
     {
         [JsonProperty(PropertyName = "ok")]

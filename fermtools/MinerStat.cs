@@ -12,10 +12,10 @@ namespace fermtools
 {
     class MinerRemote
     {
-        public CommandSet statcmd;
-        public CommandSet restartcmd;
-        public SatisticResult statres;
-        public RestartResult restartres;
+        private CommandSet statcmd;
+        private CommandSet restartcmd;
+        private SatisticResult statres;
+        private RestartResult restartres;
         public string server;
         public StringBuilder report;
         public int port;
@@ -81,7 +81,7 @@ namespace fermtools
             }
             return res;
         }
-        public bool InitHr(string sres)
+        private bool InitHr(string sres)
         {
             bool res = false;
             string[] shr = sres.Split(';');
@@ -99,7 +99,7 @@ namespace fermtools
             }
             return res;
         }
-        public bool GettHr(string sres)
+        private bool GettHr(string sres)
         {
             bool res = false;
             string[] shr = sres.Split(';');
@@ -126,7 +126,7 @@ namespace fermtools
             {
                 try { restartres = JsonConvert.DeserializeObject<RestartResult>(json); }
                 catch { return false; }
-                if (statres != null)
+                if (restartres != null)
                     return true;
             }
             return false;
@@ -163,7 +163,7 @@ namespace fermtools
             return bRes;
         }
        
-        public class CommandSet
+        private class CommandSet
         {
             public int id { get; set; }
             public string jsonrpc { get; set; }
@@ -175,7 +175,7 @@ namespace fermtools
                 method = cmd;
             }
         }
-        public class SatisticResult
+        private class SatisticResult
         {
             public SatisticResult()
             {
@@ -185,7 +185,7 @@ namespace fermtools
             public object error { get; set; }
             public List<string> result { get; set; }
         }
-        public class RestartResult
+        private class RestartResult
         {
             public int id { get; set; }
             public object error { get; set; }

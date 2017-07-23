@@ -143,6 +143,7 @@ namespace fermtools
             this.timerSoftReset = new System.Windows.Forms.Timer(this.components);
             this.timerMinerStat = new System.Windows.Forms.Timer(this.components);
             this.thMinerStat = new System.ComponentModel.BackgroundWorker();
+            this.thMinerRestart = new System.ComponentModel.BackgroundWorker();
             this.MenuContext.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -1432,7 +1433,7 @@ namespace fermtools
             // timerDelayMonitoring
             // 
             this.timerDelayMonitoring.Interval = 60000;
-            this.timerDelayMonitoring.Tick += new System.EventHandler(this.timerDelayMonitoring_Stop);
+            this.timerDelayMonitoring.Tick += new System.EventHandler(this.timerDelayMonitoring_Tick);
             // 
             // timerSoftReset
             // 
@@ -1448,6 +1449,11 @@ namespace fermtools
             // 
             this.thMinerStat.WorkerSupportsCancellation = true;
             this.thMinerStat.DoWork += new System.ComponentModel.DoWorkEventHandler(this.getMinerStat);
+            // 
+            // thMinerRestart
+            // 
+            this.thMinerRestart.WorkerSupportsCancellation = true;
+            this.thMinerRestart.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgMinerRestart);
             // 
             // Form1
             // 
@@ -1606,6 +1612,7 @@ namespace fermtools
         private System.Windows.Forms.Timer timerMinerStat;
         private System.Windows.Forms.CheckBox chPoolConnect;
         private System.ComponentModel.BackgroundWorker thMinerStat;
+        private System.ComponentModel.BackgroundWorker thMinerRestart;
     }
 }
 

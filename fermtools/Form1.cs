@@ -36,7 +36,7 @@ namespace fermtools
         const int WDT_USBOPEN = 2;              //Выбран OpenHadrdware USB WDT
         int CurrentWDT = 0;                     //Текущий WDT         
         int TickCountMax = 60;                  //Интервал времени для расчета отслеживаемых параметров, зависит от цикла таймера, в котором используется
-        int MonDelay = 60;                      //Время задержки начала мониторинга при старте, сек
+        int MonDelay = 60000;                   //Время задержки начала мониторинга при старте, mс
         int MsgBoxPause = 20000;                //Пауза для отображения сообщения, когда пользователь сможет нажать Отмену перезагрузки (мс)
         int MsgBoxTimeout = 10000;              //пауза после отмены перезагрузки до отображения нового сообщения об ошибке (мс)
         NvidiaGroup nvigr;                      //Группа Nvidia видеокарт
@@ -976,14 +976,21 @@ namespace fermtools
                                             flagrestart = upd.Message.Text.Equals("/reset " + textFermaName.Text);
                                             if (flagrestart)
                                             {
-                                                //чтобы избежать ошибки при увеличении UpdateId, подстрахуемся, при этом upd.UpdateId сохранит старое значение, а очередь очистится значением Int32.MaxValue
-                                                int id = upd.UpdateId;
-                                                try { id++; }
-                                                catch { id = Int32.MaxValue; }
                                                 //Чтобы избежать последующего ресета при перезагрузке фермы, очищаем очередь на сервере
-                                                bot.GetUpdates(id.ToString());
+                                                bot.MsgQueueClear(upd.UpdateId);
                                                 //Посылаем реквест
                                                 bot.SendMessage(bot.chatID, this.textFermaName.Text + " restarts ...", "", upd.Message.MessageId.ToString());
+                                            }
+                                            if (upd.Message.Text.Equals("/mreset " + textFermaName.Text)) //Рестарт майнера
+                                            {
+                                                if (this.chClaymoreStat.Checked)
+                                                {
+                                                    bot.MsgQueueClear(upd.UpdateId); //Чистим очередь
+                                                    this.timerDelayMonitoring.Start(); //Останавливаем мониторинг
+                                                    if (thMinerRestart.IsBusy)
+                                                        thMinerRestart.CancelAsync();
+                                                    thMinerRestart.RunWorkerAsync();
+                                                }
                                             }
                                             break;
                                     }
@@ -1037,7 +1044,7 @@ namespace fermtools
             SetMonitoringSetting(); //Устанавливаем текущие параметры мониторинга из котролов в переменные
             MessageBox.Show("Monitoring settings save successfully", "Save monitoring", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
-        private void timerDelayMonitoring_Stop(object sender, EventArgs e)
+        private void timerDelayMonitoring_Tick(object sender, EventArgs e)
         {
             //Задержка на время timer4 после старта программы
             this.timerDelayMonitoring.Stop();
@@ -1206,18 +1213,26 @@ namespace fermtools
         private void timerMinerStat_Tick(object sender, EventArgs e)
         {
             StringBuilder report = new StringBuilder();
-            if (miner.GetStatistic())
+            if (!fReset && !fMessage && !this.timerDelayMonitoring.Enabled)
             {
-                fMinerFail = false; //Сбрасываем флаг, если майнер ответил
-            }
-            else
-            {
-                if (!fMinerFail) //Сообщаем один раз
+                if (miner.GetStatistic())
                 {
-                    WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
-                    if (bot.bInit)
-                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
-                    fMinerFail = true;
+                    if (fMinerFail)
+                    {
+                        fMinerFail = false; //Сбрасываем флаг, если майнер ответил
+                        if (bot.bInit)
+                            bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner again online.");
+                    }
+                }
+                else
+                {
+                    if (!fMinerFail) //Сообщаем один раз
+                    {
+                        WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
+                        if (bot.bInit)
+                            bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
+                        fMinerFail = true;
+                    }
                 }
             }
         }
@@ -1249,7 +1264,19 @@ namespace fermtools
                 }
             }
         }
-
+        private void bgMinerRestart(object sender, DoWorkEventArgs e)
+        {
+            if (miner.RestartMiner())
+            {
+                if (bot.bInit)
+                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner restart sucscess.");
+            }
+            else
+            {
+                if (bot.bInit)
+                    bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner restart error.");
+            }
+        }
         private void chClaymoreStat_Changed(object sender, EventArgs e)
         {
             if (chClaymoreStat.Checked)
