@@ -349,7 +349,7 @@ namespace fermtools
         private void timerMonitoring_Tick(object sender, EventArgs e)
         {
             string repmon = "";
-            //Цикл тика 1 секунда, нстраивается в графическом конструкторе свойств
+            //Цикл тика 10 секунд, нстраивается в графическом конструкторе свойств
             for (int i = 0; i != CardCount; i++)
             {
                 gpupar[i].Update(TickCountMax);
@@ -386,11 +386,12 @@ namespace fermtools
             //Если нажали ОК (или само нажалось) то запускаем процесс перезагрузки, иначе нажали Отмена и ждем MsgBoxTimeout для реакции на сработку.
             if (dlg == System.Windows.Forms.DialogResult.OK)
             {
-                if (!String.IsNullOrEmpty(config.conf.othset.cmd_Script)) 
+                if (!String.IsNullOrEmpty(config.conf.othset.cmd_Script)) //Запуск команды
                     runCmd();
-                if (config.conf.miner.bPoolConnect) //Если установлен ффлаг контроля пула через майнер, отменяем ресет если майнер не видит пула
+                if (config.conf.miner.bPoolConnect) //Если установлен флаг контроля пула через майнер, отменяем ресет если майнер не видит пула
                 {
                     //Если до падения или зависания майнера отвалился пул, то перезагрузки не будет т.к. fPools будет false, 
+                    // (уже не актуально, т.к. если до майнера не достучались в очередной раз, то fPools будет true)
                     //решить проблему можно прописав старт майнера в config.conf.othset.cmd_Script
                     //Нужно только поступить по умному, сначала убить все процессы майнинга, а затем стартовать свежий
                     //Если майнер просто умер, то будет перезагрузка т.к. fPools останется true
@@ -459,24 +460,21 @@ namespace fermtools
                             report.AppendLine();
                             res = true;
                         }
+                        //Мониторим хэшрейт на нулевое значение (иногда из за задержки мониторинга какая либо карта может успеть упасть), если выставлен соответствующий флаг
+                        //Если майнер упал, то статистика не изменится и мониторинг не сработает, поэтому нужно мониторить хотя бы один параметр, кроме хэшрейта
+                        if (this.timerMinerStat.Enabled || i==3)
+                        {
+                            if (gpupar[j].GPUParams[i].ParCollect.Average() == 0)
+                            {
+                                report.AppendLine(gpupar[j].GPUName + ", subsys: " + gpupar[j].Subsys + ", slot: " + gpupar[j].Slot.ToString());
+                                report.AppendLine("Hashrate = " + miner.hr[j].ToString());
+                                report.AppendLine();
+                                res = true;
+                            }
+                        }
                     }
                 }
             }
-            //Мониторим майнер, если выставлен соответствующий флаг
-            //Если майнер упал, то статистика не изменится и мониторинг не сработает, поэтому нужно мониторить хотя бы один параметр, кроме хэшрейта
-            /*if (this.timerMinerStat.Enabled)
-            {
-                for (int j=0; j!=miner.hr.Count; j++)
-                {
-                    if (miner.hr[j] == 0)
-                    {
-                        report.AppendLine(gpupar[j].GPUName + ", subsys: " + gpupar[j].Subsys + ", slot: " + gpupar[j].Slot.ToString());
-                        report.AppendLine("Hashrate = " + miner.hr[j].ToString());
-                        report.AppendLine();
-                        res = true;
-                    }
-                }
-            }*/
             //Если что то где то упало, сообщаем в EVENLOG, шлем e-mail и телеграмму
             if (res)
             {
@@ -985,11 +983,16 @@ namespace fermtools
                                             {
                                                 if (this.chClaymoreStat.Checked)
                                                 {
-                                                    bot.MsgQueueClear(upd.UpdateId); //Чистим очередь
-                                                    this.timerDelayMonitoring.Start(); //Останавливаем мониторинг
-                                                    if (thMinerRestart.IsBusy)
-                                                        thMinerRestart.CancelAsync();
-                                                    thMinerRestart.RunWorkerAsync();
+                                                    bot.MsgQueueClear(upd.UpdateId); //Чистим очередь сообщений
+                                                    if (!this.timerDelayMonitoring.Enabled) //Защита от перезапуска майнера если таймаут задержки мониторинга активен, перезапуск может вызвать срабатывание мониторинга
+                                                    {
+                                                        this.timerDelayMonitoring.Start(); //Останавливаем мониторинг
+                                                        if (thMinerRestart.IsBusy)
+                                                            thMinerRestart.CancelAsync();
+                                                        thMinerRestart.RunWorkerAsync();
+                                                    }
+                                                    else
+                                                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\nWaiting for monitoring to be enabled.", "", upd.Message.MessageId.ToString());
                                                 }
                                             }
                                             break;
@@ -1213,18 +1216,18 @@ namespace fermtools
         private void timerMinerStat_Tick(object sender, EventArgs e)
         {
             StringBuilder report = new StringBuilder();
-            if (!fReset && !fMessage && !this.timerDelayMonitoring.Enabled)
+            if (miner.GetStatistic())
             {
-                if (miner.GetStatistic())
+                if (fMinerFail)
                 {
-                    if (fMinerFail)
-                    {
-                        fMinerFail = false; //Сбрасываем флаг, если майнер ответил
-                        if (bot.bInit)
-                            bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner again online.");
-                    }
+                    fMinerFail = false; //Сбрасываем флаг, если майнер ответил
+                    if (bot.bInit)
+                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner again online.");
                 }
-                else
+            }
+            else
+            {
+                if (!this.timerDelayMonitoring.Enabled) //Ничего никому не сообщаем в процессе задержки мониторинга
                 {
                     if (!fMinerFail) //Сообщаем один раз
                     {
@@ -1251,17 +1254,7 @@ namespace fermtools
             }
             else
             {
-                if (miner.GetStatistic())
-                {
-                    if (bot.bInit)
-                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + miner.report.ToString());
-                }
-                else
-                {
-                    WriteEventLog("Get miner statistic error.", EventLogEntryType.Error);
-                    if (bot.bInit)
-                        bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner not found or fail.");
-                }
+                timerMinerStat_Tick(null, null);
             }
         }
         private void bgMinerRestart(object sender, DoWorkEventArgs e)

@@ -49,7 +49,7 @@ namespace fermtools
             bool res = false;
             report.Clear();
             string json = JsonConvert.SerializeObject(statcmd, Formatting.Indented);
-            if (Communicate(ref json))
+            if (Communicate(ref json)) //Если сеанс связи с майнером не состоялся, то хешрейт не изменятся (останутся старые значения), установим только флаг наличия интернета, вдруг он сброшен
             {
                 try { statres = JsonConvert.DeserializeObject<SatisticResult>(json); }
                 catch { return res; }
@@ -79,6 +79,8 @@ namespace fermtools
                         report.AppendLine("This version Fermtools is not compatible with the version miner.");
                 }
             }
+            else
+                fPools = true;
             return res;
         }
         private bool InitHr(string sres)
