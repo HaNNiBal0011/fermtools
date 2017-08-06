@@ -111,6 +111,7 @@ namespace fermtools
             conf.othset.cmd_Script = "";
             conf.othset.GPUCount = 0;
             conf.othset.CompareGPUCountReset = false;
+            conf.othset.SendMinerStat = false;
 
             return WriteParam(ref config_path); ;
         }
@@ -203,6 +204,7 @@ namespace fermtools
         public bool isReset { get; set; }
         public int GPUCount { get; set; }
         public bool CompareGPUCountReset { get; set; }
+        public bool SendMinerStat { get; set; }
     }
 
 }

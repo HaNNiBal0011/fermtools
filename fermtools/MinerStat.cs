@@ -22,12 +22,14 @@ namespace fermtools
         public int cardcount;
         public bool fPools;
         public List<int> hr = new List<int>();
+        public MinerStat stat;
         public MinerRemote()
         {
             statcmd = new CommandSet("miner_getstat1");
             restartcmd = new CommandSet("miner_restart");
             statres = new SatisticResult();
             report = new StringBuilder();
+            stat = new MinerStat();
             server = "127.0.0.1";
             port = 3333;
             cardcount = 0;
@@ -39,6 +41,7 @@ namespace fermtools
             restartcmd = new CommandSet("miner_restart");
             statres = new SatisticResult();
             report = new StringBuilder();
+            stat = new MinerStat();
             server = "127.0.0.1";
             port = p;
             cardcount = 0;
@@ -74,6 +77,7 @@ namespace fermtools
                             res = InitHr(statres.result[3]);
                         else
                             res = GettHr(statres.result[3]);
+                        GetMinerStat(statres.result[2]);
                     }
                     else
                         report.AppendLine("This version Fermtools is not compatible with the version miner.");
@@ -117,6 +121,23 @@ namespace fermtools
                     else
                         hr[i] = 0;
                 }
+                res = true;
+            }
+            return res;
+        }
+        private bool GetMinerStat(string s_stat)
+        {
+            bool res = false;
+            string[] shr = s_stat.Split(';');
+            if (shr.Length == 3)
+            {
+                int hash = 0;
+                if (int.TryParse(shr[0], out hash))
+                    stat.Hashrate = hash;
+                if (int.TryParse(shr[1], out hash))
+                    stat.Shares = hash;
+                if (int.TryParse(shr[2], out hash))
+                    stat.SharesRej = hash;
                 res = true;
             }
             return res;
@@ -192,6 +213,14 @@ namespace fermtools
             public int id { get; set; }
             public object error { get; set; }
             public bool result { get; set; }
+        }
+        public class MinerStat
+        {
+            public int Hashrate;
+            public int Shares;
+            public int SharesOld;
+            public int SharesRej;
+            public int SharesRejOld;
         }
     }
 }

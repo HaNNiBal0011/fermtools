@@ -46,6 +46,8 @@ namespace fermtools
         bool fMessage;                          //Устанавливается, если выведена сообщение перезагрузки
         bool fNoUp;                             //Не реагировать на повышение параметров при мониторинге
         bool fMinerFail;                        //Флаг отправки сообщения о сбое мониторинга майнера
+        bool fSendStat;                         //Флаг отправки статистики майнера
+        bool fSendedStat;                       //Установлен, если статистика еще не отправлена
         byte WDtimer;                           //Интервал в минутах для записи в WatchDog Timer
         Thread pipeServerTh;                    //Поток для работы именованного канала
         ManualResetEvent signal;                //Сигнал для асинхронного чтения из pipe или завершения серверного процесса
@@ -95,6 +97,8 @@ namespace fermtools
                 }
             }
             FindComPorts();
+            fSendStat = false; //Пока не знаем что с отправкой статистики
+            fSendedStat = true; //Статистика не отправлена
             RestoreSetting();
             fExitCancel = true; //Запрещаем выход из программы
             fReset = false; //Перезагрузка не инициализирована
@@ -775,6 +779,7 @@ namespace fermtools
             this.chClaymoreMon.Checked = config.conf.miner.bClaymoreMon;
             this.tbClaymorPort.Text = config.conf.miner.ClaymorePort.ToString();
             this.chPoolConnect.Checked = config.conf.miner.bPoolConnect;
+            this.fSendStat = config.conf.othset.SendMinerStat;
         }
         public static string Encrypt(string data)
         {
@@ -1223,6 +1228,19 @@ namespace fermtools
                     fMinerFail = false; //Сбрасываем флаг, если майнер ответил
                     if (bot.bInit)
                         bot.SendMessage(bot.chatID, this.textFermaName.Text + "\n" + "Miner again online.");
+                }
+                if (fSendStat) //Если нужно отправляем статистику каждый час
+                {
+                    if ((System.DateTime.Now.Minute == 0) && fSendedStat)
+                    {
+                        fSendedStat = false;
+                        if (bot.bInit)
+                            bot.SendMessage(bot.chatID, this.textFermaName.Text + " \\ Shares: " + (miner.stat.Shares - miner.stat.SharesOld).ToString() + " \\ SharesRej: " + (miner.stat.SharesRej - miner.stat.SharesRejOld).ToString());
+                        miner.stat.SharesOld = miner.stat.Shares;
+                        miner.stat.SharesRejOld = miner.stat.SharesRej;
+                    }
+                    if ((System.DateTime.Now.Minute == 1) && !fSendedStat) //Следующую минуту сбрасываем флаг статистики
+                        fSendedStat = true;
                 }
             }
             else
