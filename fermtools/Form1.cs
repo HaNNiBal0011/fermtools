@@ -72,6 +72,8 @@ namespace fermtools
         public Form1(string[] args)
         {
             InitializeComponent();
+            notifyIcon1.Text = "FermTools\nVer: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); //Добавляем в трей версию программы
+            this.Text = "FermTools Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); //Добавляем версию программы в заголовок формы
 
             config_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools.json";
             config_path0 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\fermtools0.json";
@@ -1234,8 +1236,20 @@ namespace fermtools
                     if ((System.DateTime.Now.Minute == 0) && fSendedStat)
                     {
                         fSendedStat = false;
+                        int shares = 0; int sharesrej = 0;
+                        if (miner.stat.Shares < miner.stat.SharesOld)
+                        {
+                            //Если был перезапуск
+                            shares = miner.stat.Shares;
+                            sharesrej = miner.stat.SharesRej;
+                        }
+                        else
+                        {
+                            shares = miner.stat.Shares - miner.stat.SharesOld;
+                            sharesrej = miner.stat.SharesRej - miner.stat.SharesRejOld;
+                        }
                         if (bot.bInit)
-                            bot.SendMessage(bot.chatID, this.textFermaName.Text + " \\ Shares: " + (miner.stat.Shares - miner.stat.SharesOld).ToString() + " \\ SharesRej: " + (miner.stat.SharesRej - miner.stat.SharesRejOld).ToString());
+                            bot.SendMessage(bot.chatID, this.textFermaName.Text + " (sh,rej): " + shares.ToString() + ";" + sharesrej.ToString());
                         miner.stat.SharesOld = miner.stat.Shares;
                         miner.stat.SharesRejOld = miner.stat.SharesRej;
                     }
